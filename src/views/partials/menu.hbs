@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="/public/styles/menu.css">
+
+<div class="main-menu" id="main-menu">
+
+  <a href="/realTimeProducts" id="realTimeProducts" class="text">Go to Real time products</a>
+
+  {{#if user.isAdmin}}
+    <a href="/home/crud-admin" id="crud-admin" class="text">Create Product</a>
+  {{/if}}
+
+  {{#if user}}
+    {{#with user}}
+      <a href="/cart" id="cart" class="text">
+        Go to Cart
+        <sup>Items: <strong>{{length _id}}</strong></sup>
+      </a>
+      <div id="user">
+        <img src={{image}} alt="User Image" onclick="userView()"/>
+        {{!-- <a href="/user" class="user text">{{name}}</a> --}}
+        <p class="user background-success text border-radius cursor-pointer">Go to your account</p>
+      </div>
+    {{/with}}
+
+  {{else}}
+    <a href="/auth" class="text" id="auth">Log In / Sign Up</a>
+  {{/if}}
+
+<p hidden id="currentView">{{currentView}}</p>
+</div>
+  <script src="/public/js/main.js"></script>

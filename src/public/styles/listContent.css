@@ -1,0 +1,37 @@
+.content {
+    margin-bottom: 3%;
+    padding: 3%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.content img {
+    width: 60%;
+    margin-right: 2%;
+}
+
+.productAttributes {
+    padding: 2%;
+}
+
+.button {
+    padding: 1%;
+}
+
+.description {
+    height: 30%;
+    overflow: auto;
+    border-top-style: solid;
+    border-top-color: black;
+    border-top-width: 1;
+    margin-top: 4%;
+    margin-bottom: 8%;
+}
+
+.rate {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    align-self: center;
+}

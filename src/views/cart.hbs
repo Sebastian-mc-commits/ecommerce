@@ -1,0 +1,28 @@
+<h1>Cart</h1>
+<button><a href="/cart/deleteAll" class="text">Delete all</a></button>
+<div class="container m-auto grid" id="wrapQuantity">
+      {{#each products}}
+        <div class="card w-3">
+            <img
+              src={{this.thumbnail}}
+              alt="Product Image"
+              class="w-10"
+            />
+          <h1>{{this.title}}</h1>
+          <p>Price: {{this.price}}</p>
+          <p>Code: {{this.code}}</p>
+          <p>Status: {{this.status}}</p>
+          <p>Stock: <span id="stock">{{this.stock}}</span></p>
+        <input type="number" class="card w-2 border-radius" data-quantity="{{this.stock}}" value="1">
+          <!--<a href="/cart/addToCart?title={{title}}&{{price}}&code={{code}}&sttus={{status}}&description={{description}}&tumbnail={{tumbnail}}">
+            Add to cart
+        </a>-->
+          <button><a href="/cart/delete/{{this._id}}" class="text">Delete</a></button>
+
+          <button><a href="/listContent/{{this._id}}" class="text">Watch more</a></button>
+        </div>
+      {{/each}}
+  </div>
+</div>
+
+<script src="/public/js/cart.js"></script>

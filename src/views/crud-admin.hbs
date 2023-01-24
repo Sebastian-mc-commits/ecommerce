@@ -1,0 +1,128 @@
+<link rel="stylesheet" href="/public/styles/crud-admin.css" />
+
+<div class="side-bar-wrapper">
+  <input type="checkbox" id="btn" hidden />
+  <label for="btn" class="menu-btn">
+    <p>&#9776</p>
+  </label>
+
+  <nav class="sidebar">
+    <div class="title">Admins options</div>
+    <ul class="list-items" id="list_items">
+      <li class="list-content" id="go_to_home">Home</li>
+      <li class="list-content" id="go_to_create">Create</li>
+      <li class="list-content" id="go_to_user">Users Options</li>
+      <li id="go_to_table" class="list-content">Delete or Update</li>
+      <li class="list-content" id="go_to_update" hidden></li>
+    </ul>
+  </nav>
+
+</div>
+{{! <p>  </p> }}
+
+{{! <div class="content">
+  <div class="header">Animated Side Navigation Menu</div>
+  <p>using only HTML and CSS</p>
+</div> }}
+
+<div class="content m-auto">
+  <h2 class="title">Add a product</h2>
+  <form
+    class="form card"
+    id="form"
+    action="/home/addProduct"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    <div class="group">
+      <input
+        type="file"
+        placeholder="Image route (optional)"
+        name="thumbnail"
+      />
+      <input
+        type="text"
+        class="title_form"
+        placeholder="Title"
+        id="field"
+        name="title"
+      />
+      <input type="number" placeholder="price" id="field" name="price" />
+      <div>
+        <input
+          type="text"
+          placeholder="Code"
+          id="field"
+          name="code"
+        />
+      </div>
+    </div>
+    <div class="group">
+      <label for="status">
+        <p>Set status to false</p>
+        <input type="checkbox" name="status" value="false" />
+      </label>
+      <input type="number" placeholder="Stock" id="field" name="stock" />
+    </div>
+
+    <div class="commentContent">
+      <textarea
+        name="description"
+        rows="10"
+        placeholder="Description"
+        id="field"
+      ></textarea>
+    </div>
+    <input
+      type="submit"
+      value="Done"
+      class="w-6 btn-transition"
+      id="activeButton"
+      
+    />
+  </form>
+
+  <div>
+    <h2 class="title">Delete or Update</h2>
+    {{! <ul id="product"></ul> }}
+
+  <div>
+    <h2 class="title">Delete or Update</h2>
+    {{! <ul id="product"></ul> }}
+    <table class="w-10">
+      <thead>
+        <th>id</th>
+        <th>Name</th>
+        <th>code</th>
+        <th>Delete</th>
+        <th>Update</th>
+      </thead>
+      <tbody id="product"></tbody>
+    </table>
+  </div>
+
+  <div class="border"></div>
+  
+    <table class="w-10 userOptions">
+      <thead>
+        <th>id</th>
+        <th>Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Set to admin</th>
+      </thead>
+      <tbody id="user"></tbody>
+    </table>
+  </div>
+
+  <div class="border"></div>
+
+  <div id="update"></div>
+
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/public/js/crud-admin.js"></script>
+{{!-- <script src="/public/js/crud-admin-user.js"></script> --}}
+<script src="/public/js/validateField.js"></script>

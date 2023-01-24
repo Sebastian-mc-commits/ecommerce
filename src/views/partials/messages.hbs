@@ -1,0 +1,36 @@
+{{#if message}}
+    <p hidden id="message">{{message.message}}</p>
+    <p hidden id="type">{{message.type}}</p>
+    {{#if message.error}}
+        <p hidden id="error">{{message.error}}</p>
+    {{/if}}
+    <div class="border"></div>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    const message = {
+        message: document.querySelector("#message")?.textContent,
+        type: document.querySelector("#type")?.textContent,
+        error: document.querySelector("#error")?.textContent
+    }
+
+    if ( message ) {
+        const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 5000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+        }
+    })
+    Toast.fire({
+        icon: message.type,
+        title: message.message,
+        text: message.error
+    });
+    }
+</script>
+{{/if}}

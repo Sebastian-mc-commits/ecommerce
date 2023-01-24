@@ -1,0 +1,84 @@
+{
+    "name": "length",
+    "hash": {},
+    "data": {
+        "exphbs": {
+            "cache": false,
+            "encoding": "utf8",
+            "view": "cart",
+            "helpers": {},
+            "partials": {},
+            "runtimeOptions": {},
+            "filePath": "C:\\Users\\Sebas\\OneDrive\\Escritorio\\Retos\\src\\views\\layouts\\main.hbs"
+        },
+        "_parent": {
+            "exphbs": {
+                "cache": false,
+                "encoding": "utf8",
+                "view": "cart",
+                "helpers": {},
+                "partials": {},
+                "runtimeOptions": {},
+                "filePath": "C:\\Users\\Sebas\\OneDrive\\Escritorio\\Retos\\src\\views\\layouts\\main.hbs"
+            }
+        },
+        "root": {
+            "settings": {
+                "x-powered-by": true,
+                "etag": "weak",
+                "env": "development",
+                "query parser": "extended",
+                "subdomain offset": 2,
+                "trust proxy": false,
+                "views": "C:\\Users\\Sebas\\OneDrive\\Escritorio\\Retos\\src\\views",
+                "jsonp callback name": "callback",
+                "view engine": "hbs"
+            },
+            "products": [
+                {
+                    "id": 1,
+                    "title": "0.ptd",
+                    "description": "Ejemplo",
+                    "price": 0,
+                    "thumbnail": "./",
+                    "code": "0.ptd",
+                    "status": true,
+                    "quantity": 1
+                },
+                {
+                    "id": 2,
+                    "title": "0.um7",
+                    "description": "Ejemplo",
+                    "price": 1000,
+                    "thumbnail": "./",
+                    "code": "0.um7",
+                    "status": true,
+                    "quantity": 1
+                },
+                {
+                    "id": 3,
+                    "title": "0.cd5",
+                    "description": "Ejemplo",
+                    "price": 2000,
+                    "thumbnail": "./",
+                    "code": "0.cd5",
+                    "status": true,
+                    "quantity": 1
+                }
+            ],
+            "_locals": {},
+            "cache": false,
+            "body": "<div class=\"container\">\r\n  <h1>Cart</h1>\r\n  <button><a href=\"/cart/deleteAll\" class=\"text\">Delete all</a></button>\r\n        <img src=./ alt=\"Product Image\" />\r\n\r\n      <h1>0.ptd</h1>\r\n      <p>Price: 0</p>\r\n      <p>Code: 0.ptd</p>\r\n      <p>Status: true</p>\r\n      <p>Ejemplo</p>\r\n      <p>Quantity: 1</p>\r\n      <button><a href=\"/cart/delete/1\" class=\"text\">Delete</a></button>\r\n      <!--<a href=\"/cart/addToCart?title=0.ptd&0&code=0.ptd&status=true&description=Ejemplo&tumbnail=\">\r\n            Add to cart\r\n        </a>-->\r\n        <img src=./ alt=\"Product Image\" />\r\n\r\n      <h1>0.um7</h1>\r\n      <p>Price: 1000</p>\r\n      <p>Code: 0.um7</p>\r\n      <p>Status: true</p>\r\n      <p>Ejemplo</p>\r\n      <p>Quantity: 1</p>\r\n      <button><a href=\"/cart/delete/2\" class=\"text\">Delete</a></button>\r\n      <!--<a href=\"/cart/addToCart?title=0.um7&1000&code=0.um7&status=true&description=Ejemplo&tumbnail=\">\r\n            Add to cart\r\n        </a>-->\r\n        <img src=./ alt=\"Product Image\" />\r\n\r\n      <h1>0.cd5</h1>\r\n      <p>Price: 2000</p>\r\n      <p>Code: 0.cd5</p>\r\n      <p>Status: true</p>\r\n      <p>Ejemplo</p>\r\n      <p>Quantity: 1</p>\r\n      <button><a href=\"/cart/delete/3\" class=\"text\">Delete</a></button>\r\n      <!--<a href=\"/cart/addToCart?title=0.cd5&2000&code=0.cd5&status=true&description=Ejemplo&tumbnail=\">\r\n            Add to cart\r\n        </a>-->\r\n</div>\r\n\r\n<script src=\"/public/js/product.js\"></script>"
+        }
+    },
+    "loc": {
+        "start": {
+            "line": 17,
+            "column": 49
+        },
+        "end": {
+            "line": 17,
+            "column": 59
+        }
+    }
+}

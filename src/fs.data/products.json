@@ -1,0 +1,193 @@
+[
+  {
+    "id": "b2ca7a3d-7012-4200-abda-217926170643",
+    "title": "Product updated",
+    "description": "one million",
+    "price": "0",
+    "thumbnail": "/public/uploads/images/example.jpg",
+    "code": "0.dof",
+    "stock": "0",
+    "status": "false"
+  },
+  {
+    "id": "f83c54de-61ab-4725-ad10-8c2ecb68cfd2",
+    "title": "Good2",
+    "description": "Lorem, ipsum dolor sit amet consectetur \r\n    adipisicing elit.Dolor voluptatem totam ullam ipsa, \r\n    facilis rem eveniet facere sapiente aliquid repudiandae \r\n    placeat soluta tenetur fugit, laudantium, incidunt porro \r\n    similique nemo blanditiis.",
+    "price": "1000",
+    "thumbnail": "/public/uploads/images/example.jpg",
+    "code": "0.fii",
+    "stock": "1",
+    "status": true
+  },
+  {
+    "id": "363ea5d2-4946-4196-b800-600162bb6e59",
+    "title": "0.drx",
+    "description": "Ejemplo",
+    "price": 2000,
+    "thumbnail": "/public/uploads/images/example.jpg",
+    "code": "0.drx",
+    "stock": 2,
+    "status": true
+  },
+  {
+    "id": "78a95633-39ad-4687-9715-f9fdc6ebe42b",
+    "title": "0.pxg",
+    "description": "Ejemplo",
+    "price": 4000,
+    "thumbnail": "/public/uploads/images/example.jpg",
+    "code": "0.pxg",
+    "stock": 4,
+    "status": true
+  },
+  {
+    "id": "76dc2ae0-12c8-4021-8ad3-d0e9bf02e3c9",
+    "title": "0.5jt",
+    "description": "Lorem, ipsum dolor sit amet consectetur \n    adipisicing elit.Dolor voluptatem totam ullam ipsa, \n    facilis rem eveniet facere sapiente aliquid repudiandae \n    placeat soluta tenetur fugit, laudantium, incidunt porro \n    similique nemo blanditiis.",
+    "price": 5000,
+    "thumbnail": "/public/uploads/images/example.jpg",
+    "code": "0.5jt",
+    "stock": 5,
+    "status": true
+  },
+  {
+    "id": "5c735167-cbfd-4497-a32f-945d4c68e60b",
+    "title": "0.oa2",
+    "description": "Ejemplo",
+    "price": 6000,
+    "thumbnail": "/public/uploads/images/example.jpg",
+    "code": "0.oa2",
+    "stock": 6,
+    "status": true
+  },
+  {
+    "id": "ce0e6717-535d-4f1f-8b77-1408be9d8aa1",
+    "title": "0.5w5",
+    "description": "Lorem, ipsum dolor sit amet consectetur \n    adipisicing elit.Dolor voluptatem totam ullam ipsa, \n    facilis rem eveniet facere sapiente aliquid repudiandae \n    placeat soluta tenetur fugit, laudantium, incidunt porro \n    similique nemo blanditiis.",
+    "price": 7000,
+    "thumbnail": "/public/uploads/images/example.jpg",
+    "code": "0.5w5",
+    "stock": 7,
+    "status": true
+  },
+  {
+    "id": "836790a9-88ab-40aa-b559-90a3f39fd4b2",
+    "title": "0.0a7",
+    "description": "Ejemplo",
+    "price": 8000,
+    "thumbnail": "/public/uploads/images/example.jpg",
+    "code": "0.0a7",
+    "stock": 8,
+    "status": true
+  },
+  {
+    "id": "32787ce4-aff4-4d63-9cd6-4d09d1a68a42",
+    "title": "0.tpu",
+    "description": "Lorem, ipsum dolor sit amet consectetur \n    adipisicing elit.Dolor voluptatem totam ullam ipsa, \n    facilis rem eveniet facere sapiente aliquid repudiandae \n    placeat soluta tenetur fugit, laudantium, incidunt porro \n    similique nemo blanditiis.",
+    "price": 9000,
+    "thumbnail": "/public/uploads/images/example.jpg",
+    "code": "0.tpu",
+    "stock": 9,
+    "status": true
+  },
+  {
+    "id": "a523ed58-2423-4b28-b78d-cb44648789f5",
+    "title": "0.gi6",
+    "description": "Ejemplo",
+    "price": 10000,
+    "thumbnail": "/public/uploads/images/example.jpg",
+    "code": "0.gi6",
+    "stock": 10,
+    "status": true
+  },
+  {
+    "id": "b26912e7-c30a-4586-9c83-05ebb396faed",
+    "title": "0.h7f",
+    "description": "Lorem, ipsum dolor sit amet consectetur \n    adipisicing elit.Dolor voluptatem totam ullam ipsa, \n    facilis rem eveniet facere sapiente aliquid repudiandae \n    placeat soluta tenetur fugit, laudantium, incidunt porro \n    similique nemo blanditiis.",
+    "price": 11000,
+    "thumbnail": "/public/uploads/images/example.jpg",
+    "code": "0.h7f",
+    "stock": 11,
+    "status": true
+  },
+  {
+    "id": "504c1211-135f-47c5-9e15-8acbfde6aff1",
+    "title": "0.wsg",
+    "description": "Ejemplo",
+    "price": 12000,
+    "thumbnail": "/public/uploads/images/example.jpg",
+    "code": "0.wsg",
+    "stock": 12,
+    "status": true
+  },
+  {
+    "id": "28221adf-6310-4926-a251-aaca6e4f9abe",
+    "title": "0.vor",
+    "description": "Lorem, ipsum dolor sit amet consectetur \n    adipisicing elit.Dolor voluptatem totam ullam ipsa, \n    facilis rem eveniet facere sapiente aliquid repudiandae \n    placeat soluta tenetur fugit, laudantium, incidunt porro \n    similique nemo blanditiis.",
+    "price": 13000,
+    "thumbnail": "/public/uploads/images/example.jpg",
+    "code": "0.vor",
+    "stock": 13,
+    "status": true
+  },
+  {
+    "id": "8cbfb918-b92e-42f0-9e98-ba6f7ad7c634",
+    "title": "0.pytq",
+    "description": "Ejemplo",
+    "price": "14000",
+    "thumbnail": "/public/uploads/images/example.jpg",
+    "code": "0.pyt",
+    "stock": "14",
+    "status": true
+  },
+  {
+    "id": "08340cef-ea55-4a73-af63-1f28662535e6",
+    "title": "0.cty",
+    "description": "Lorem, ipsum dolor sit amet consectetur \n    adipisicing elit.Dolor voluptatem totam ullam ipsa, \n    facilis rem eveniet facere sapiente aliquid repudiandae \n    placeat soluta tenetur fugit, laudantium, incidunt porro \n    similique nemo blanditiis.",
+    "price": 15000,
+    "thumbnail": "/public/uploads/images/example.jpg",
+    "code": "0.cty",
+    "stock": 15,
+    "status": true
+  },
+  {
+    "id": "845264b3-4618-4fec-a638-ea8899f02788",
+    "title": "0.mkf",
+    "description": "Lorem, ipsum dolor sit amet consectetur \n    adipisicing elit.Dolor voluptatem totam ullam ipsa, \n    facilis rem eveniet facere sapiente aliquid repudiandae \n    placeat soluta tenetur fugit, laudantium, incidunt porro \n    similique nemo blanditiis.",
+    "price": 17000,
+    "thumbnail": "/public/uploads/images/example.jpg",
+    "code": "0.mkf",
+    "stock": 17,
+    "status": true
+  },
+  {
+    "id": "ac153283-d541-4aee-b62e-6ce88ec7196a",
+    "title": "Camera",
+    "price": "1000000",
+    "code": "0.fii2",
+    "status": "false",
+    "stock": "1578",
+    "description": "Product added",
+    "thumbnail": "/public/uploads/images/a77e03cc-16a5-4a91-9d0c-b3144a5b7a54.jpg",
+    "quantity": 1
+  },
+  {
+    "id": "8f7c2690-3702-403f-9067-3b0fd19aa533",
+    "title": "New be",
+    "price": "10000000",
+    "code": "0.dr",
+    "stock": "111",
+    "description": "hola",
+    "status": true,
+    "thumbnail": "/public/uploads/images/example.jpg"
+  },
+  {
+    "id": "58d24aa3-dd05-4470-a672-0bc541e46657",
+    "title": "sdsdsd",
+    "price": "1000",
+    "code": "0.drx0",
+    "status": "false",
+    "stock": "0000",
+    "description": "zzz",
+    "thumbnail": "/public/uploads/images/example.jpg"
+  }
+]

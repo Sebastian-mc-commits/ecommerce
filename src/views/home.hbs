@@ -1,0 +1,69 @@
+{{!-- <a href="/realTimeProducts" class="text">Go to Real time products</a>
+<br>
+<a href="/home/crud-admin" class="text">Create Product</a> --}}
+<h1>Products</h1>
+{{!-- <button onclick="nextProduct()">Scroll</button> --}}
+<div class="container m-auto grid" id="handleContent">
+
+    {{#if getProductById}}
+      {{#with products}}
+          <div class="card w-3">
+            <img
+              src={{this.thumbnail}}
+              alt="Product Image"
+              class="w-10"
+            />
+          <h1>{{this.title}}</h1>
+          <p>Price: {{this.price}}</p>
+          <p>Code: {{this.code}}</p>
+          <p>Status: {{this.status}}</p>
+          <p>Stock: {{this.stock}}</p>
+          <!--<a href="/cart/addToCart?title={{title}}&{{price}}&code={{code}}&sttus={{status}}&description={{description}}&tumbnail={{tumbnail}}">
+            Add to cart
+        </a>-->
+        {{#if user}}
+          <button data-cart="{{this._id}}">
+            {{!-- <a href="/cart/addToCart/{{this._id}}" class="text">Add to cart</a> --}}
+            Add to cart
+          </button>
+        {{/if}}
+
+          <button data-more="{{this._id}}">
+            {{!-- <a href="/listContent/{{this._id}}" class="text">Watch more</a> --}}
+            Watch more
+          </button>
+        </div>
+      {{/with}}
+    {{else}}
+    {{#each products}}
+        <div class="card w-3">
+            <img
+              src={{this.thumbnail}}
+              alt="Product Image"
+              class="w-10"
+            />
+          <h1>{{this.title}}</h1>
+          <p>Price: {{this.price}}</p>
+          <p>Code: {{this.code}}</p>
+          <p>Status: {{this.status}}</p>
+          <p>Stock: {{this.stock}}</p>
+          <!--<a href="/cart/addToCart?title={{title}}&{{price}}&code={{code}}&sttus={{status}}&description={{description}}&tumbnail={{tumbnail}}">
+            Add to cart
+        </a>-->
+          <button data-cart="{{this._id}}">
+            {{!-- <a href="/cart/addToCart/{{this._id}}" class="text">Add to cart</a> --}}
+            Add to cart
+          </button>
+
+          <button>
+            <a href="/listContent/{{this._id}}" class="text">Watch more</a>
+            Watch more
+          </button>
+        </div>
+    {{/each}}
+    {{/if}}
+
+  </div>
+</div>
+
+<script src="/public/js/home.js"></script>

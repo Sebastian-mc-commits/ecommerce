@@ -1,0 +1,37 @@
+{
+  "name": "retos",
+  "version": "1.0.0",
+  "description": "",
+  "main": "createFile.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sebastian-mc-commits/challenges.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sebastian-mc-commits/challenges/issues"
+  },
+  "homepage": "https://github.com/Sebastian-mc-commits/challenges#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-handlebars": "^6.0.6",
+    "express-session": "^1.17.3",
+    "mongoose": "^6.8.3",
+    "mongoose-delete": "^0.5.4",
+    "multer": "^1.4.5-lts.1",
+    "socket.io": "^4.5.4",
+    "uuidv4": "^6.2.13"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
