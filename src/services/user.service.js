@@ -26,7 +26,7 @@ export const createUser = async (data) => {
 
 export const getUsers = async () => {
     try {
-        const users = await UserModel.find({});
+        const users = await UserModel.find().lean();
         return users;
     }
     catch (err) {

@@ -1,27 +1,29 @@
 <link rel="stylesheet" href="/public/styles/listContent.css" />
 
 <div class="container m-auto">
-  {{#with getProduct.product}}
-    <div class="content">
-      <img src={{thumbnail}} alt="Product image" />
-      <div class="productAttributes">
-        <h1>{{title}}</h1>
-        <p>Price: {{price}}</p>
-        <p>Code: {{code}}</p>
-        <p>Status: {{status}}</p>
-        <p>Stock: {{stock}}</p>
-      </div>
+  {{#with getProduct}}
+  <div class="content">
+    <img src={{thumbnail}} alt="Product image" />
+    <div class="productAttributes">
+      <h1>{{title}}</h1>
+      <p>Price: {{price}}</p>
+      <p>Code: {{code}}</p>
+      <p>Status: {{status}}</p>
+      <p>Stock: {{stock}}</p>
     </div>
-    <button class="button">Buy {{title}}</button>
-    <div class="description">
-      <p><strong>Description: </strong><br />{{description}}</p>
-    </div>
+  </div>
+  {{#if user}}
+  <button class="button">Buy {{title}}</button>
+  {{/if}}
+  <div class="description">
+    <p><strong>Description: </strong><br />{{description}}</p>
+  </div>
   {{/with}}
 
   <div class="border"></div>
+
   {{#if user}}
-  <h1>Welcome{{user.name}} <sup>{{user.email}}</sup></h1>
-  {{/if}}
+  <h1>Welcome {{user.name}}</h1>
 
   <form id="formChat">
     <div class="rate">
@@ -44,23 +46,31 @@
     </div>
 
     <div class="commentContent">
-      <input type="text" id="header" placeholder="Header">
-      <textarea
-        id="comment"
-        rows="10"
-        placeholder="Your opinion make us grow"
-      ></textarea>
-      <input type="submit" value="All set"/>
+      <textarea id="comment" rows="10" placeholder="Your opinion make us grow"></textarea>
+      <input type="submit" value="All set" />
     </div>
 
   </form>
+    {{/if}}
 
   <h3>Comments <strong id="commentsLength"></strong></h3>
-  <ul id="chat"></ul>
+  <ul id="chat">
+    {{#each getProduct.comments}}
+      <li><h3>{{userCreator.name}}</h3>says: <br> {{message}}</li>
+    {{/each}}
+  </ul>
 </div>
 
-<p hidden id="productRef">{{getProduct.product._id}}</p>
+<p hidden id="productRef">{{getProduct._id}}</p>
+<p hidden id="room">{{getProduct._id}}</p>
+<p hidden id="createdBy">{{user._id}}</p>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{{#if user}}
+<script>
+  const createdBy = document.querySelector("#createdBy").textContent;
+</script>
 <script src="/public/js/chat.js"></script>
+{{/if}}

@@ -1,12 +1,31 @@
 @import url("https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300&display=swap");
 
+:root {
+  --user-color: rgb(79, 76, 72);
+  --options-color: rgb(42, 41, 39);
+  --options-color-children: rgb(61, 59, 56);
+  --options-color-children-darker: rgb(36, 35, 33);
+  --danger: brown;
+  --text: wheat;
+  --default: FFFFFF;
+  --success: #28a745;
+  --info: #8b9dc3;
+  --warning: #F7DE3A;
+}
+
 body {
   font-family: "Hanken Grotesk", sans-serif;
+  margin: 0;
 }
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
 }
 
 .container {

@@ -12,9 +12,11 @@ socket.on("requestMessage", text => {
     });
 });
 
-socket.on("getProducts", async data => {
+socket.on("getProducts", async ({products}) => {
+    console.log("data");
+    console.log(products);
     try {
-        await renderProducts(data);
+        await renderProducts(products);
     } catch {
         products.innerHTML = `<div class='center text-warning'><h1>Something is wrong</h1></div>`
     }

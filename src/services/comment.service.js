@@ -1,9 +1,11 @@
 import CommentModel from "../models/comment.model.js";
+import ProductModel from "../models/product.model.js";
 
-export const createComment = async (createdBy, productRef, data) => {
+export const createComment = async (productRef, data) => {
     try {
-        const comment = new CommentModel({...data, createdBy, productRef});
-        const result = comment.save();
+        const comment = new CommentModel({...data});
+        // const comment = CommentModel.create({...data, createdBy});
+        const result = await comment.save(productRef);
         return result;
     }
     catch (err) {
@@ -11,34 +13,23 @@ export const createComment = async (createdBy, productRef, data) => {
     }
 }
 
-export const getComments = async (productRef) => {
-    try {
-        const comments = await CommentModel.find({productRef});
+export const getComments = async (_id) => {
 
-        const eachComment = [...comments].map(comment => {
-            const data = {
-                rate: comment.rate,
-                header: comment.header,
-                message: comment.message,
-                createdBy: comment.createdBy
-            }
-            return data;
-        });
-        const parseComments = {
-            product: getComments.productRef[0],
-            eachComment
-        }
-        // const mapComments = comments.map(comment => comment.productRef);
-        return parseComments;
+    try {
+        const comments = await ProductModel.findOne({_id}).populate({path: "comments", populate: {path: "userCreator"} }).lean();
+
+        console.log("comments from the service");
+        console.log(comments);
+        return comments;
     }
     catch (err) {
         throw new Error(err);
     }
 }
 
-export const editComment = async ({productRef, createdBy}, data) => {
+export const editComment = async (userCreator, data) => {
     try {
-        const product = await CommentModel.findOneAndUpdate({ productRef, createdBy }, data, { new: true });
+        const product = await CommentModel.findOneAndUpdate({ userCreator }, data, { new: true });
         return product;
     }
     catch (err) {
@@ -46,9 +37,9 @@ export const editComment = async ({productRef, createdBy}, data) => {
     }
 }
 
-export const getCommentsOfUser = async (createdBy) => {
+export const getCommentsOfUser = async (userCreator) => {
     try {
-        const product = await CommentModel.find({createdBy});
+        const product = await CommentModel.find({userCreator});
         return product;
     }
     catch (err) {

@@ -1,7 +1,7 @@
 import fs from "fs";
 import __dirname from "../__dirname.js";
 import { v4 } from "uuid";
-// import * as productService from "../services/product.service.js";
+import * as productService from "../services/product.service.js";
 // import * as userService from "../services/user.service.js";
 // import "../config/db.js";
 // import * as cartService from "../services/cart.service.js";
@@ -86,7 +86,7 @@ const mongo = async () => {
 
         const user = Math.floor(Math.random() * 3);
         const getAdmin = [3, 4, 10];
-        const showUsers = await userService.getUsers();
+        // const showUsers = await userService.getUsers();
         const ejm = {
             title: random, description: i % 2 == 0 ? "Ejemplo" : m,
             price: i * 1000, code: random, stock: i
@@ -99,9 +99,9 @@ const mongo = async () => {
             last_name: i * 1000, email, password: random,
         }
 
-        const id = showUsers[getAdmin[user]]._id;
-        await productService.createProduct(id, ejm);
-        // await userService.createUser({ ...us });
+        // const id = showUsers[getAdmin[user]]._id;
+        // await productService.createProduct(id, ejm);
+        await userService.createUser({ ...us });
         console.log("Bucle");
     }
     return "All Good";
@@ -109,30 +109,30 @@ const mongo = async () => {
 // mongo();
 const otherExampleFunction = async () => {
 
-    const showUsers = await userService.getUsers();
+    // const showUsers = await userService.getUsers();
     // const rs = await userService.userToAdmin(showUsers[5]._id);
     // const products = await productService.getProductsAdminView(showUsers[3]._id);
     // const rs = await userService.keepTrack();
     // const p = products.map(product => product.createdBy);
 
     const productId = await productService.getProducts();
-    const rs = cartService.deleteFromUserToCart(showUsers[1], productId[15]);
-    return rs;
+    // const rs = cartService.deleteFromUserToCart(showUsers[1], productId[15]);
+    return productId;
 }
 
-const otherExampleBecaseImFrustrated = async () => {
+// const otherExampleBecaseImFrustrated = async () => {
 
-    const id = "63cfbf071486fa81468e00b9";
-    const data = {
-        title: 'example',
-        description: 'Hi man!',
-        price: 1000,
-        code: '40.pol',
-        status: false,
-        stock: 122
-    }
-    const response = await productService.createProduct(id, data);
-    return response;
-}
-otherExampleBecaseImFrustrated().then((result) => console.log(result)).catch(err => console.log("Somethung went wrong", err));
+//     const id = "63cfbf071486fa81468e00b9";
+//     const data = {
+//         title: 'example',
+//         description: 'Hi man!',
+//         price: 1000,
+//         code: '40.pol',
+//         status: false,
+//         stock: 122
+//     }
+//     const response = await productService.createProduct(id, data);
+//     return response;
+// }
+otherExampleFunction().then((result) => console.log(result)).catch(err => console.log("Somethung went wrong", err));
 console.log("set");

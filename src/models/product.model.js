@@ -21,6 +21,7 @@ const schema = new mongoose.Schema({
         default: "https://i.pinimg.com/originals/73/a6/c4/73a6c4e772e4aad4e6ec37de2f52af74.png"
     },
 
+
     code: {
         type: String,
         requred: true,
@@ -39,30 +40,30 @@ const schema = new mongoose.Schema({
     },
 
     createdBy: {
-        require: true,
+        required: true,
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     },
 
-    cart: {
-        type: [{
-            user: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "User"
-            }
-        }],
-        
-        default: []
-    }
+    comments: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Comment"
+        }
+    ]
+
 });
 
-// schema.pre("save", async function (next) {
-//     console.log(this.createdBy);
-//     const user = await getUser.findOne({_id: this.createdBy}).lean();
-//     console.log(user);
-//     if (!user.isAdmin) throw new Error("permission denied");
-//     next();
-// });
+schema.pre("save", async function (next) {
+    try {
+        const user = await getUser.findOne({ _id: this.createdBy });
+        if (!user.isAdmin) throw new Error("permission denied");
+        next();
+
+    } catch (err) {
+        console.log(err.message);
+    }
+});
 
 const ProductModel = mongoose.model("Product", schema);
 

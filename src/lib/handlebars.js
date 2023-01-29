@@ -11,4 +11,6 @@ helpers.length = async (id) => {
 
 helpers.currentView = (options) => options.data.exphbs.view;
 
+helpers.showMenu = (options) => !/crud-admin/g.test(helpers.currentView(options));
+
 export default helpers;

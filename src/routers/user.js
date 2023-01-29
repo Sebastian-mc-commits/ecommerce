@@ -11,5 +11,11 @@ router.get("/", authenticate, (req, res) => {
         req.flash("message", { message: "user Not Found", type: "warning", error: err.message });
         return res.status(404).render("errorHandler");
     }
-})
+});
+
+router.get("/logout", authenticate, (req, res) => {
+    req.session.destroy();
+    req.session = null
+    res.render("home");
+});
 export default router;

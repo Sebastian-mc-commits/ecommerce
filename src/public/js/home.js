@@ -16,10 +16,14 @@ handleContent.addEventListener("click", e => {
     console.log(target);
     if (!target.dataset.cart) return;
     
-    const y = e.clientY;
-    // const y2 = e.pageY;
+    // const y = e.clientY;
+    const y = e.pageY;
     localStorage.setItem("handleScroll", String(y));
 
     return location.href = `/cart/addToCart/${target.dataset.cart}`;
 
 });
+
+const example = () => {
+    fetch("/home/home2").then(res => res.json()).then(data => console.log(data)).catch(err => console.log(err.message));
+};

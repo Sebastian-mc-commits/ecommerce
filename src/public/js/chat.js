@@ -4,26 +4,26 @@ const chat = document.querySelector("#chat");
 const commentsLength = document.querySelector("#commentsLength");
 const comment = document.querySelector("#comment");
 const user = document.querySelector("#user");
-const room = document.querySelector("#productRef").textContent;
+const room = document.querySelector("#room").textContent;
+const productRef = document.querySelector("#productRef").textContent;
 
 let exisUser = "";
 
-socket.emit("selectedRoom", room);
+socket.emit("selectedRoom", { room, productRef });
 
 formChat.addEventListener('submit', e => {
     e.preventDefault();
-    const header = document.querySelector("#header").textContent;
 
     const rate = document.querySelectorAll("#rate");
     const selectedRate = [...rate].find(item => item.checked);
+    console.log("Comming to form");
 
     socket.emit("message", {
         room,
-        header,
         message: comment.value,
         rate: selectedRate.value,
         productRef,
-        createBy
+        createdBy
     });
     /*socket.emit("message", {
         from: socket.id, 
@@ -33,15 +33,22 @@ formChat.addEventListener('submit', e => {
 });
 
 function printData(data) {
+    console.log(data);
+    if (!data) return chat.innerHTML = "<h2>No Comments Found</h2>"
     chat.innerHTML = "";
     commentsLength.textContent = data.length;
-    for (const { rate, header, message, createdBy } of data) {
-        chat.innerHTML += `<h3>Rate: ${rate}</h3>
-            <li><h3>${header}</h3> ${createdBy.name} says: <br> ${message}</li>`;
+    for (const { rate, message, userCreator } of data) {
+        try {
+            chat.innerHTML += `<h3>Rate: ${rate}</h3>
+                <li><h3>${userCreator.name}</h3>says: <br> ${message}</li>`;
+        }
+        catch {
+            chat.innerHTML = "<h2>Render error</h2>"
+        }
     }
 }
 
-socket.on("data", async data => printData(data) );
+socket.on("data", async ({ data }) => printData(data));
 
 // const registerUser = () => {
 //     if (exisUser) return;

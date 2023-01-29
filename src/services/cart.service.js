@@ -1,11 +1,10 @@
-import ProductModel from "../models/product.model.js";
+import UserModel from "../models/user.models.js";
 
-export const addToCart = async (userId, _id) => {
+export const addToCart = async (_id, productId) => {
     try {
-        const product = await ProductModel.findOne({_id});
-        product.cart.push({user: userId});
-        const result = await product.save();
-        // const result = await product.updateOne({_id}, product);
+        const user = await UserModel.findOne({_id});
+        user.cart.push({product: productId});
+        const result = await user.save();
         return result;
     }
     catch (err) {
@@ -13,9 +12,9 @@ export const addToCart = async (userId, _id) => {
     }
 }
 
-export const deleteFromUserToCart = async (userId, _id) => {
+export const deleteFromUserToCart = async (_id, productId) => {
     try {
-        const result = await ProductModel.updateOne({_id}, {$pull: {cart: {user: userId }} });
+        const result = await UserModel.updateOne({_id}, {$pull: {cart: {product: productId}} });
         return result;
     }
     catch (err) {
@@ -25,9 +24,9 @@ export const deleteFromUserToCart = async (userId, _id) => {
 
 export const getProductsFromCart = async (userId) => {
     try {
-        // const products = await ProductModel.find({cart: {$elemMatch: {user: "63cdd07de2db59a79ded8f17"}} }).lean();
-        const products = await ProductModel.find({"cart.user": userId}).lean();
-        return products;
+        const products = await UserModel.findOne({_id: userId}).populate("cart.product").lean();
+        const getProducts = products.cart.map(product => product.product);
+        return getProducts;
     }
     catch (err) {
         throw new Error(err);
@@ -36,8 +35,7 @@ export const getProductsFromCart = async (userId) => {
 
 export const countProductsOfCart = async (userId) => {
     try {
-        const count = await ProductModel.countDocuments({cart: {user: userId}}).lean();
-        console.log(count);
+        const count = await UserModel.countDocuments({userId}).lean();
         return count;
     }
     catch (err) {
@@ -48,7 +46,9 @@ export const countProductsOfCart = async (userId) => {
 export const deleteAll = async (userId) => {
     try {
         // const result = await ProductModel.updateOne({_id}, {$pull: {cart: {user: userId }} });
-        const result = await ProductModel.updateMany({}, {$pull: {cart: {user: userId }} });
+        const result = await UserModel.updateOne({_id: userId}, {$set: {cart: [] } });
+        console.log("result");
+        console.log(result);
         return result;
     }
     catch (err) {

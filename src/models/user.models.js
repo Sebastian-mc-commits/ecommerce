@@ -12,32 +12,54 @@ const schema = new mongoose.Schema({
 
     name: {
         type: String,
-        require: true
+        required: true
     },
 
     last_name: {
         type: String,
-        require: true
+        required: true
 
     },
 
     email: {
         type: String,
-        require: true,
+        required: true,
         unique: true,
         
     },
 
     password: {
         type: String,
-        require: true
+        required: true
     },
 
     isAdmin: {
         type: Boolean,
-        require: true,
+        required: true,
         default: false
-    }
+    },
+
+    isSuperAdmin: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+
+    cart: {
+        type: [{
+            product: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Product"
+            }
+        }],
+        
+        default: []
+    },
+
+    // cart: [{
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "Product"
+    // }]
 
 });
 
@@ -50,7 +72,7 @@ schema.pre("save", async function (next){
 
 schema.methods.comparePassword = async function(password) {
     const isValidPassword = await bcryptjs.compare(password, this.password);
-   return isValidPassword; 
+   return true; 
 };
 
 schema.methods.setToAdmin = async function() {

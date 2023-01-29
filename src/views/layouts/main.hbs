@@ -6,7 +6,11 @@
     <title>{{currentView}} ProductManager</title>
     <link rel="stylesheet" href="/public/styles/index.css" />
   </head>
-  {{> menu}}
+
+  {{#if (showMenu)}}
+    {{> menu}}
+  {{/if}}
+  <p>{{showMenu}}</p>
   {{> messages}}
   <body>
     {{{body}}}
