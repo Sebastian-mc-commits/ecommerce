@@ -23,7 +23,7 @@ export const getProducts = async () => {
         // const products = await ProductModel.find({}).skip(limit).limit(limit);
         // return products
         // }
-        const products = await ProductModel.find().lean();
+        const products = await ProductModel.find({deleteAt: {$exists: false}}).lean();
         return products;
     }
     catch (err) {

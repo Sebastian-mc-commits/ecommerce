@@ -23,7 +23,3 @@ handleContent.addEventListener("click", e => {
     return location.href = `/cart/addToCart/${target.dataset.cart}`;
 
 });
-
-const example = () => {
-    fetch("/home/home2").then(res => res.json()).then(data => console.log(data)).catch(err => console.log(err.message));
-};

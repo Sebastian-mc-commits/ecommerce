@@ -29,7 +29,8 @@ const upload = multer({
 router.get("/", authenticateAdmin, async (req, res) => {
     try {
         // res.render("crud-admin", { products: await product.getProducts() });
-        res.render("crud-admin");
+        const user = req.session?.user;
+        res.render("crud-admin", {getUser: JSON.stringify(user)});
     }
     catch (err) {
         req.flash("message", { message: "Has been a problem with the Admin page render", type: "warning", error: err.message });

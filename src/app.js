@@ -11,6 +11,8 @@ import helpers from "./lib/handlebars.js";
 import { getProducts } from "./services/product.service.js";
 import { getUsers } from "./services/user.service.js";
 import * as comments from "./services/comment.service.js";
+import { onAuthenticateSocket } from "./lib/middleware/socket/authentication.socket.js";
+import fs from "fs";
 
 dotenv.config();
 
@@ -61,17 +63,12 @@ const io = new Server(server);
 
 io.on("connection", async (socket) => {
 
-    // io.use((socket, next) => {
-    //     const token = socket.handshake.auth;
-    //     next(token);
-    // });
-
-    socket.on("selectedRoom", async ({room, productRef}) => {
-        // socket.rooms.delete;
+    socket.on("selectedRoom", async ({ room, productRef }) => {
         socket.join(room);
-        // const getData = await comments.getComments(productRef);
-        // socket.emit("data", {data: getData.comments})
     });
+
+    const products = await getProducts();
+    socket.emit("getProducts", { products });
 
     socket.on("message", async ({ createdBy, productRef, room, rate, message }) => {
         const data = {
@@ -79,19 +76,37 @@ io.on("connection", async (socket) => {
             message,
             userCreator: createdBy
         }
-        console.log("data", data);
         await comments.createComment(productRef, data);
         const getData = await comments.getComments(productRef);
         io.to(room).emit("data", { data: getData.comments });
     });
-    
 
-    const products = await getProducts();
-    const users = await getUsers();
-    
-    socket.emit("getProducts", {products});
+    let users = [];
+    const isAuthenticate = socket.handshake.auth;
+    io.use(async (_, next) => {
+        const isAdmin = Boolean(isAuthenticate.isAdmin);
+        console.log("Hi from middleware socket", isAuthenticate.isAdmin);
+
+        if (!isAdmin) {
+            next(new Error("Unauthorized"));
+        }
+        else {
+            next();
+        }
+    });
+
+    console.log("onUsers");
+    const isSuperAdmin = Boolean(isAuthenticate.isSuperAdmin);
+
+    if (isSuperAdmin) {
+        // console.log("hi");
+        users = await getUsers();
+    }
+
+    console.log(users);
+
     socket.emit("getData", { products, users });
-    
+
     socket.on("sendProduct", async message => {
         io.emit("requestMessage", { message });
         io.emit("getProducts", { products });

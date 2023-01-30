@@ -72,7 +72,13 @@ schema.pre("save", async function (next){
 
 schema.methods.comparePassword = async function(password) {
     const isValidPassword = await bcryptjs.compare(password, this.password);
-   return true; 
+    console.log("isValidPassword")
+    console.log(isValidPassword)
+    console.log("password");
+    console.log(this.password);
+    console.log("password2");
+    console.log(password);
+   return isValidPassword; 
 };
 
 schema.methods.setToAdmin = async function() {

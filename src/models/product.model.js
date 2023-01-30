@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongooseDelete from "mongoose-delete";
 import getUser from "./user.models.js";
 const schema = new mongoose.Schema({
     title: {
@@ -53,6 +54,8 @@ const schema = new mongoose.Schema({
     ]
 
 });
+
+schema.plugin(mongooseDelete, {deletedAt: true});
 
 schema.pre("save", async function (next) {
     try {

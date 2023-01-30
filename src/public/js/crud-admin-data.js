@@ -1,13 +1,15 @@
 const user = document.querySelector("#user");
 const product = document.querySelector("#product");
-const socket = io();
+const socket = io({auth: getUser});
 
 socket.on("getData", ({ products, users }) => {
+    console.log("users");
+    console.log(users);
     try {
         printProducts(products);
         printUsers(users);
     } catch {
-        document.querySelector("#handleData").innerHTML = `
+        product.innerHTML = `
             <p>Something went wrong</p>
         `;
     }

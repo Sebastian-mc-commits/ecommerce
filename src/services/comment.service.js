@@ -17,9 +17,6 @@ export const getComments = async (_id) => {
 
     try {
         const comments = await ProductModel.findOne({_id}).populate({path: "comments", populate: {path: "userCreator"} }).lean();
-
-        console.log("comments from the service");
-        console.log(comments);
         return comments;
     }
     catch (err) {
