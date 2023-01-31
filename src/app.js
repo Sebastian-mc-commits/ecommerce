@@ -83,27 +83,24 @@ io.on("connection", async (socket) => {
 
     let users = [];
     const isAuthenticate = socket.handshake.auth;
-    io.use(async (_, next) => {
-        const isAdmin = Boolean(isAuthenticate.isAdmin);
-        console.log("Hi from middleware socket", isAuthenticate.isAdmin);
+    // io.use(async (_, next) => {
+    //     const isAdmin = Boolean(isAuthenticate.isAdmin);
+    //     console.log("Hi from middleware socket", isAuthenticate.isAdmin);
 
-        if (!isAdmin) {
-            next(new Error("Unauthorized"));
-        }
-        else {
-            next();
-        }
-    });
+    //     if (!isAdmin) {
+    //         next(new Error("Unauthorized"));
+    //     }
+    //     else {
+    //         next();
+    //     }
+    // });
 
-    console.log("onUsers");
     const isSuperAdmin = Boolean(isAuthenticate.isSuperAdmin);
 
     if (isSuperAdmin) {
         // console.log("hi");
         users = await getUsers();
     }
-
-    console.log(users);
 
     socket.emit("getData", { products, users });
 
