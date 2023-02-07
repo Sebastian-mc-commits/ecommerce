@@ -16,6 +16,8 @@ router.post("/login", isAuthenticate, async (req, res) => {
         const getUser = await user.getUser(req.body);
         req.session.user = getUser;
         req.flash("message", {message: `Welcome ${getUser.name}`, type: "success"});
+
+        req.io.emit("newUser", {user: getUser});
         res.redirect("/home");
     }
     catch(err) {
@@ -29,6 +31,7 @@ router.post("/singup", isAuthenticate, async (req, res) => {
     try {
         const getUser = await user.createUser(req.body);
         req.session.user = getUser;
+        req.io.emit("newUser", {user: getUser});
         req.flash("message", {message: `Welcome ${getUser.name}`, type: "success"});
         res.redirect("/home");
     }

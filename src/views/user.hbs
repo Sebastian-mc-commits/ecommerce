@@ -3,13 +3,13 @@
 
 <div class="content">
     <div class="userContent">
-        <img src="{{user.image}}" alt="Image">
-        <p>{{user.name}}</p>
-        <p>{{user.email}}</p>
+        <img src="{{selectedUser.image}}" alt="Image">
+        <p>{{selectedUser.name}}</p>
+        <p>{{selectedUser.email}}</p>
     </div>
     <div class="optionsContent" id="optionsContent">
         <ul>
-            {{#if user.isAdmin}}
+            {{#if selectedUser.adminOptions.isAdmin}}
             <li style="--clr:#336699">
                 <p data-text="&nbsp;Created products" id="getProducts">&nbsp;Created products</p>
             </li>
@@ -20,7 +20,7 @@
                 <p data-text="&nbsp;Deleted products" id="getDeletedProducts">&nbsp;Deleted products&nbsp;</p>
             </li>
             {{/if}}
-            {{#if user.isSuperAdmin}}
+            {{#if selectedUser.superAdminOptions.isSuperAdmin}}
             <li style="--clr:#6699ff">
                 <p data-text="&nbsp;Users set to admin" id="getAdmins">&nbsp;Users set to admin&nbsp;</p>
             </li>
@@ -31,9 +31,11 @@
             <li style="--clr:#9999ff">
                 <p data-text="&nbsp;Order" id="getOrder">&nbsp;Order&nbsp;</p>
             </li>
+            {{#isEqual user._id selectedUser._id }}
             <li class="onLogOut">
                 <button onclick="handleLogout()">Log out</button>
             </li>
+            {{/isEqual}}
         </ul>
     </div>
 </div>

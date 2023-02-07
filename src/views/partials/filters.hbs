@@ -1,0 +1,56 @@
+
+<link rel="stylesheet" href="/public/styles/partials/modal.css">
+<link rel="stylesheet" href="/public/styles/partials/filters.css">
+<div class="overlay" id="overlay"></div>
+<section class="modal" id="modal">
+    <div class="modal-header">
+        <h3>Types</h3>
+        <button data-close-button>X</button>
+    </div>
+    <div class="modal-content" id="content">
+
+    </div>
+    <div class="modal-footer display-none">
+        <span class="btn" data-selected>Done</span>
+    </div>
+</section>
+
+<input type="checkbox" id="hideForm" hidden>
+<form  id="handleFilterForm" action={{action}} method="POST" class="formDesign">
+    <label for="sortBy">
+        <span>Sort By <br></span>
+        <select name="sort" id="sortBy">
+            <option value="">Select an option</option>
+            <option value="title 1">Ascendent</option>
+            <option value="title -1">Descendent</option>
+            <option value="price -1">Highest Price</option>
+            <option value="price 1">Lowest Price</option>
+        </select>
+    </label>
+
+    <div id="showSelectedTypes"></div>
+
+    <label for="priceRange">
+        <span>Min Price</span>
+        <input type="range" id="priceRange" value="0" name="minPrice">
+        <span id="rangeValue">0.0</span>
+    </label>
+
+    <label for="priceRange">
+        <span>Max Price</span>
+        <input type="range" id="priceRange" value="0" name="maxPrice">
+        <span id="rangeValue">0.0</span>
+    </label>
+
+    <span class="btn" data-modal-target="#modal">Categories</span>
+    <input type="submit" value="Apply" class="btn bg-gray" disabled>
+</form>
+<label for="hideForm" class="hideForm"><</label>
+    <div class="mainContent" id="mainContent">
+        {{#if @partial-block}}
+        {{> @partial-block }}
+        {{/if}}
+    </div>
+
+<script src="/public/js/partials/filters.js"></script>
+<script src="/public/js/partials/modal.js"></script>

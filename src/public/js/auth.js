@@ -16,6 +16,7 @@ isRegister.addEventListener("click", () => {
 
         action.setAttribute("action", "/auth/login");
         title.textContent = "Log In";
+        const field = document.querySelectorAll("#field");
 
         isRegister.textContent = "Don't you have an account?";
 

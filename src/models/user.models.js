@@ -25,24 +25,52 @@ const schema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        
+        index: true
+
     },
 
     password: {
         type: String,
-        required: true
+        required: true,
+        index: true
     },
 
-    isAdmin: {
-        type: Boolean,
-        required: true,
-        default: false
-    },
+    adminOptions: {
+        isAdmin: {
+            type: Boolean,
+            default: false,
+            required: true
+        },
 
-    isSuperAdmin: {
-        type: Boolean,
-        required: true,
-        default: false
+        deletedProducts: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product",
+            unique: true
+        }],
+        
+        updatedProducts: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product",
+            unique: true
+        }]
+    },
+    
+    superAdminOptions: {
+        isSuperAdmin: {
+            type: Boolean,
+            default: false,
+            required: true
+        },
+        usersSetToAdmin: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            unique: true
+        }],
+
+        // usersUnsetToAdmin: [{
+        //     type: mongoose.Schema.Types.ObjectId,
+        //     ref: "User"
+        // }]
     },
 
     cart: {
@@ -52,10 +80,20 @@ const schema = new mongoose.Schema({
                 ref: "Product"
             }
         }],
-        
+
         default: []
     },
 
+    orders: {
+        type: [{
+            order: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Order"
+            }
+        }],
+
+        default: []
+    }
     // cart: [{
     //     type: mongoose.Schema.Types.ObjectId,
     //     ref: "Product"
@@ -64,34 +102,50 @@ const schema = new mongoose.Schema({
 });
 
 
-schema.pre("save", async function (next){
+schema.pre("save", async function (next) {
+    console.log("is modified");
+    console.log(!this.isModified("password"));
+    if (!this.isModified("password")) return next();
     const salt = await bcryptjs.genSalt(10);
+    UserModel.create
     this.password = await bcryptjs.hash(this.password, salt);
     next()
 });
 
-schema.methods.comparePassword = async function(password) {
+schema.methods.comparePassword = async function (password) {
     const isValidPassword = await bcryptjs.compare(password, this.password);
-    console.log("isValidPassword")
-    console.log(isValidPassword)
-    console.log("password");
-    console.log(this.password);
-    console.log("password2");
-    console.log(password);
-   return isValidPassword; 
+    return isValidPassword;
 };
 
-schema.methods.setToAdmin = async function() {
-    this.isAdmin = true;
-    return await this.save();
+schema.methods.setToAdmin = async function (_id) {
+
+    try {
+        await UserModel.updateOne({ _id }, {$push: {"superAdminOptions.usersSetToAdmin": this._id } } );
+        this.adminOptions.isAdmin = true;
+        return await this.save();
+    }
+    catch (err) {
+        throw new Error(err);
+    }
 }
 
-schema.pre("remove", async function(next) {
-    if (this.isAdmin) {
+schema.methods.unsetUserToAdmin = async function (_id) {
+    try {
+        await UserModel.updateOne({ _id }, {$pull: {"superAdminOptions.usersSetToAdmin": this._id } } );
+        this.adminOptions.isAdmin = false;
+        return await this.save();
+    }
+    catch (err) {
+        throw new Error(err);
+    }
+}
+
+schema.pre("remove", async function (next) {
+    if (this.adminOptions.isAdmin) {
         try {
-            await ProductModel.deleteMany({createdBy: this._id});
+            await ProductModel.deleteMany({ createdBy: this._id });
         }
-        catch(err) {
+        catch (err) {
             return next(Error(err));
         }
     }
@@ -102,3 +156,11 @@ const UserModel = mongoose.model("User", schema);
 
 
 export default UserModel;
+
+const students = [{ "first_name": "John", "last_name": "Doe", "email": "johndoe@example.com", "gender": "male", "grade": "A", "group": "1" },
+{ "first_name": "Jane", "last_name": "Doe", "email": "janedoe@example.com", "gender": "female", "grade": "B", "group": "2" },
+{ "first_name": "Bob", "last_name": "Smith", "email": "bobsmith@example.com", "gender": "male", "grade": "C", "group": "1" },
+{ "first_name": "Alice", "last_name": "Johnson", "email": "alicejohnson@example.com", "gender": "female", "grade": "A", "group": "2" },
+{ "first_name": "Charlie", "last_name": "Williams", "email": "charliewilliams@example.com", "gender": "male", "grade": "B", "group": "1" },
+{ "first_name": "Emma", "last_name": "Jones", "email": "emmajones@example.com", "gender": "female", "grade": "C", "group": "2" },
+{ "first_name": "Sebastian", "last_name": "Mc", "email": "sm9349168gmail.com", "gender": "male", "grade": "A", "group": "2" }]

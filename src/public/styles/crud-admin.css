@@ -210,3 +210,27 @@ body {
   background: #343333;
   /* background-color: yellowgreen; */
 }
+
+.userRender tr td.userMessage{
+  position: relative;
+  overflow: hidden;
+}
+.userRender tr td.userMessage::before {
+  position: absolute;
+  inset: 0;
+  transform: translateY(100%);
+  content: "message";
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--gray);
+  z-index: 3;
+  transition: all 0.5s;
+}
+
+.userRender tr td.userMessage:hover::before{
+  transform: translateY(0);
+  background-color: var(--user-color);
+}

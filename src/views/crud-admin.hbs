@@ -15,7 +15,7 @@
       <li class="onPressLi">Create product</li>
       <li>Delete or Update product</li>
       <li id="handleUpdateOnMenu" hidden></li>
-      {{#if user.isSuperAdmin}}
+      {{#if user.superAdminOptions.isSuperAdmin}}
       <li>Users Options</li>
       {{/if}}
     </ul>
@@ -54,7 +54,7 @@
           <div class="commentContent">
             <textarea name="description" rows="10" placeholder="Description" id="field"></textarea>
           </div>
-          <input type="submit" value="Done" class="w-6 btn-transition" id="activeButton" disabled/>
+          <input type="submit" value="Done" class="w-6 btn-transition" id="activeButton" disabled />
         </form>
       </div>
     </li>
@@ -85,13 +85,14 @@
         <h2>Users</h2>
         <table class="w-10">
           <thead>
+            <th>Is connected</th>
             <th>id</th>
             <th>Name</th>
             <th>Last Name</th>
             <th>Email</th>
             <th>Set to admin</th>
           </thead>
-          <tbody id="user"></tbody>
+          <tbody id="user" class="userRender"></tbody>
         </table>
       </div>
     </li>
@@ -100,8 +101,14 @@
 
 </div>
 
+{{#if pagination}}
+<div class="footer-content">
+  {{> pagination}}
+</div>
+{{/if}}
+
 <script>
-  const getUser = {{{getUser}}}
+  const getUser = {{{ getUser }}}
   /*window.addEventListener("load", () => {
     window.postMessage({type: "data", data: {{{user}}} }, '*');
   });

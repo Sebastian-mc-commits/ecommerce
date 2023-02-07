@@ -11,6 +11,9 @@
   --success: #28a745;
   --info: #8b9dc3;
   --warning: #F7DE3A;
+  --gray: #cfd4c7;
+  --dark-blue: #0b62b9;
+  --white: #fff;
 }
 
 body {
@@ -109,20 +112,31 @@ html {
     align-items: center;
 }
 .warning {
-  color: darkred;
+  color: var(--warning);
 }
 
-.background-warning {
-  background-color: darkred;
+.bg-warning {
+  background-color: var(--warning);
+  opacity: 0.7;
+}
+
+.danger {
+  color: var(--danger);
+}
+
+.bg-danger {
+  padding: 2%;
+  background-color: var(--danger);
   opacity: 0.7;
 }
 
 .success {
-  color: forestgreen;
+  color: var(--success);
 }
 
-.background-success {
-  background-color: forestgreen;
+.bg-success {
+  padding: 2%;
+  background-color: var(--success);
   /* opacity: 0.7; */
 }
 
@@ -201,22 +215,60 @@ table {
 }
 
 button, input[type="submit"], input[type="file"]{
-  padding: 2%;
   border: 1px solid rgba(0, 0, 0, 0.2);
   cursor: pointer;
   border-radius: 8px;
+  margin: 0.4rem 0 0.2rem;
+  cursor: pointer;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.8rem 1.4rem;
+  font-weight: 700;
+  background-color: black;
+  border-radius: 5px;
+  text-align: center;
+  font-size: 1em;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 6;
+}
+
+.overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+
+input[type=range], select {
+  width: 100%;
 }
 
 input[type="submit"]:hover, button:hover, input[type="file"]:hover {
-  animation: wave 0.5s ease-in-out 1;
+  animation: wave infinite 0.5s ease-in-out;
+  animation-direction: alternate;
+  transition: all 0.5s;
 }
 
 @keyframes wave {
   from {
-    transform: rotate(4deg);
+    border: 1px black solid;
   }
   to {
-    transform: rotate(0);
+    border: 1px var(--gray) solid;
   }
 }
 
@@ -233,4 +285,16 @@ input[type="submit"]:hover, button:hover, input[type="file"]:hover {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.footer-content {
+  position: absolute;
+  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -150%;
+}
+
+.bg-gray {
+  background-color: var(--gray);
 }

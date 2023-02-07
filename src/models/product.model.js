@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import mongooseDelete from "mongoose-delete";
 import getUser from "./user.models.js";
+import pagination from "mongoose-paginate-v2";
 const schema = new mongoose.Schema({
     title: {
         type: String,
@@ -12,7 +13,7 @@ const schema = new mongoose.Schema({
         requred: true
     },
     price: {
-        type: String,
+        type: Number,
         requred: true
     },
 
@@ -51,16 +52,22 @@ const schema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: "Comment"
         }
-    ]
+    ],
+
+    categoryType: {
+        type: String,
+        required: true
+    }
 
 });
 
 schema.plugin(mongooseDelete, {deletedAt: true});
+schema.plugin(pagination);
 
 schema.pre("save", async function (next) {
     try {
         const user = await getUser.findOne({ _id: this.createdBy });
-        if (!user.isAdmin) throw new Error("permission denied");
+        if (!user.adminOptions.isAdmin) throw new Error("permission denied");
         next();
 
     } catch (err) {

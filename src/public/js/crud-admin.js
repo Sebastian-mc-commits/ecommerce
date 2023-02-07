@@ -8,15 +8,24 @@ const form = document.querySelector("#form");
 btn.addEventListener("input", () => content.classList.toggle("translate"));
 
 // socket.on("requestMessage", text => {
-    //     const {type, message} = text.message;
-    //     console.log(`type: ${type} message: ${message}`)
-    //     Swal.fire({
-        //         text: message,
-        //         toast: true,
-        //         position: "top-righ",
-        //         color: type
-        //     });
-        // });
+//     const {type, message} = text.message;
+//     console.log(`type: ${type} message: ${message}`)
+//     Swal.fire({
+//         text: message,
+//         toast: true,
+//         position: "top-righ",
+//         color: type
+//     });
+// });
+
+const showMessage = ({ type, message }) => {
+    Swal.fire({
+        text: message,
+        toast: true,
+        position: "top",
+        color: type
+    });
+}
 
 const message_crud = JSON.parse(localStorage.getItem("message")) || "";
 
@@ -30,13 +39,12 @@ if (message_crud) {
     });
     localStorage.removeItem("message");
 }
-
 //On press side-bar options
 list_items.addEventListener("click", e => {
     const target = e.target;
 
     if (target === list_items) return;
-    
+
     const slides = document.querySelector("[data-slides]");
     const activeSlide = slides.querySelector("[data-active]");
 
@@ -46,7 +54,7 @@ list_items.addEventListener("click", e => {
     if (currentEqualPrev) return;
 
     const prevIndex = [...slides.children].indexOf(activeSlide);
-    
+
     list_items.children[newIndex].classList.add("onPressLi");
     console.log(newIndex);
     slides.children[newIndex].dataset.active = true;

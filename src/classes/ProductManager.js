@@ -1,9 +1,9 @@
-import fs from "fs";
-import __dirname from "../__dirname.js";
-import { v4 } from "uuid";
-import * as productService from "../services/product.service.js";
+// import fs from "fs";
+// import __dirname from "../__dirname.js";
+// import { v4 } from "uuid";
+// import * as productService from "../services/product.service.js";
 // import * as userService from "../services/user.service.js";
-// import "../config/db.js";
+import "../config/db.js";
 // import * as cartService from "../services/cart.service.js";
 class ProductManager {
     #product;
@@ -106,6 +106,7 @@ const mongo = async () => {
     }
     return "All Good";
 }
+
 // mongo();
 const otherExampleFunction = async () => {
 

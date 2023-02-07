@@ -26,8 +26,19 @@ export const createUser = async (data) => {
 
 export const getUsers = async () => {
     try {
-        const users = await UserModel.find().lean();
+        const users = await UserModel.find().select("-password").lean();
+        // const users = await UserModel.paginate({}, {limit: 6, page, lean: true});
         return users;
+    }
+    catch (err) {
+        throw new Error(err);
+    }
+}
+
+export const getUserForSuperAdmin = async (_id) => {
+    try {
+        const user = await UserModel.findOne({_id}).select("-password").lean();
+        return user;
     }
     catch (err) {
         throw new Error(err);
@@ -53,11 +64,23 @@ export const updateUser = async ({email, password, _id }) => {
     }
 }
 
-export const userToAdmin = async (_id) => {
+export const userToAdmin = async (adminId, _id) => {
     try {
         // const user = await UserModel.updateOne({ _id }, {$set: {name: "sebastian mac"} }, {upsert: false});
         const user = await UserModel.findOne({_id});
-        const response = await user.setToAdmin();
+        const response = await user.setToAdmin(adminId);
+        return response;
+    }
+    catch (err) {
+        throw new Error(err);
+    }
+}
+
+export const unsetUserToAdmin = async (adminId, _id) => {
+    try {
+        // const user = await UserModel.updateOne({ _id }, {$set: {name: "sebastian mac"} }, {upsert: false});
+        const user = await UserModel.findOne({_id});
+        const response = await user.unsetUserToAdmin(adminId);
         return response;
     }
     catch (err) {

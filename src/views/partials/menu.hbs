@@ -4,7 +4,8 @@
 
   <a href="/realTimeProducts" id="realTimeProducts" class="text">Go to Real time products</a>
 
-  {{#if user.isAdmin}}
+  {{#if user.adminOptions.isAdmin}}
+<p>Admin2 {{user.adminOptions.isAdmin}}</p>
     <a href="/crud-admin" id="crud-admin" class="text">Product options</a>
   {{/if}}
 
@@ -17,7 +18,7 @@
       <div id="user">
         <img src={{image}} alt="User Image" onclick="userView()"/>
         {{!-- <a href="/user" class="user text">{{name}}</a> --}}
-        <p class="user background-success text border-radius cursor-pointer">Go to your account</p>
+        <p class="user bg-success text border-radius cursor-pointer">Go to your account</p>
       </div>
     {{/with}}
 

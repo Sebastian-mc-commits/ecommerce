@@ -21,6 +21,7 @@
   "homepage": "https://github.com/Sebastian-mc-commits/challenges#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.1",
     "connect-flash": "^0.1.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
@@ -28,7 +29,10 @@
     "express-session": "^1.17.3",
     "mongoose": "^6.8.3",
     "mongoose-delete": "^0.5.4",
+    "mongoose-paginate-v2": "^1.7.1",
     "multer": "^1.4.5-lts.1",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
     "socket.io": "^4.5.4",
     "uuidv4": "^6.2.13"
   },
