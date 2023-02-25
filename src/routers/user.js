@@ -21,8 +21,6 @@ router.get("/visitUser", authenticateSuperAdmin, async (req, res) => {
     try {
         const {_id} = req.query;
         const selectedUser = await getUserForSuperAdmin(_id);
-        console.log("visit user");
-        console.log(selectedUser);
         res.render("user", {
             selectedUser
         });
@@ -33,9 +31,5 @@ router.get("/visitUser", authenticateSuperAdmin, async (req, res) => {
     }
 });
 
-router.get("/logout", authenticate, (req, res) => {
-    req.session.destroy();
-    req.session = null
-    res.render("home");
-});
+
 export default router;

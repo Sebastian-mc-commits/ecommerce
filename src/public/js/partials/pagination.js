@@ -1,8 +1,8 @@
 let HTML = "";
-let i = paginationOptions.page < 3 ? 1: paginationOptions.page - 2;
+let i = paginationOptions.page < 3 ? 1 : paginationOptions.page - 2;
 let condition = paginationOptions.page < 3 ? 5 : paginationOptions.page + 2;
 
-for (i; i <= condition; i++){
+for (i; i <= condition; i++) {
   HTML += i === paginationOptions.page ? `<p class="pageSelected">${i}</p>` : `<p>${i}</p>`;
   if (i === paginationOptions.totalPages) break;
 }

@@ -6,6 +6,7 @@ body {
 * {
     box-sizing: border-box;
     margin: 0;
+    padding: 0;
 }
 
 ::-webkit-scrollbar {
@@ -52,6 +53,7 @@ img {
 
 .optionsContent {
     height: 100vh;
+    padding-left: 3%;
     background-color: var(--options-color);
 }
 
@@ -207,6 +209,7 @@ button {
     top: 0;
     font-size: 4em;
     cursor: pointer;
+    z-index: 10;
 }
 
 .quantityDesign {
@@ -220,25 +223,8 @@ button {
     align-items: center;
     gap: 10px;
     width: 20px;
+    z-index: 7;
 }
-
-.danger {
-    background-color: var(--danger);
-
-}
-
-.info {
-    background-color: var(--info);
-}
-
-.success {
-    background-color: var(--success);
-}
-
-.default {
-    background-color: white;
-}
-
 
 .orderDesign {
     /* display: flex;
@@ -381,6 +367,41 @@ button {
     font-size: 25px;
 }
 
+.typeMessageDesign {
+    position: relative;
+    top: 85%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    /* min-width: 100%; */
+    width: 70%;
+}
+
+.typeMessageDesign span {
+    font-size: 2rem;
+    padding: 1.5%;
+    cursor: pointer;
+    border-radius: 10%;
+    transition: all 0.3s;
+}
+
+.typeMessageDesign span:hover {
+    background-color: var(--options-color-children);
+}
+
+.typeMessageDesign span:focus {
+    border: 10px solid var(--options-color-children-darker);
+}
+.typeMessageDesignInput {
+    width: 80%;
+    height: 75px;
+    font-size: 2rem;
+    color: var(--text);
+    background-color: var(--options-color-children);
+    border: 1px solid var(--options-color-children-darker);
+    border-radius: 10px;
+}
+
 @media (max-width: 800px) {
     .optionsContent ul li>p {
         font-size: 1em;
@@ -421,4 +442,50 @@ button {
         top: 10rem;
     }
 
+}
+
+div.message {
+    position: absolute;
+    inset: 0;
+    bottom: 15%;
+    width: 70%;
+    height: 70%;
+    background-color: var(--user-color);
+    display: flex;
+    flex-direction: column;
+    gap: 2%;
+    overflow: auto;
+}
+
+div.message div {
+    padding: 2%;
+    width: 90%;
+    border-radius: 10px;
+}
+
+div.message strong {
+    cursor: default;
+    font-size: 0.7rem;
+}
+div.message div.from {
+    text-align: left;
+    background-color: var(--options-color);
+}
+
+div.message div.self {
+    text-align: right;
+    background-color: var(--options-color-children);
+}
+
+nav.sidebar .title {
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+nav.sidebar .title:hover {
+    background-color: var(--options-color);
+}
+
+.translateLeft {
+    transform: translateX(-100%);
 }

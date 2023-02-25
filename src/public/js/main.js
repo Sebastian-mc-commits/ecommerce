@@ -1,12 +1,23 @@
 const currentView = document.querySelector("#currentView").textContent;
-console.log("currentView");
-console.log(currentView);
+
 if (currentView !== "home") {
-    const element = document?.querySelector(`#${currentView}`);
+
+    const element = document?.querySelector(`[data-location=${currentView}]`);
     if (element) {
-        element.innerHTML = "<strong>Go back</strong>";
-        element.href = "/home"
+        const homeView = document.createElement("p");
+        homeView.classList.add("main-menu-home-view");
+        homeView.textContent = "Home";
+        homeView.dataset.location = "home"
+
+        element.parentNode.replaceChild(homeView, element);
     }
 }
 
-const userView = () => location.href = "/user";
+document.querySelector("#main-menu").onclick = (event) => {
+    const dataset = event.target.dataset;
+
+    console.log(event.target);
+    if (!dataset.location) return;
+
+    return location.href = `/${dataset.location}`;
+}

@@ -1,232 +1,27 @@
 const optionsContent = document.querySelector("#optionsContent");
 const changeBody = document.querySelector("body");
-let helper = {};
 
-const orders =
-    [
-        {
-            title: "example2sssssssssssssssssssssssssssssssssssssssss",
-            price: 1000000000000002,
-            stock: 4,
-            desription: "lorem",
-            thumbnail: "https://th.bing.com/th/id/OIP.oTAts-vs68T4vch6Q0smQwHaFe?pid=ImgDet&rs=1",
-            code: "dddddddddddddddddddddddddddddddddddddddddddddddd",
-            status: true
-        },
-        {
-            title: "example22",
-            price: 12,
-            stock: 4,
-            desription: "lorem",
-            thumbnail: "https://th.bing.com/th/id/OIP.oTAts-vs68T4vch6Q0smQwHaFe?pid=ImgDet&rs=1",
-            code: "sas22",
-            status: true
-        },
-        {
-            title: "example11",
-            price: 12,
-            stock: 4,
-            desription: "lorem",
-            thumbnail: "https://th.bing.com/th/id/OIP.oTAts-vs68T4vch6Q0smQwHaFe?pid=ImgDet&rs=1",
-            code: "sas22",
-            status: true
-        },
-        {
-            title: "example2",
-            price: 12,
-            stock: 4,
-            desription: "lorem",
-            thumbnail: "https://th.bing.com/th/id/OIP.oTAts-vs68T4vch6Q0smQwHaFe?pid=ImgDet&rs=1",
-            code: "sas22",
-            status: true
-        },
-        {
-            title: "example3",
-            price: 12,
-            stock: 4,
-            desription: "lorem",
-            thumbnail: "https://th.bing.com/th/id/OIP.oTAts-vs68T4vch6Q0smQwHaFe?pid=ImgDet&rs=1",
-            code: "sas22",
-            status: true
-        },
-        {
-            title: "example4",
-            price: 12,
-            stock: 4,
-            desription: "lorem",
-            thumbnail: "https://th.bing.com/th/id/OIP.oTAts-vs68T4vch6Q0smQwHaFe?pid=ImgDet&rs=1",
-            code: "sas22",
-            status: true
-        },
-        {
-            title: "example5",
-            price: 12,
-            stock: 4,
-            desription: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorem et aut eos perspiciatis, ratione repudiandae
-    vitae? Autem, facere pariatur provident dignissimos velit obcaecati modi nisi dolorum officiis delectus ad
-    doloremque!`,
-            thumbnail: "https://th.bing.com/th/id/OIP.oTAts-vs68T4vch6Q0smQwHaFe?pid=ImgDet&rs=1",
-            code: "sas22",
-            status: true
-        },
-        {
-            title: "example6",
-            price: 12,
-            stock: 4,
-            desription: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorem et aut eos perspiciatis, ratione repudiandae
-    vitae? Autem, facere pariatur provident dignissimos velit obcaecati modi nisi dolorum officiis delectus ad
-    doloremque!`,
-            thumbnail: "https://th.bing.com/th/id/OIP.oTAts-vs68T4vch6Q0smQwHaFe?pid=ImgDet&rs=1",
-            code: "sas22",
-            status: true
-        },
-        {
-            title: "example7",
-            price: 12,
-            stock: 4,
-            desription: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorem et aut eos perspiciatis, ratione repudiandae
-    vitae? Autem, facere pariatur provident dignissimos velit obcaecati modi nisi dolorum officiis delectus ad
-    doloremque!`,
-            thumbnail: "https://th.bing.com/th/id/OIP.oTAts-vs68T4vch6Q0smQwHaFe?pid=ImgDet&rs=1",
-            code: "sas22",
-            status: true
-        },
-        {
-            title: "example8",
-            price: 12,
-            stock: 4,
-            desription: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorem et aut eos perspiciatis, ratione repudiandae
-    vitae? Autem, facere pariatur provident dignissimos velit obcaecati modi nisi dolorum officiis delectus ad
-    doloremque!`,
-            thumbnail: "https://th.bing.com/th/id/OIP.oTAts-vs68T4vch6Q0smQwHaFe?pid=ImgDet&rs=1",
-            code: "sas22",
-            status: true
-        },
-        {
-            title: "example9",
-            price: 12,
-            stock: 4,
-            desription: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorem et aut eos perspiciatis, ratione repudiandae
-    vitae? Autem, facere pariatur provident dignissimos velit obcaecati modi nisi dolorum officiis delectus ad
-    doloremque!`,
-            thumbnail: "https://th.bing.com/th/id/OIP.oTAts-vs68T4vch6Q0smQwHaFe?pid=ImgDet&rs=1",
-            code: "sas22",
-            status: true
-        },
-        {
-            title: "example01",
-            price: 12,
-            stock: 4,
-            desription: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorem et aut eos perspiciatis, ratione repudiandae
-    vitae? Autem, facere pariatur provident dignissimos velit obcaecati modi nisi dolorum officiis delectus ad
-    doloremque!`,
-            thumbnail: "https://th.bing.com/th/id/OIP.oTAts-vs68T4vch6Q0smQwHaFe?pid=ImgDet&rs=1",
-            code: "sas22",
-            status: true
-        },
-        {
-            title: "example21",
-            price: 12,
-            stock: 4,
-            desription: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorem et aut eos perspiciatis, ratione repudiandae
-    vitae? Autem, facere pariatur provident dignissimos velit obcaecati modi nisi dolorum officiis delectus ad
-    doloremque!`,
-            thumbnail: "https://th.bing.com/th/id/OIP.oTAts-vs68T4vch6Q0smQwHaFe?pid=ImgDet&rs=1",
-            code: "sas22",
-            status: true
-        },
-        {
-            title: "example12",
-            price: 12,
-            stock: 4,
-            desription: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorem et aut eos perspiciatis, ratione repudiandae
-    vitae? Autem, facere pariatur provident dignissimos velit obcaecati modi nisi dolorum officiis delectus ad
-    doloremque!`,
-            thumbnail: "https://th.bing.com/th/id/OIP.oTAts-vs68T4vch6Q0smQwHaFe?pid=ImgDet&rs=1",
-            code: "sas22",
-            status: true
-        },
-        {
-            title: "example13",
-            price: 12,
-            stock: 4,
-            desription: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorem et aut eos perspiciatis, ratione repudiandae
-    vitae? Autem, facere pariatur provident dignissimos velit obcaecati modi nisi dolorum officiis delectus ad
-    doloremque!`,
-            thumbnail: "https://th.bing.com/th/id/OIP.oTAts-vs68T4vch6Q0smQwHaFe?pid=ImgDet&rs=1",
-            code: "sas22",
-            status: true
-        },
-        {
-            title: "example123",
-            price: 12,
-            stock: 4,
-            desription: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorem et aut eos perspiciatis, ratione repudiandae
-    vitae? Autem, facere pariatur provident dignissimos velit obcaecati modi nisi dolorum officiis delectus ad
-    doloremque!`,
-            thumbnail: "https://th.bing.com/th/id/OIP.oTAts-vs68T4vch6Q0smQwHaFe?pid=ImgDet&rs=1",
-            code: "sas22",
-            status: true
-        },
-        {
-            title: "example321",
-            price: 12,
-            stock: 4,
-            desription: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorem et aut eos perspiciatis, ratione repudiandae
-    vitae? Autem, facere pariatur provident dignissimos velit obcaecati modi nisi dolorum officiis delectus ad
-    doloremque!`,
-            thumbnail: "https://th.bing.com/th/id/OIP.oTAts-vs68T4vch6Q0smQwHaFe?pid=ImgDet&rs=1",
-            code: "sas22",
-            status: true
-        },
-        {
-            title: "example3",
-            price: 12,
-            stock: 4,
-            desription: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorem et aut eos perspiciatis, ratione repudiandae
-    vitae? Autem, facere pariatur provident dignissimos velit obcaecati modi nisi dolorum officiis delectus ad
-    doloremque!`,
-            thumbnail: "https://www.marketingdirecto.com/wp-content/uploads/2015/12/productos-cool.jpg",
-            code: "sas22",
-            status: true
-        },
-        {
-            title: "example43",
-            price: 12,
-            stock: 4,
-            desription: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorem et aut eos perspiciatis, ratione repudiandae
-    vitae? Autem, facere pariatur provident dignissimos velit obcaecati modi nisi dolorum officiis delectus ad
-    doloremque!`,
-            thumbnail: "https://th.bing.com/th/id/OIP.oTAts-vs68T4vch6Q0smQwHaFe?pid=ImgDet&rs=1",
-            code: "sas22",
-            status: true
-        },
-        {
-            title: "example345",
-            price: 12,
-            stock: 4,
-            desription: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorem et aut eos perspiciatis, ratione repudiandae
-    vitae? Autem, facere pariatur provident dignissimos velit obcaecati modi nisi dolorum officiis delectus ad
-    doloremque!`,
-            thumbnail: "https://th.bing.com/th/id/OIP.oTAts-vs68T4vch6Q0smQwHaFe?pid=ImgDet&rs=1",
-            code: "sas22",
-            status: true
-        },
-        {
-            title: "Final",
-            price: 12,
-            stock: 4,
-            desription: `Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorem et aut eos perspiciatis, ratione repudiandae
-    vitae? Autem, facere pariatur provident dignissimos velit obcaecati modi nisi dolorum officiis delectus ad
-    doloremque!`,
-            thumbnail: "https://th.bing.com/th/id/OIP.oTAts-vs68T4vch6Q0smQwHaFe?pid=ImgDet&rs=1",
-            code: "sas22",
-            status: true
-        },
-    ]
+const { loader, hideLoader, randomColor, activeGlobalMessage, functionsMethods, activeGlobalMessageV2, showCurrentUserValues } = globalMethods;
+console.log("showCurrentUserValues")
+console.log(showCurrentUserValues())
+
+const caseValues = {
+    getProducts: "getProducts",
+    getUpdatedProducts: "getUpdatedProducts",
+    getDeletedProducts: "getDeletedProducts",
+    getAdmin: "getAdmin",
+    getOrder: "getOrder",
+    settings: "settings",
+    goToChat: "goToChat"
+}
+
+const retrieveData = {}
+let request = "";
+randomColor();
+
 
 let HTML = "<h3>Not found</h3>";
-optionsContent.addEventListener("click", e => {
+optionsContent.addEventListener("click", async e => {
     const target = e.target;
 
     const existRequest = target.closest("div").querySelector(".handleRequest");
@@ -236,42 +31,154 @@ optionsContent.addEventListener("click", e => {
         return existRequest.parentNode.removeChild(existRequest);
     }
 
-    switch (target.getAttribute("id")) {
-        case "getProducts":
-            handleProduct(orders, "create");
+    let result;
+    const { getProducts, getDeletedProducts, getAdmin, getOrder, getUpdatedProducts, goToChat, settings } = caseValues;
+    switch (target.getAttribute("data-option")) {
+
+        case getProducts:
+
+            if (getProducts in retrieveData) {
+                handleProduct(retrieveData.getProducts, "create");
+                break;
+            }
+
+            loader(target);
+
+            request = await fetch("http://localhost:4000/api/product/getCreatedByAdminProducts", {
+                method: "GET",
+            });
+
+            result = await request.json();
+
+            hideLoader(target);
+
+            if (!request.ok && "message" in result) {
+
+                return activeGlobalMessage({
+                    message: result.message,
+                    type: "warning"
+                });
+            }
+
+            else if (!request.ok) {
+
+                return activeGlobalMessage({
+                    message: "SERVER ERROR",
+                    type: "warning"
+                });
+            }
+
+            retrieveData[getProducts] = result;
+
+            handleProduct(retrieveData.getProducts, "create");
             break;
-        case "getUpdatedProducts":
-            handleProduct(orders, "update");
+
+        case getUpdatedProducts:
+            handleProduct(retrieveData.getDeletedProducts, "update");
             break;
-        case "getDeletedProducts":
-            handleProduct(orders, "delete");
+        case getDeletedProducts:
+
+            if (getDeletedProducts in retrieveData) {
+                handleProduct(retrieveData[getDeletedProducts], "delete");
+                break;
+            }
+
+            loader(target);
+
+            request = await fetch("http://localhost:4000/api/product/getDeletedProducts", {
+                method: "GET",
+            });
+
+            result = await request.json();
+
+            hideLoader(target);
+
+            if (!request.ok && "message" in result) {
+
+                return activeGlobalMessage({
+                    message: result.message,
+                    type: "warning"
+                });
+            }
+
+            else if (!request.ok) {
+
+                return activeGlobalMessage({
+                    message: "SERVER ERROR",
+                    type: "warning"
+                });
+            }
+
+            retrieveData[getDeletedProducts] = result;
+            handleProduct(retrieveData[getDeletedProducts], "delete");
             break;
-        case "getAdmins":
+
+        case getAdmin:
             return location.href = "/crud-admin&getAdmins";
-        case "getOrder":
+        case getOrder:
             onHandleOrder(orders);
             break;
-        case "settings":
-            handleUserSettings();
+        case settings:
+        case goToChat:
+
+            if (goToChat in retrieveData) {
+                handleRenderUsers(retrieveData[goToChat]);
+                break;
+            }
+
+            loader(target);
+
+            request = await fetch("http://localhost:4000/api/user/options", {
+                method: "GET",
+            });
+
+            result = await request.json();
+            console.log("result");
+            console.log(result);
+
+            hideLoader(target);
+
+            if (!request.ok && "message" in result) {
+
+                return activeGlobalMessage({
+                    message: result.message,
+                    type: "warning"
+                });
+            }
+
+            else if (!request.ok) {
+
+                return activeGlobalMessage({
+                    message: "SERVER ERROR",
+                    type: "warning"
+                });
+            }
+
+            retrieveData[goToChat] = result;
+            handleRenderUsers(retrieveData[goToChat]);
+            break;
+
     }
 
     changeBody.style.backgroundColor = "var(--options-color)";
 
-    target.parentNode.innerHTML += `
-    <div class="handleRequest">
+    const parentTarget = target.parentNode;
+
+    if (!parentTarget) return;
+
+    parentTarget.innerHTML += `
+    <div class="handleRequest" data-request>
     <span class="goBack" onclick="handleGoBack()">&#8592;</span>
         ${HTML}
-        </div>
-        `;
+        </div>`;
 
-    if ("onChangeFunction" in helper) helper.onChangeFunction();
+    if ("onChangeFunction" in functionsMethods) functionsMethods.onChangeFunction();
 
-    const handleRequest = document.querySelector(".handleRequest");
+    // if ("lastFn" in fnKeeper) fnKeeper.lastFn();
 
-    const onScrollProduct = !!HTML ? [...handleRequest.children].find(element =>
-        element.tagName === "DIV").getBoundingClientRect() : handleRequest.getBoundingClientRect();
+    const handleRequest = document.querySelector("[data-request]");
 
-    console.log(onScrollProduct);
+    const onScrollProduct = handleRequest.getBoundingClientRect();
 
     window.scrollTo({
         top: onScrollProduct.y,
@@ -279,6 +186,7 @@ optionsContent.addEventListener("click", e => {
         behavior: "smooth"
     });
 
+    socket.emit("Hi");
 });
 
 const handleGoBack = () => {
@@ -292,4 +200,4 @@ const handleGoBack = () => {
     changeBody.style.backgroundColor = "var(--default)";
 }
 
-const handleLogout = () => location.href = "/user/logout";
+const handleLogout = () => location.href = "/api/auth/logout";

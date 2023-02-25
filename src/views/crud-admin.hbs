@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/public/styles/partials/side-bar.css" />
 <link rel="stylesheet" href="/public/styles/crud-admin.css" />
 
 <div class="side-bar-wrapper">
@@ -34,6 +35,7 @@
     <li class="slide" data-active>
       <div>
         <h2 class="title">Add a product</h2>
+        <button onclick="existUpdateValues()">Pres for view</button>
         <form class="form card" id="form" action="/crud-admin/addProduct" method="POST" enctype="multipart/form-data">
           <div class="group">
             <input type="file" placeholder="Image route (optional)" name="thumbnail" />
@@ -49,7 +51,10 @@
               <input type="checkbox" name="status" value="false" />
             </label>
             <input type="number" placeholder="Stock" id="field" name="stock" />
+
+            <input type="text" id="field" name="categoryType" placeholder="Which category does belong">
           </div>
+
 
           <div class="commentContent">
             <textarea name="description" rows="10" placeholder="Description" id="field"></textarea>
@@ -66,6 +71,7 @@
         <table class="w-10">
           <thead>
             <th>id</th>
+            <th>Category</th>
             <th>Name</th>
             <th>code</th>
             <th>Delete</th>

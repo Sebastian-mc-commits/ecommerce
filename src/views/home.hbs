@@ -1,14 +1,19 @@
 <link rel="stylesheet" href="/public/styles/home.css" />
 
-<main class="header">
-<h1>Products</h1>
-{{#if len}}
-<h3>Match: {{len}}</h3>
+{{#if cookie}}
+{{> tinyCarousel title="Products you might like." }}
 {{/if}}
+
+<main class="header">
+
+  <h1>Products</h1>
+  {{#if len}}
+  <h3>Match: {{len}}</h3>
+  {{/if}}
 
 </main>
 
-{{#> filters action="/home/applyFilters"}}
+{{#> filters action="" method="GET" }}
 <div class="grid w-10" id="handleContent">
   {{#if getProductById}}
   {{#with products}}
@@ -38,7 +43,7 @@
   {{else}}
   {{#each products}}
   <div class="card w-3">
-    <img src={{this.thumbnail}} alt="Product Image" class="w-10" />
+    <img src={{this.thumbnail}} alt="Product Image" />
     <h1>{{this.title}}</h1>
     <p>Price: {{this.price}}</p>
     <p>Code: {{this.code}}</p>
@@ -67,11 +72,10 @@
 
 {{#if pagination}}
 <div class="footer-content">
-  <p>pagination</p>
   {{#if sorter}}
-    <p>{{sorter}}</p>
+  <p>{{sorter}}</p>
   {{/if}}
-{{> pagination}}
+  {{> pagination}}
 </div>
 {{/if}}
 

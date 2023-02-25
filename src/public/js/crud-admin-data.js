@@ -1,14 +1,14 @@
 const user = document.querySelector("#user");
-const product = document.querySelector("#product");
 // const socket = io({auth});
-const socket = io();
+const { activeGlobalMessage, activeGlobalMessageV2, showCurrentUserValues } = globalMethods;
+const userValues = showCurrentUserValues();
+const socket = io({ auth: userValues });
 
 let data = [];
 let userData = [];
 
 socket.on("getProducts", async ({ products }) => {
     console.log("products");
-    console.log(products);
     try {
         printProducts(products);
     } catch {
@@ -38,8 +38,6 @@ socket.on("newUser", ({ user }) => {
 });
 
 socket.on("getUsers", async ({ users }) => {
-    console.log("users");
-    console.log(users);
     try {
         printUsers(users);
     } catch {
@@ -67,7 +65,7 @@ socket.on("getUsers", async ({ users }) => {
 //     })
 // }
 
-const setUserToAdmin = ({ name, _id }, method = true) => {
+const setUserToAdmin = ({ name, _id, email }, method = true) => {
     Swal.fire({
         title: `Are you sure you wanna ${method ? "set" : "unset"} ${name} to Admin`,
         showDenyButton: true,
@@ -86,8 +84,10 @@ const setUserToAdmin = ({ name, _id }, method = true) => {
                 confirmButtonText: "Continue",
             }).then(async ({ isConfirmed, isDenied }) => {
                 if (isConfirmed) {
-                    // location.href = `/crud-admin/setUserToAdmin/${_id}`
-                    let request = await fetch(`/crud-admin/${method ?
+
+                    let retrieveData = [];
+
+                    let request = await fetch(`/api/crud-admin/${method ?
                         "setUserToAdmin"
                         :
                         "unsetToAdmin"
@@ -95,16 +95,28 @@ const setUserToAdmin = ({ name, _id }, method = true) => {
                         method: "PUT",
                     });
 
-                    if (request.ok) {
-                        const result = await request.json();
-                        socket.emit("editedUser", { user: result });
-                        const message = {
-                            type: "#84DE02",
-                            message: `${result.name} ${method ? "set" : "unset"} to admin successfully`
-                        }
+                    retrieveData = await request.json();
 
-                        showMessage(message);
+                    if (!request.ok && "message" in retrieveData) {
+                        return activeGlobalMessage({
+                            message: retrieveData.message,
+                            type: "warning"
+                        });
                     }
+
+                    else if (!request.ok) {
+                        return activeGlobalMessage({
+                            message: "SERVER ERROR",
+                            type: "warning"
+                        });
+                    }
+
+                    // socket.emit("editedUser", { email, isAdmin: method === "setUserToAdmin" });
+                    return activeGlobalMessageV2({
+                        message: retrieveData.message,
+                        type: "#84DE02"
+                    });
+
                 }
                 else if (isDenied) Swal.fire("Changes are not save", "", "info");
             })
@@ -118,15 +130,15 @@ const setUserToAdmin = ({ name, _id }, method = true) => {
 const printProducts = (productData) => {
     data = productData;
     product.innerHTML = ``;
-    for (const { title, _id, code } of data) {
-        const requestId = JSON.stringify({ _id, title });
+    for (const { title, _id, code, categoryType } of data) {
         product.innerHTML += `
-            <tr class='text-center'>
+            <tr class='text-center' id='abcde'>
                 <td>${_id}</td>
+                <td>${categoryType}</td>
                 <td>${title}</td>
                 <td>${code}</td>
-                <td class='text-end'><button onclick='deleteProduct(${requestId})'>Delete</button></td>
-                <td class='text-end'><button onclick='updateProduct("${_id}")'>update</button></td>
+                <td class='text-end'><button data-delete-product="${_id}">Delete</button></td>
+                <td class='text-end'><button data-update-product="${_id}">update</button></td>
             </tr>`
     }
 
@@ -135,10 +147,10 @@ const printProducts = (productData) => {
 const printUsers = (users) => {
     user.innerHTML = "";
     userData = users;
-    for (const { name, _id, email, last_name, adminOptions, isConnected } of userData) {
+    for (const { name, _id, auth, last_name, adminOptions, isConnected } of userData) {
         if (getUser._id === _id) continue;
 
-        const requestId = JSON.stringify({ _id, name });
+        const requestId = JSON.stringify({ _id, name, email: auth.email });
         let handleAdmin = `<button onclick='setUserToAdmin(${requestId})'>Set to Admin</button>`
 
         if (adminOptions.isAdmin) {
@@ -151,13 +163,14 @@ const printUsers = (users) => {
             }
         };
 
+        // <td class="userMessage" onclick="notifyUser('${_id}')">${name}</td>
         user.innerHTML += `
             <tr class='text-center'>
             <td><span class=${isConnected ? "success bg-success" : "danger bg-danger"}>&#9737; &#8213; ${isConnected}</span></td>
             <td>${_id}</td>
-            <td class="userMessage" onclick="notifyUser('${_id}')">${name}</td>
+            <td>${name}</td>
             <td>${last_name}</td>
-            <td>${email}</td>
+            <td>${auth.email}</td>
             <td class='text-end'>
                 ${handleAdmin}
             </td>

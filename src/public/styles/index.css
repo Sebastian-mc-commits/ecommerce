@@ -27,7 +27,9 @@ html {
   box-sizing: border-box;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: inherit;
 }
 
@@ -86,11 +88,11 @@ html {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
-  /* Add rounded corners to the top left and the top right corner of the image */
-  img {
-    border-radius: 5px 5px 0 0;
-    object-fit: cover;
-  }
+/* Add rounded corners to the top left and the top right corner of the image */
+img {
+  border-radius: 5px 5px 0 0;
+  object-fit: cover;
+}
 
 .border-radius {
   border-radius: 10px;
@@ -107,10 +109,11 @@ html {
 }
 
 .flex {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
+
 .warning {
   color: var(--warning);
 }
@@ -125,6 +128,18 @@ html {
 }
 
 .bg-danger {
+  background-color: var(--danger);
+}
+
+.bg-info {
+  background-color: var(--info);
+}
+
+.default {
+  background-color: white;
+}
+
+.bg-danger {
   padding: 2%;
   background-color: var(--danger);
   opacity: 0.7;
@@ -135,7 +150,6 @@ html {
 }
 
 .bg-success {
-  padding: 2%;
   background-color: var(--success);
   /* opacity: 0.7; */
 }
@@ -214,7 +228,9 @@ table {
   display: none;
 }
 
-button, input[type="submit"], input[type="file"]{
+button,
+input[type="submit"],
+input[type="file"] {
   border: 1px solid rgba(0, 0, 0, 0.2);
   cursor: pointer;
   border-radius: 8px;
@@ -253,11 +269,14 @@ button, input[type="submit"], input[type="file"]{
 }
 
 
-input[type=range], select {
+input[type=range],
+select {
   width: 100%;
 }
 
-input[type="submit"]:hover, button:hover, input[type="file"]:hover {
+input[type="submit"]:hover,
+button:hover,
+input[type="file"]:hover {
   animation: wave infinite 0.5s ease-in-out;
   animation-direction: alternate;
   transition: all 0.5s;
@@ -267,6 +286,7 @@ input[type="submit"]:hover, button:hover, input[type="file"]:hover {
   from {
     border: 1px black solid;
   }
+
   to {
     border: 1px var(--gray) solid;
   }
@@ -297,4 +317,49 @@ input[type="submit"]:hover, button:hover, input[type="file"]:hover {
 
 .bg-gray {
   background-color: var(--gray);
+}
+
+.loader {
+  border: 4px solid rgba(0, 0, 0, 0.4);
+  min-width: 36px;
+  max-width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: transparent;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+    border: 4px solid rgba(0, 0, 0, 0.6);
+    border-left-color: transparent;
+  }
+
+  20% {
+    border: 4px solid rgba(26, 4, 93, 0.6);
+    border-left-color: transparent;
+  }
+
+  40% {
+    border: 4px solid rgba(223, 221, 230, 0.6);
+    border-left-color: transparent;
+
+  }
+
+  100% {
+    /* background-color: #222; */
+    border: 4px solid rgba(139, 9, 9, 0.4);
+    border-left-color: transparent;
+    transform: rotate(360deg);
+  }
+}
+
+.enableScale {
+  transform: scale(1);
+}
+
+.disableScale {
+  transform: scale(0);
 }

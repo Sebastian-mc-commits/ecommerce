@@ -11,7 +11,13 @@ import helpers from "./lib/handlebars.js";
 import { getAllProducts } from "./services/product.service.js";
 import { getUsers } from "./services/user.service.js";
 import * as comments from "./services/comment.service.js";
+import cookieParser from "cookie-parser";
+import cors from "cors";
 import { onAuthenticateSocket } from "./lib/middleware/socket/authentication.socket.js";
+import passport from "passport";
+import { authApiRouter, crudAdminApiRouter, productApiRouter, userApiRouter } from "./routers/api/index.js";
+import userMessages from "./utils/messages/messages.user.utils.js";
+import mongoConnect from "connect-mongo";
 
 dotenv.config();
 const app = express();
@@ -22,37 +28,27 @@ app.use(express.json());
 app.use("/public", express.static(__dirname("public")));
 
 const sessionMiddleware = session({
+    store: mongoConnect.create({
+        mongoUrl: process.env.MONGO_URI
+    }),
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
 })
 app.use(sessionMiddleware);
+app.use(cors());
 
 app.use(flash());
 app.use((req, res, next) => {
     app.locals.message = req.flash("message")[0];
-    // req.session.user = {
-    //     adminOptions: { isAdmin: true, deletedProducts: [], updatedProducts: [] },
-    //     superAdminOptions: {
-    //         isSuperAdmin: true,
-    //         usersSetToAdmin: [
-    //             "63e0331e7c228b6dc2c6e054",
-    //         ]
-    //     },
-    //     _id: "63e022a6040934599eb02a27",
-    //     image: 'https://th.bing.com/th/id/R.6c6bff6f40d420c8a756db79a369681c?rik=suTO6OOqRmSAJQ&pid=ImgRaw&r=0',
-    //     name: 'example',
-    //     last_name: 'admin',
-    //     email: 'admin@gmail.com',
-    //     password: '$2a$10$.pSVUU4ogBN3jFGuxcc.iuDr7oyNTEgbDwPJSmNu2Non3Z2e8KFB6',
-    //     cart: [],
-    //     orders: [],
-    //     __v: 0
-    // }
     app.locals.user = req.session.user;
 
     next();
 });
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(cookieParser(process.env.SECRET_COOKIE));
 
 //Set
 const hbs = create({
@@ -69,57 +65,54 @@ app.use("/cart", cart);
 app.use("/listContent", listContent);
 app.use("/user", user);
 app.use("/realTimeProducts", realTimeProducts);
+app.use("/api/auth", authApiRouter);
+app.use("/api/user", userApiRouter);
+app.use("/api/crud-admin", crudAdminApiRouter);
+app.use("/api/product", productApiRouter);
+app.use("/auth", auth);
+// http://localhost:4000/api/auth/github/callback
 
 const server = app.listen(PORT, () => console.log("Server set on port ", PORT));
 
 const io = new Server(server);
 
-const wrap = middleware => (socket, next) => {
-    return middleware(socket.request, {}, next);
-}
+// const wrap = middleware => (socket, next) => {
+//     return middleware(socket.request, {}, next);
+// }
 
-io.use(wrap(sessionMiddleware));
+// io.use(wrap(sessionMiddleware));
 
-app.use( (req, _, next) => {
-    req.io = io;
-    next();
-});
+// app.use((req, _, next) => {
+//     req.io = io;
+//     next();
+// });
 
-app.use("/auth", auth);
 
 
 io.on("connection", async (socket) => {
+
+    io.use((socket, next) => {
+        const auth = socket.handshake.auth
+
+        if (!auth) return next(userMessages.NOT_FOUND);
+
+        socket.user = auth;
+        console.log("User")
+        console.log(socket.user)
+        return next();
+    });
+
     let users = [];
 
     if (!socket.connected) {
-        console.log("socket disconnected");
-        console.log(socket.connected);
         socket.connect();
     }
 
-    console.log("enter in io");
-    // io.use( async (socket, next) => {
-    //     const isUserAuthenticate = socket.request?.session?.user;
-
-    //     console.log("isUserAuthenticate")
-    //     console.log(!!isUserAuthenticate)
-    //     if (!!isUserAuthenticate) return next();
-    //     users = await getUsers();
-
-    //     const newUser = {...isUserAuthenticate, isConnected: true}
-    //     socket.broadcast.emit("getUsers", {users: {...users, ...newUser} });
-    //     next();
-    // });
-
-
-    console.log("conected Users");
-
-
-    socket.on("selectedRoom", async ({ room, productRef }) => {
+    socket.on("selectedRoom", async ({ room }) => {
         socket.join(room);
     });
 
-    const products = await getAllProducts();
+    let products = await getAllProducts();
     socket.emit("getProducts", { products });
 
     socket.on("message", async ({ createdBy, productRef, room, rate, message }) => {
@@ -133,26 +126,24 @@ io.on("connection", async (socket) => {
         io.to(room).emit("data", { data: getData.comments });
     });
 
-    // const isAuthenticate = socket.handshake.auth;
-    // io.use(async (middlewareSocket, next) => {
-    //     console.log("middleware");
-    //     const { isAdmin } = socket.request?.session?.user?.adminOptions;
+    io.use((socket, next) => {
+        const { isAdmin = false } = socket.user;
 
-    //     if (!isAdmin) {
-    //         console.log("middlewareAdmin");
-    //         return next(new Error("Unauthorized"));
-    //     }
-    //     return next();
-    // });
-    // const isSuperAdmin = Boolean(isAuthenticate.superAdminOptions?.isSuperAdmin)<
+        console.log("isAdmin")
+        console.log(isAdmin)
+        if (!isAdmin) return next(new Error("Unauthorized"));
+
+        return next();
+    });
 
     const isUserConnected = (users) => {
+        if (!socket.user) return;
         for (let user of users) {
             let isConnected = false;
             for (let [_, socket] of io.of("/").sockets) {
-                console.log("socket name");
-                console.log(socket?.request?.session?.user?.name);
-                if (socket.request?.session?.user?.email === user.email) {
+                // console.log("socket name");
+                // console.log(socket?.request?.session?.user?.name);
+                if (socket.user.email === user.email) {
                     isConnected = true;
                     break;
                 }
@@ -163,45 +154,98 @@ io.on("connection", async (socket) => {
 
     // if (socket.request?.session?.user?.superAdminOptions?.isSuperAdmin) {
     // }
-    users = await getUsers();
+
+    if (!users.length) {
+        users = await getUsers();
+    }
+
     isUserConnected(users);
-    console.log("middlewareAuth");
     socket.emit("getUsers", { users });
 
 
-    socket.on("editedUser", async ({ user }) => {
+    // socket.on("editedUser", async ({ email, isAdmin = false }) => {
 
-        if (!!!users.length) {
-            console.log("Users not fount");
-            users = await getUsers();
+    //     if (!users.length) {
+
+    //         users = await getUsers();
+    //         return io.emit("getUsers", { users });
+
+    //     }
+    //     const index = users.find(({ auth }) => auth.email === email);
+
+    //     if (index !== -1) {
+    //         const [_, connectedSockets] = io.of("/").sockets;
+    //         const isConnected = connectedSockets?.some(connected => connected.user.email === email);
+
+    //         // user.isConnected = isConnected || false;
+    //         console.log(users[index]);
+    //         users[index].adminOptions.isAdmin = isAdmin;
+    //     }
+
+    //     io.emit("getUsers", users);
+    // });
+
+    socket.on("sendProduct", async ({ message, product, type = "delete" }) => {
+        console.log("hi");
+
+        if (!!!products.length) {
+            products = await getAllProducts();
         }
-        console.log("users");
-        console.log(users);
-        const index = users.findIndex(({ email }) => email === user.email);
-        console.log("index");
-        console.log(index);
 
-        if (index !== -1) {
-            const [_, connectedSockets] = io.of("/").sockets;
-            const isConnected = connectedSockets?.some(connected => connected.request?.session?.user?.email === user.email);
-            
-            user.isConnected = isConnected || false;
-            users[index] = user;
-        }
-        else {
-            users.push(user);
+        else if (type === "delete") {
+            products = products.filter(({ code }) => code !== product.code);
         }
 
-        socket.emit("getUsers", { users });
-        socket.to(user._id).emit("userData", { user });
-    });
+        else if (type === "update") {
+            const index = products.findIndex(({ code }) => code === product.code);
 
-    socket.on("sendProduct", async message => {
+            if (index === -1) products.push(product);
+            else {
+                products[index] = product;
+            }
+        }
+
+        else if (type === "add") {
+            products.push(product);
+        }
+
         io.emit("requestMessage", { message });
         io.emit("getProducts", { products });
     });
 
+    // io.use((socket, next) => {
+    //     const auth = socket.handshake.auth;
+    //     console.log("auth");
+    //     console.log(auth);
+
+    //     if (!auth) return next("Not found");
+
+    //     socket.username = auth;
+    //     console.log("Middleware")
+    //     next();
+    // });
+
+    // let connectedUsers = [];
+    // for (let [id, socket] of io.of("/").sockets) {
+    //     console.log("Render Sockets");
+    //     const username = socket.handshake.auth?.username;
+
+    //     if (!username) continue;
+    //     connectedUsers.push({ username, id });
+    // }
+
+    // let dc = ["Hi", "hiw2"];
+    // socket.on("sendMessageFromFront", ({ message, sendTo }) => {
+    //     dc.push(message);
+    //     socket.to(sendTo).emit("getMessages", { dc });
+    // });
+
+    // io.emit("sendConnectedUsers", { connectedUsers });
+
+    // io.emit("getMessages", { dc });
+
     socket.on("connect_error", (err) => {
         console.log(`connect_error due to ${err.message}`);
     });
+
 });

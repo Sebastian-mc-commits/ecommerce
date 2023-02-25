@@ -5,6 +5,17 @@ const submitButton = document.querySelector("[type='submit']");
 const mainContent = document.querySelector("#mainContent");
 const formChildren = handleFilterForm.querySelectorAll("input, select");
 
+const reqParams = new URLSearchParams(window.location.search);
+if (reqParams.get("sort")) {
+
+    for (let element of formChildren) {
+        if (element.tagName === "SELECT") {
+            element.value = [...document.querySelector("#sortBy").children].find(child => child.value === reqParams.get("sort")).value;
+            break;
+        }
+    }
+}
+
 const initialInputValues = {
     form: [...formChildren].map((element, index) => {
         return {
@@ -14,12 +25,9 @@ const initialInputValues = {
         }
     }),
 }
-
 const filtersApplied = JSON.parse(localStorage?.getItem("filtersApplied"));
 
 if (filtersApplied) {
-    console.log("filtersApplied");
-    console.log(filtersApplied);
     let HTML = "";
     for (filter in filtersApplied) {
         HTML += `
@@ -48,6 +56,7 @@ if (filtersApplied) {
     mainContent.insertAdjacentHTML("afterbegin", HTML);
     localStorage.removeItem("filtersApplied");
 }
+
 const fetchData = async (fetchUri) => {
     const request = await fetch(fetchUri, {
         method: "GET",
@@ -64,7 +73,13 @@ window.addEventListener("load", () => {
     let HTML = "";
 
     fetchData("/home/availableCategories").then((response) => {
-        for (element of response) HTML += `<label id="selectedType"> <input type="checkbox" name="types" value=${element}><span>#${element}</span></label>`
+        for (element of response) {
+
+            element = element.replace(/\s+/g, " ");
+
+            const value = element.replace(/\s+/g, "+");
+            HTML += `<label id="selectedType"> <input type="checkbox" name="types" value=${value}><span>#${element}</span></label>`
+        }
         return content.insertAdjacentHTML("afterbegin", HTML);
     }).catch(() => {
         HTML = "<h3>Nothing Found</h3>";
@@ -78,14 +93,24 @@ fetchData("/home/getPrice").then((response) => {
     inputRange.forEach(input => input.dispatchEvent(inputEvent));
 });
 
+
 inputRange.forEach(input => {
     input.addEventListener("custom:inputData", event => {
         const { max } = event.detail.response;
+
         event.target.min = 0;
         event.target.max = max;
+
+        if (reqParams.get("minPrice") && event.target.name === "minPrice") {
+            event.target.value = reqParams.get("minPrice");
+            event.target.closest("label").querySelector("#rangeValue").textContent = reqParams.get("minPrice");
+        }
+        else if (reqParams.get("maxPrice") && event.target.name === "maxPrice") {
+            event.target.value = reqParams.get("maxPrice");
+            event.target.closest("label").querySelector("#rangeValue").textContent = reqParams.get("maxPrice");
+        }
     });
 })
-
 
 inputRange.forEach(element => {
     element.addEventListener("input", e => {
@@ -188,11 +213,22 @@ submitButton.addEventListener("click", function (e) {
     const form = e.target.closest("form");
     const formData = new FormData(form);
     let data = Object.fromEntries(formData);
-    for (let isValueValid in data) {
-        if (!!!data[isValueValid]) {
-            delete data[isValueValid];
-        };
+    console.log("data");
+    console.log(data);
+
+    const params = new URLSearchParams();
+    for (let key in data) {
+        if (!!!data[key]) {
+            delete data[key];
+            continue;
+        }
+        params.append(key, data[key]);
     }
+
+    console.log("params");
+    console.log(params.toString());
     localStorage.setItem("filtersApplied", JSON.stringify(data));
+    // location.href = `/home?${params.toString()}`;
+    form.action = `/home?${params.toString()}`;
     form.submit();
 });

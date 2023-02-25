@@ -1,57 +1,89 @@
-// import { emailRegex, passwordRegex } from "../../const/regex.js";
-
-// // const password = document.querySelector("#password").textContent;
-// // const email = document.querySelector("#email").textContent;
 const isRegister = document.querySelector("#isRegister");
-// const isCodeUnique = emailRegex.test(email) && passwordRegex.test(password);
 let isCodeunique = true;
-const children = document.querySelector("#singUpFields").children;
+const children = document.querySelector("#signUpFields").children;
 const title = document.querySelector("#title");
 const action = document.querySelector("#form");
-
 isRegister.addEventListener("click", () => {
-    console.log(action.getAttribute("action"));
 
-    if (action.getAttribute("action") === "/auth/singup") {
+    if (action.getAttribute("action") === "/api/auth/signup") {
 
-        action.setAttribute("action", "/auth/login");
+        action.action = "/api/auth/login";
         title.textContent = "Log In";
-        const field = document.querySelectorAll("#field");
 
         isRegister.textContent = "Don't you have an account?";
 
         if (children[0].hasAttribute("id")) {
             for (let child of children) {
-                console.log(child);
                 child.removeAttribute("id");
-                child.setAttribute("disabled", "");
+                child.disabled = true;
                 child.value = "";
             }
         }
     }
-    else if (action.getAttribute("action") === "/auth/login") {
+    else if (action.getAttribute("action") === "/api/auth/login") {
 
         title.textContent = "Sing Up";
         isRegister.textContent = "Do you already have an account?";
-        action.setAttribute("action", "/auth/singup");
+        action.action = "/api/auth/signup"
 
         if (!children[0].hasAttribute("id")) {
             for (let child of children) {
-                child.removeAttribute("disabled");
+                child.disabled = false;
                 child.setAttribute("id", "field");
             }
+
         }
 
     };
+
+    return validateFields();
 })
 
-// password.addEventListener("blur", () => {
-//     const passwordMessage = document.querySelector("#passwordMessage");
-//     if (!isCodeUnique) {
-//         passwordMessage.textContent = `The password has to contain at least one uppercase letter,
-//         at least one special character from !@#$%^&*,
-//         at least one numeric digit,
-//         at least one lowercase letter and
-//         be at least 8 characters long`
-//     }
-// });
+action.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData);
+
+    globalMethods.loader(this);
+    const request = await fetch(this.action, {
+        method: "POST",
+        headers: {
+            "Content-type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    if (!request.ok && request.redirected) {
+        let { message } = await request.json();
+        globalMethods.activeGlobalMessage({
+            message,
+            type: "warning"
+        });
+    }
+    else if (request.ok && request.redirected) location.href = request.url;
+
+    return globalMethods.hideLoader(this);
+
+});
+
+action.querySelector("#sign-in_methods").onclick = function (event) {
+    event.stopPropagation();
+    event.preventDefault();
+
+    const target = event.target;
+
+    if (target.tagName !== "BUTTON") return;
+
+    const methodSelected = target.dataset.method;
+
+    if (methodSelected === "google") {
+        console.log("google");
+        location.href = "/api/auth/google"
+    }
+    else if (methodSelected === "github") {
+        console.log("github");
+        location.href = "/api/auth/github"
+    }
+}

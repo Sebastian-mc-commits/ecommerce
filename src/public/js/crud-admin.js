@@ -4,29 +4,48 @@ const content = document.querySelector(".content");
 const list_items = document.querySelector("#list_items");
 const handleUpdate = document.querySelector("#handleUpdate");
 const form = document.querySelector("#form");
+const product = document.querySelector("#product");
 
 btn.addEventListener("input", () => content.classList.toggle("translate"));
 
-// socket.on("requestMessage", text => {
-//     const {type, message} = text.message;
-//     console.log(`type: ${type} message: ${message}`)
-//     Swal.fire({
-//         text: message,
-//         toast: true,
-//         position: "top-righ",
-//         color: type
-//     });
-// });
+window.onload = () => {
+    product.addEventListener("click", async function (event) {
+        const dataset = event.target.dataset;
 
-const showMessage = ({ type, message }) => {
-    Swal.fire({
-        text: message,
-        toast: true,
-        position: "top",
-        color: type
+        if (!dataset.deleteProduct && !dataset.updateProduct) return;
+
+        if (!!dataset.deleteProduct) {
+
+            globalMethods.loader(event.target, "first")
+            // const productOnDeleting = data.find(({ _id }) => dataset.deleteProduct === _id);
+
+            const request = await fetch(`/api/crud-admin/deleteProduct/?pid=${dataset.deleteProduct}`, {
+                method: "DELETE"
+            });
+
+            globalMethods.hideLoader(event.target);
+
+            let result = await request?.json();
+
+            if (!result) {
+                return globalMethods.activeGlobalMessageV2({
+                    message: "SERVER ERROR",
+                    type: "warning"
+                })
+            };
+
+            globalMethods.activeGlobalMessageV2(result.status);
+
+            const userMessage = {
+                message: `The product ${result.product.title} has been deleted`,
+                type: "brown"
+            }
+
+            socket.emit("sendProduct", { message: userMessage, product: result.product });
+        }
+        else if (!!dataset.updateProduct) updateProduct(dataset.updateProduct);
     });
 }
-
 const message_crud = JSON.parse(localStorage.getItem("message")) || "";
 
 if (message_crud) {
@@ -66,35 +85,66 @@ list_items.addEventListener("click", e => {
 
 let isCodeunique = true;
 
-const deleteProduct = (data) => {
-    const { _id, title } = data
-    const message = { type: "#B30000", message: `${title} Has been deleted` }
-    socket.emit("sendProduct", message);
-    localStorage.setItem("message", JSON.stringify(message));
-    location.href = `/crud-admin/delete/${_id}`;
-};
+// const deleteProduct = async (data) => {
+//     const { _id, title } = data;
+
+//     const request = await fetch(`/api/crud-admin/deleteProduct/${_id}`, {
+//         method: "DELETE"
+//     });
+
+//     let message = {
+//         type: "brown",
+//         message: "Error found"
+//     }
+
+//     if (!request.ok) return globalMethods.activeGlobalMessageV2(message);
+
+//     let result = await request.json();
+
+//     message = {
+//         type: "#B30000",
+//         message: `${title} Has been deleted. If you want to restore the product go to your account and deleted products`
+//     }
+//     globalMethods.activeGlobalMessageV2(message);
+
+//     const userMessage = {
+//         type: "brown",
+//         message: `The product ${title} has been deleted`
+//     }
+
+//     return socket.emit("sendProduct", { message: userMessage, product: result });
+// };
 
 
 const updateProduct = (id_p) => {
-    const { title, _id, description, price, stock } = data.find(item => item._id === id_p);
-    const sendProduct = (bool = true) => {
-        const title_for_update = document.querySelector("#title_for_update");
-        const message = {
-            type: "#84DE02",
-            message: `${title} Updated to ${title_for_update.value}`
+
+    const { title, _id, description, price, stock, categoryType } = data.find(item => item._id === id_p);
+
+    const handleUpdateOnMenu = document.querySelector("#handleUpdateOnMenu");
+    handleUpdateOnMenu.textContent = `Update ${title}`;
+
+    if (handleUpdateOnMenu.hasAttribute("hidden")) handleUpdateOnMenu.hidden = false;
+
+    if (document.querySelector("#update_form")) {
+        const fields = {
+            categoryType,
+            title,
+            description,
+            price,
+            stock
         }
-        if (bool) localStorage.setItem("message", JSON.stringify(message));
-        return socket.emit("sendProduct", message);
-    }
 
-    const update_form = document.querySelector("#update_form") || "";
+        document.querySelector("#update_form").dataset.formId = _id;
+        for (let field in fields) {
+            document.querySelector("#update_form").querySelector(`[name=${field}]`).value = fields[field];
+        }
+        return;
+    };
 
-    if (update_form) update_form.removeEventListener("submit", sendProduct(false));
-
-    handleUpdate.innerHTML = `<form class="form card" id="update_form" action="/crud-admin/updateProduct/${_id}" method="POST">
+    handleUpdate.innerHTML = `<form class="form card" id="update_form" data-form-id='${_id}'>
     <div class="group">
     <input type="text" id="title_for_update" placeholder="Title" value=${title} name="title" />
-      <input type="number" placeholder="price" name="price" value='${price}'/>
+      <input type="number" step='0.01' placeholder="price" name="price" value='${price}'/>
       </div>
       <div class="group">
       <label for="status">
@@ -102,6 +152,7 @@ const updateProduct = (id_p) => {
       <input type="checkbox" name="status" value="false" />
       </label>
       <input type="number" placeholder="Stock" name="stock" value='${stock}'/>
+      <input type="text" id="field" name="categoryType" placeholder="Category" value='${categoryType}'>
       </div>
       
       <div class="commentContent">
@@ -115,18 +166,99 @@ const updateProduct = (id_p) => {
         </form>`
 
     //SHow the option for updating
-    const handleUpdateOnMenu = document.querySelector("#handleUpdateOnMenu");
-    handleUpdateOnMenu.textContent = `Update ${title}`;
-    if (handleUpdateOnMenu.hasAttribute("hidden")) handleUpdateOnMenu.removeAttribute("hidden");
 
-    document.querySelector("#update_form").addEventListener("submit", () => sendProduct());
+    document.querySelector("#update_form").addEventListener("submit", async function (event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData);
+
+        globalMethods.loader(this);
+        const request = await fetch(`/api/crud-admin/updateProduct/${this.dataset.formId}`, {
+            method: "PUT",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+        globalMethods.hideLoader(this);
+
+        let result = await request.json();
+
+        if (!request.ok && "status" in result) {
+            return globalMethods.activeGlobalMessageV2(result.status);
+        }
+
+        else if (!result && !result?.product) {
+            return globalMethods.activeGlobalMessageV2({
+                message: "SERVER ERROR",
+                type: "brown"
+            });
+        }
+
+        const userMessage = {
+            type: "#B30000",
+            message: `New product ${title} added`
+        }
+
+        handleUpdateOnMenu.textContent = `Update ${result.product.title}`;
+
+        socket.emit("sendProduct", {
+            message: userMessage,
+            product: result.product,
+            type: "update"
+        });
+
+        return globalMethods.activeGlobalMessageV2(result.status);
+    });
 }
 
 
-form.addEventListener("submit", () => {
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-    const message = { type: "#84DE02", message: `${title_form.value} Added` }
-    localStorage.setItem("message", JSON.stringify(message));
-    socket.emit("sendProduct", message)
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
+
+    globalMethods.loader(form);
+
+    const request = await fetch("/api/crud-admin/addProduct", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    globalMethods.hideLoader(form);
+
+    let result = await request.json();
+
+    if (!request.ok && "status" in result) {
+        return globalMethods.activeGlobalMessageV2(result.status);
+    }
+
+    else if (!result && !result?.product) {
+        return globalMethods.activeGlobalMessageV2({
+            message: "SERVER ERROR",
+            type: "brown"
+        });
+    }
+
+    const userMessage = { type: "#84DE02", message: `${title_form.value} Added` }
+
+    socket.emit("sendProduct", {
+        message: userMessage,
+        product: result.product,
+        type: "add"
+    });
+
+    return globalMethods.activeGlobalMessageV2(result.status);
 }
 );
+
+const existUpdateValues = () => {
+    if (document.querySelector("#update_form")) {
+        return console.log(true);
+    }
+    return console.log(false);
+};

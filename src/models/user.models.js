@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 import bcryptjs from "bcryptjs";
 import { emailRegex } from "../const/regex.js";
 import ProductModel from "./product.model.js";
+import authMessages from "../utils/messages/messages.auth.utils.js";
+import userMessages from "../utils/messages/messages.user.utils.js";
+import serverMessages from "../utils/messages/messages.server.utils.js";
 
 const schema = new mongoose.Schema({
     image: {
@@ -16,24 +19,38 @@ const schema = new mongoose.Schema({
     },
 
     last_name: {
-        type: String,
-        required: true
-
+        type: String
     },
 
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        index: true
+    auth: {
+        email: {
+            type: String,
+            required: true,
+            index: true,
+            unique: true
+        },
 
+        provider: {
+            type: String,
+            required: true,
+            default: "EmailPasswordAuth",
+            enum: ["EmailPasswordAuth", "github", "google"]
+        },
+
+        password: {
+            type: String,
+            index: true
+        },
     },
 
-    password: {
-        type: String,
-        required: true,
-        index: true
-    },
+    // email: {
+    //     type: String,
+    //     required: true,
+    //     unique: true,
+    //     index: true
+
+    // },
+
 
     adminOptions: {
         isAdmin: {
@@ -47,14 +64,14 @@ const schema = new mongoose.Schema({
             ref: "Product",
             unique: true
         }],
-        
+
         updatedProducts: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: "Product",
             unique: true
         }]
     },
-    
+
     superAdminOptions: {
         isSuperAdmin: {
             type: Boolean,
@@ -93,47 +110,83 @@ const schema = new mongoose.Schema({
         }],
 
         default: []
-    }
-    // cart: [{
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "Product"
-    // }]
+    },
+
+    messages: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Message"
+        }
+    ]
 
 });
 
 
 schema.pre("save", async function (next) {
-    console.log("is modified");
-    console.log(!this.isModified("password"));
-    if (!this.isModified("password")) return next();
+
+    if (this.auth.provider === "EmailPasswordAuth" && !!!this.auth.password) return next(authMessages.FAIL_PASSWORD);
+    if (!this.isModified("auth.password") || this.auth.provider !== "EmailPasswordAuth") return next();
     const salt = await bcryptjs.genSalt(10);
-    UserModel.create
-    this.password = await bcryptjs.hash(this.password, salt);
-    next()
+    this.auth.password = await bcryptjs.hash(this.auth.password, salt);
+    return next()
 });
 
 schema.methods.comparePassword = async function (password) {
-    const isValidPassword = await bcryptjs.compare(password, this.password);
+    if (this.auth.provider !== "EmailPasswordAuth") return;
+    const isValidPassword = await bcryptjs.compare(password, this.auth.password);
     return isValidPassword;
 };
 
 schema.methods.setToAdmin = async function (_id) {
 
     try {
-        await UserModel.updateOne({ _id }, {$push: {"superAdminOptions.usersSetToAdmin": this._id } } );
-        this.adminOptions.isAdmin = true;
-        return await this.save();
+
+        const user = await UserModel.findOne({ _id, "adminOptions.isAdmin": true });
+        if (!user) throw new Error(userMessages.ADMIN_ONLY);
+
+        const isAlreadySetByAdmin = [...user.superAdminOptions.usersSetToAdmin].includes(this._id);
+
+        if (!isAlreadySetByAdmin) {
+            user.superAdminOptions.usersSetToAdmin.push(this._id);
+        }
+
+        await Promise.all([
+            await user.save(),
+            this.adminOptions.isAdmin = true,
+            await this.save()
+
+        ]);
+
+
     }
     catch (err) {
+
+        if (err.message !== userMessages.ADMIN_ONLY) {
+            err.message = serverMessages.SERVER_FAILURE
+        }
         throw new Error(err);
     }
 }
 
 schema.methods.unsetUserToAdmin = async function (_id) {
     try {
-        await UserModel.updateOne({ _id }, {$pull: {"superAdminOptions.usersSetToAdmin": this._id } } );
-        this.adminOptions.isAdmin = false;
-        return await this.save();
+
+        const user = await UserModel.findOne({ _id, "adminOptions.isAdmin": true });
+        if (!user) throw new Error(userMessages.ADMIN_ONLY);
+
+        const isNotAnAdmin = [...user.superAdminOptions.usersSetToAdmin].includes(this._id);
+
+        if (isNotAnAdmin) {
+            user.superAdminOptions.usersSetToAdmin.pull(this._id);
+        }
+
+        await Promise.all([
+            await user.save(),
+            this.adminOptions.isAdmin = false,
+            await this.save()
+
+        ]);
+
     }
     catch (err) {
         throw new Error(err);

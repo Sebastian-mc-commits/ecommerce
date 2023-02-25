@@ -2,12 +2,20 @@
 import { Router } from "express";
 import { authenticate } from "../lib/middleware/authentication.js";
 import * as cart from "../services/cart.service.js";
+import { retrieveProductsViewedByCookie } from "../utils/retrieveProductsViewed.js";
 const router = Router();
 
 router.get("/", authenticate, async (req, res) => {
     try {
         const userId = req.session.user._id;
         const products = await cart.getProductsFromCart(userId);
+        const getRandomProduct = Math.floor(Math.random() * 1);
+        const existsCookie = req.cookies.seenProducts;
+
+        // retrieveProductsViewedByCookie(existsCookie, "products",
+        //     res,
+        //     products[getRandomProduct]
+        // );
         res.render("cart", { products });
     }
     catch (err) {

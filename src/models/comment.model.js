@@ -19,10 +19,6 @@ const schema = new mongoose.Schema({
 
 });
 
-// schema.pre("find", function () {
-//     this.model.populate("createdBy").populate("productRef").lean();
-// });
-
 schema.pre("save", async function(next, productId) {
     const _id = Object.values(productId).join("");
     try {

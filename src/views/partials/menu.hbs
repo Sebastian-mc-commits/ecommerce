@@ -1,31 +1,85 @@
 <link rel="stylesheet" href="/public/styles/menu.css">
 
-<div class="main-menu" id="main-menu">
+<main class="main-menu" id="main-menu">
 
-  <a href="/realTimeProducts" id="realTimeProducts" class="text">Go to Real time products</a>
+  <div class="main-menu-values">
 
-  {{#if user.adminOptions.isAdmin}}
-<p>Admin2 {{user.adminOptions.isAdmin}}</p>
-    <a href="/crud-admin" id="crud-admin" class="text">Product options</a>
-  {{/if}}
+    {{!-- <p data-location="realTimeProducts" class="text">Go to Real time products</p> --}}
 
-  {{#if user}}
+    {{#if user.adminOptions.isAdmin}}
+    <p data-location="crud-admin" class="text">Product options</p>
+    {{/if}}
+
+    {{#if user}}
     {{#with user}}
-      <a href="/cart" id="cart" class="text">
-        Go to Cart
-        <sup>Items: <strong>{{length _id}}</strong></sup>
-      </a>
-      <div id="user">
-        <img src={{image}} alt="User Image" onclick="userView()"/>
-        {{!-- <a href="/user" class="user text">{{name}}</a> --}}
-        <p class="user bg-success text border-radius cursor-pointer">Go to your account</p>
-      </div>
+    <p data-location="cart" class="text">
+      Go to Cart
+      {{!-- <sup>Items: <strong>{{length _id}}</strong></sup> --}}
+    </p>
+
+    <img data-location="user" src={{image}} alt="User Image" />
     {{/with}}
 
-  {{else}}
-    <a href="/auth" class="text" id="auth">Log In / Sign Up</a>
-  {{/if}}
+    {{else}}
+    <p data-location="auth" class="text">Log In / Sign Up</p>
+    {{/if}}
 
-<p hidden id="currentView">{{currentView}}</p>
+    <p hidden id="currentView">{{currentView}}</p>
+  </div>
+</main>
+{{!-- <p id="gettingEmail">email {{user.auth.email}} id {{user._id}}</p>
+
+<div>
+  <input type="text" name="send">
+  <input type="text" name="to">
+  <button id="FormMessage">Send</button>
 </div>
-  <script src="/public/js/main.js"></script>
+
+<div id="gettingMessages"></div>
+<p>connectedUsers</p>
+<div id="connectedUsers"></div> --}}
+
+<script src="/public/js/main.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+  const userValues = globalMethods.showCurrentUserValues();
+  const socket = io({ auth: { username } });
+
+
+  /*socket.on("getMessages", data => {
+
+    document.querySelector("#gettingMessages").innerHTML = "";
+
+    if (data.dc.length) {
+      for (let d of data.dc) {
+        document.querySelector("#gettingMessages").innerHTML += d;
+      }
+    }
+  });
+
+  socket.on("sendConnectedUsers", ({ connectedUsers }) => {
+    if (!connectedUsers.length) return;
+    console.log("connectedUsers")
+    console.log(connectedUsers)
+
+    document.querySelector('div[id="connectedUsers"]').innerHTML = "";
+    for (let { id, username } of connectedUsers) {
+      document.querySelector('div[id="connectedUsers"]').innerHTML += `
+        <p>Id: ${id} && Username: ${username}</p>
+      `;
+    }
+  });
+
+
+  document.querySelector("#FormMessage").addEventListener("click", function (event) {
+    console.log("Clicked");
+
+    socket.emit("sendMessageFromFront", {
+      message: this.closest("div").querySelector("[name='send']").value,
+      sendTo: this.closest("div").querySelector("[name='to']").value
+    });
+
+    this.closest("div").querySelector("[type='text']").value = "";
+  });*/
+</script>
