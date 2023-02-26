@@ -1,12 +1,13 @@
 import { Router } from "express";
 import __dirname from "../__dirname.js";
 import { authenticate, authenticateAdmin } from "../lib/middleware/authentication.js";
+import { verifyTokenAdmin } from "../lib/middleware/verifyToken.middleware.js";
 
 const router = Router();
 
 
 
-router.get("/", authenticateAdmin, async (req, res) => {
+router.get("/", authenticateAdmin, verifyTokenAdmin, async (req, res) => {
     try {
         // res.render("crud-admin", { products: await product.getProducts() });
         const user = req.session?.user;

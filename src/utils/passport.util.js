@@ -4,7 +4,6 @@ import { Strategy as GithuStrategy } from "passport-github2";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import * as userService from "../services/user.service.js";
 import { config } from "dotenv";
-import UserModel from "../models/user.models.js";
 import authMessages from "./messages/messages.auth.utils.js";
 
 config();

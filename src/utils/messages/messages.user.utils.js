@@ -11,7 +11,13 @@ const userMessages = {
 
     ADMIN_UPDATE: name => `The account of ${name} has been updated to an admin account.`,
 
-    UNSET_ADMIN: name => `The ${name} user is no longer an admin`
+    UNSET_ADMIN: name => `The ${name} user is no longer an admin`,
+
+    COOKIE_NOT_FOUND: "Authorization failed: cookie not found.",
+
+    AUTHENTICATION_REQUIRED: "Please authenticate yourself to access this resource. You may do so by logging in or creating an account if you haven't already done so.",
+
+    ALREADY_AUTHENTICATE: email => `You're already logged in as ${email}. Please log out first if you want to log in with a different account`
 }
 
 export default userMessages;

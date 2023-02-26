@@ -1,20 +1,17 @@
 {{#if message}}
-<p hidden id="message">{{message.message}}</p>
-<p hidden id="type">{{message.type}}</p>
-{{#if message.error}}
-<p hidden id="error">{{message.error}}</p>
-{{/if}}
+<p data-global-router-message="true" hidden>message/*&*/{{message.message}}/*&*/type/*&*/{{message.type}}</p>
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    const message = {
-        message: document.querySelector("#message")?.textContent,
-        type: document.querySelector("#type")?.textContent,
-        error: document.querySelector("#error")?.textContent
+    const messageByRouter = {}
+    const getMessageRouter = document.querySelector("[data-global-router-message]").textContent.split("/*&*/");
+
+    for (let i = 0; i < getMessageRouter.length; i += 2) {
+        messageByRouter[getMessageRouter[i]] = getMessageRouter[i + 1];
     }
 
-    if (message) globalMethods.activeGlobalMessage(message);
+    if (Object.values(messageByRouter).length) globalMethods.activeGlobalMessage(messageByRouter);
 
 </script>
 {{/if}}

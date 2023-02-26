@@ -1,30 +1,35 @@
 import { Router } from "express";
 import { authenticate as isLogin, isAuthenticate } from "../../lib/middleware/authentication.js";
 import passport from "../../utils/passport.util.js";
+import { createToken } from "../../lib/middleware/createToken.middleware.js";
+
 const router = Router();
 
-
-router.get("/github", isAuthenticate, passport.authenticate("github", { scope: ["user:email"] }));
 
 router.get("/logout", isLogin, (req, res) => {
     req.session.destroy();
     res.redirect("/home");
 });
 
-router.get("/github/callback", isAuthenticate, passport.authenticate("github", {
+router.use(isAuthenticate);
+
+router.get("/github", passport.authenticate("github", { scope: ["user:email"] }));
+
+router.get("/github/callback", passport.authenticate("github", {
     failureRedirect: "/auth",
     failureFlash: true
-}), (req, res) => {
+}), createToken, (req, res) => {
+
     req.session.user = req.user;
     res.redirect("/home");
 });
 
-router.get("/google", isAuthenticate, passport.authenticate("google", { scope: ["email"] }));
+router.get("/google", passport.authenticate("google", { scope: ["email"] }));
 
 router.get("/google/redirect", passport.authenticate("google", {
     failureRedirect: "/auth",
     failureFlash: true
-}), (req, res) => {
+}), createToken, (req, res) => {
     req.session.user = req.user;
     res.redirect("/home");
 });
@@ -34,24 +39,23 @@ router.get("/failAuth", (req, res) => {
     res.status(403).json({ message: flash[0] });
 });
 
-router.post("/signup", isAuthenticate, passport.authenticate("signup", {
+router.post("/signup", passport.authenticate("signup", {
     failureRedirect: "/api/auth/failAuth",
     failureFlash: true
-}), (req, res) => {
+}), createToken, (req, res) => {
 
     req.session.user = req.user;
     res.redirect("/home");
 });
 
-router.post("/login", isAuthenticate, passport.authenticate("login", {
+router.post("/login", passport.authenticate("login", {
     failureRedirect: "/api/auth/failAuth",
     // failureFlash: authMessages.FAIL_LOGIN,
     failureFlash: true
-
-}), (req, res) => {
-    console.log("Getting router auth");
+    
+}), createToken, (req, res) => {
     req.session.user = req.user;
-    res.json({ message: "RRRR" });
+    res.redirect("/home");
 });
 
 export default router;

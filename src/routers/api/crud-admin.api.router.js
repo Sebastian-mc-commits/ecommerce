@@ -8,6 +8,7 @@ import * as ProductService from "../../services/product.service.js";
 import { getAdmins, unsetUserToAdmin, userToAdmin, getUsers } from "../../services/user.service.js";
 import productMessages from "../../utils/messages/messages.product.utils.js";
 import userMessages from "../../utils/messages/messages.user.utils.js";
+import { verifyTokenAdmin, verifyTokenSuperAdmin } from "../../lib/middleware/verifyToken.middleware.js";
 
 
 const router = Router();
@@ -29,7 +30,7 @@ const upload = multer({
     }
 });
 
-router.delete("/deleteProduct/", authenticateAdmin, async (req, res) => {
+router.delete("/deleteProduct/", authenticateAdmin, verifyTokenAdmin, async (req, res) => {
     try {
         const { pid = "" } = req?.query || {};
         const { _id: userId } = req?.session?.user || {}
@@ -43,7 +44,7 @@ router.delete("/deleteProduct/", authenticateAdmin, async (req, res) => {
     }
 });
 
-router.post("/addProduct", authenticateAdmin, upload.single("thumbnail"), async (req, res) => {
+router.post("/addProduct", authenticateAdmin, verifyTokenAdmin, upload.single("thumbnail"), async (req, res) => {
     try {
         const file = req.file?.filename;
         const { title, price, code, status, stock, description, categoryType } = req.body;
@@ -73,7 +74,7 @@ router.post("/addProduct", authenticateAdmin, upload.single("thumbnail"), async 
 
 });
 
-router.put("/updateProduct/:pid", authenticateAdmin, async (req, res) => {
+router.put("/updateProduct/:pid", authenticateAdmin, verifyTokenAdmin, async (req, res) => {
     try {
 
         const { title, price, code, status, stock, description } = req.body;
@@ -96,7 +97,7 @@ router.put("/updateProduct/:pid", authenticateAdmin, async (req, res) => {
     }
 });
 
-router.put("/setUserToAdmin/:id", authenticateSuperAdmin, async (req, res) => {
+router.put("/setUserToAdmin/:id", authenticateSuperAdmin, verifyTokenSuperAdmin, async (req, res) => {
     try {
         const adminId = req.session.user._id;
         const user = await userToAdmin(adminId, req.params.id);
@@ -108,7 +109,7 @@ router.put("/setUserToAdmin/:id", authenticateSuperAdmin, async (req, res) => {
     }
 });
 
-router.put("/unsetToAdmin/:id", authenticateSuperAdmin, async (req, res) => {
+router.put("/unsetToAdmin/:id", authenticateSuperAdmin, verifyTokenSuperAdmin, async (req, res) => {
     try {
         const adminId = req.session.user._id;
         const user = await unsetUserToAdmin(adminId, req.params.id);
@@ -120,7 +121,7 @@ router.put("/unsetToAdmin/:id", authenticateSuperAdmin, async (req, res) => {
     }
 });
 
-router.get("/getAdmins", authenticate, async (req, res) => {
+router.get("/getAdmins", authenticate, verifyTokenSuperAdmin, async (req, res) => {
     try {
         const admins = await getAdmins();
 
@@ -131,7 +132,7 @@ router.get("/getAdmins", authenticate, async (req, res) => {
     }
 });
 
-router.get("/getUsers", authenticateSuperAdmin, async (req, res) => {
+router.get("/getUsers", authenticateSuperAdmin, verifyTokenSuperAdmin, async (req, res) => {
     try {
         const { skip = 0 } = req?.query || {};
         const users = await getUsers(parseInt(skip));
