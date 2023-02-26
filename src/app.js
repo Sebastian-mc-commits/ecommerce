@@ -1,5 +1,6 @@
 import express from "express";
-import { Server } from "socket.io";
+import { Server as WebSocketServer } from "socket.io";
+import { createServer } from "http";
 import { create } from "express-handlebars";
 import session from "express-session";
 import flash from "connect-flash";
@@ -23,6 +24,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+const httpServer = createServer(app);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/public", express.static(__dirname("public")));
@@ -72,9 +74,9 @@ app.use("/api/product", productApiRouter);
 app.use("/auth", auth);
 // http://localhost:4000/api/auth/github/callback
 
-const server = app.listen(PORT, () => console.log("Server set on port ", PORT));
+httpServer.listen(PORT, () => console.log("Server set on port ", PORT));
 
-const io = new Server(server);
+const io = new WebSocketServer(httpServer);
 
 // const wrap = middleware => (socket, next) => {
 //     return middleware(socket.request, {}, next);
@@ -87,9 +89,6 @@ const io = new Server(server);
 //     next();
 // });
 
-
-
-let handleConnectedSockets = [];
 io.on("connection", async (socket) => {
 
     io.use(async (socket, next) => {
@@ -99,31 +98,20 @@ io.on("connection", async (socket) => {
 
         socket.user = auth;
 
-        if (socket.user.isSuperAdmin === "false") return next();
-
-        if (handleConnectedSockets.length) {
-
-            return socket.emit("connectedSockets", { connectedSockets: handleConnectedSockets }, (data) => {
-                console.log("Received ACK from front end", data);
-            });
-        }
-
-        for (let [socketId, connectedSockets] of io.of("/").sockets) {
-            const authSocket = connectedSockets.handshake.auth;
-            handleConnectedSockets.push({ authSocket, socketId });
-        }
-        socket.emit("connectedSockets", { connectedSockets: handleConnectedSockets }, (data) => {
-            console.log("Received ACK from front end", data);
+        io.emit("isSocketConnected", {
+            socket: auth,
+            isSocketConnected: true
         });
-
-
-
-        console.log("User")
-        console.log(socket.user)
         return next();
     });
 
-    let users = [];
+    socket.on("disconnect", () => {
+
+        io.emit("isSocketConnected", {
+            socket: socket.user,
+            isSocketConnected: false
+        });
+    });
 
     if (!socket.connected) {
         socket.connect();
@@ -150,47 +138,65 @@ io.on("connection", async (socket) => {
     io.use((socket, next) => {
         const { isAdmin = false } = socket.user;
 
-        if (isAdmin || isAdmin === "false") return next(new Error("Unauthorized"));
+        if (!isAdmin) return next(new Error(userMessages.ADMIN_ONLY));
 
         return next();
     });
 
+    // let users = [];
 
-    // if (socket.request?.session?.user?.superAdminOptions?.isSuperAdmin) {
+    // // if (socket.request?.session?.user?.superAdminOptions?.isSuperAdmin) {
+    // // }
+
+    // if (!users.length) {
+    //     console.log("Not exist user");
+    //     users = await getUsers();
+
+    //     for (let user of users) {
+
+    //         let isConnected = false;
+
+    //         for (let [_, connectedSockets] of io.of("/").sockets) {
+    //             // console.log("connectedSockets");
+    //             // console.log(connectedSockets.handshake.auth);
+    //             if (connectedSockets.handshake.auth?.email === user.auth.email) {
+    //                 isConnected = true;
+    //                 break;
+    //             }
+    //         }
+    //         user.isConnected = isConnected;
+    //     }
     // }
+    let connectedUsers = [];
 
-    if (!users.length) {
-        users = await getUsers();
-    }
+    const populateConnectedUsers = async () => {
+        return await new Promise((resolve) => {
+            for (let [socketId, connectedSockets] of io.of("/").sockets) {
+                const user = connectedSockets.handshake.auth;
+                if (user) {
+                    connectedUsers.push({ ...user, socketId });
+                }
+            }
+            resolve();
+        });
+    };
 
-    // const getConnectedSockets = () => {
-    //     // if (!socket?.username && socket.username?.isSuperAdmin === "false") return;
+    // Rest of front end code goes here...
 
+    socket.on("editedUser", async ({ message, userUpdated }) => {
 
-    //     return handleConnectedSockets.length ? handleConnectedSockets : [];
-    // }
-
-    socket.emit("getUsers", { users });
-
-    socket.on("editedUser", async ({ email, _id, admin }) => {
-
-        if (!users.length) users = await getUsers();
-
-        const index = users.findIndex(({ auth }) => auth.email === email);
-        let userUpdated
-
-        if (index !== -1) {
-            const [_, connectedSockets] = io.of("/");
-            users[index].isConnected = connectedSockets.some(socket => socket.user.email === email);
-            users.adminOptions.isAdmin = admin;
-            userUpdated = users[index];
+        if (!connectedUsers.length) {
+            await populateConnectedUsers();
         }
-        // else {
-        //     userUpdated = await getUserById(_id);
-        //     users.push(userUpdated);
-        // }
+        const sendUpdate = connectedUsers.find(({ email }) => email === userUpdated.auth.email);
 
-        io.emit("showUserEdited", userUpdated);
+        console.log("sendUpdate");
+        console.log(sendUpdate);
+        if (sendUpdate) {
+
+            socket.to(sendUpdate.socketId).emit("sendUpdate", { userUpdated });
+        }
+        io.emit("showUserEdited", { userUpdated, message });
     });
 
     socket.on("sendProduct", async ({ message, product, type = "delete" }) => {
@@ -220,6 +226,13 @@ io.on("connection", async (socket) => {
         io.emit("getProducts", { products });
     });
 
+    socket.on("getCurrentUsers", async () => {
+
+        if (!connectedUsers.length) {
+            await populateConnectedUsers();
+            socket.emit("getUsersConnected", { connectedUsers });
+        }
+    });
     // io.use((socket, next) => {
     //     const auth = socket.handshake.auth;
     //     console.log("auth");
@@ -250,6 +263,8 @@ io.on("connection", async (socket) => {
     // io.emit("sendConnectedUsers", { connectedUsers });
 
     // io.emit("getMessages", { dc });
+
+    socket.on("getCCC", () => console.log("Hello fella"));
 
     socket.on("connect_error", (err) => {
         console.log(`connect_error due to ${err.message}`);

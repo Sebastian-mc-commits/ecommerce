@@ -40,13 +40,16 @@
 <div id="connectedUsers"></div> --}}
 
 <script src="/public/js/main.js"></script>
+
+{{#if user}}
+
 <script src="/socket.io/socket.io.js"></script>
 
 <script>
-  const userValues = globalMethods.showCurrentUserValues();
-  const socket = io({ auth: { username } });
+  const { showCurrentUserValues } = globalMethods;
+  const socket = io({ auth: showCurrentUserValues() });
 
-
+  socket.on("sendUpdate", ({ userUpdated }) => console.log(userUpdated));
   /*socket.on("getMessages", data => {
 
     document.querySelector("#gettingMessages").innerHTML = "";
@@ -83,3 +86,5 @@
     this.closest("div").querySelector("[type='text']").value = "";
   });*/
 </script>
+
+{{/if}}

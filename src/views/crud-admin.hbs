@@ -13,11 +13,11 @@
       <p class="title">Admins options</p>
     </div>
     <ul class="list-items" id="list_items">
-      <li class="onPressLi">Create product</li>
-      <li>Delete or Update product</li>
+      <li class="onPressLi" data-handle-option="createProduct">Create product</li>
+      <li data-handle-option="delete_update_product">Delete or Update product</li>
       <li id="handleUpdateOnMenu" hidden></li>
       {{#if user.superAdminOptions.isSuperAdmin}}
-      <li>Users Options</li>
+      <li data-handle-option="getUsers">Users Options</li>
       {{/if}}
     </ul>
   </nav>
@@ -88,9 +88,11 @@
 
     <li class="slide" data-render-users="true">
       <div>
+        <button onclick="tryGetConnection()">Try connection</button>
         <h2>Users</h2>
         <table class="w-10">
           <thead>
+            <th>Is connected</th>
             <th>id</th>
             <th>Name</th>
             <th>Last Name</th>
@@ -114,23 +116,11 @@
 </div>
 {{/if}}
 
-<script>
-  const getUser = {{{ getUser }}}
-  /*window.addEventListener("load", () => {
-    window.postMessage({type: "data", data: {{{user}}} }, '*');
-  });
-
-  window.addEventListener("message", e => {
-    if (e.data.type === "data"){
-      const data = e.data.data;
-      console.log(data);
-    }
-      console.log("data");
-      console.log(data);
-  });*/
-</script>
-<script src="/socket.io/socket.io.js"></script>
+{{!--
+<script src="/socket.io/socket.io.js"></script> --}}
+<script src="/socket.io/socket.io.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="/public/js/crud-admin-data.js"></script>
 <script src="/public/js/crud-admin.js"></script>
+<script src="/public/js/crud-admin-data.js"></script>
+<script src="/public/js/crud-admin-renderUsers.js"></script>
 <script src="/public/js/validateField.js"></script>

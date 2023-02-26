@@ -6,6 +6,16 @@ const handleUpdate = document.querySelector("#handleUpdate");
 const form = document.querySelector("#form");
 const product = document.querySelector("#product");
 
+const { loader, hideLoader, activeGlobalMessage, activeGlobalMessageV2, showCurrentUserValues, showConfirmationMessage, useFetch, randomColor } = globalMethods;
+const userValues = showCurrentUserValues();
+
+let socket = io({ auth: userValues });
+
+const crudAdminMethods = {
+    case_methods: {
+        GET_USERS: "getUsers"
+    }
+}
 btn.addEventListener("input", () => content.classList.toggle("translate"));
 
 window.onload = () => {
@@ -16,25 +26,25 @@ window.onload = () => {
 
         if (!!dataset.deleteProduct) {
 
-            globalMethods.loader(event.target, "first")
+            loader(event.target, "first")
             // const productOnDeleting = data.find(({ _id }) => dataset.deleteProduct === _id);
 
             const request = await fetch(`/api/crud-admin/deleteProduct/?pid=${dataset.deleteProduct}`, {
                 method: "DELETE"
             });
 
-            globalMethods.hideLoader(event.target);
+            hideLoader(event.target);
 
             let result = await request?.json();
 
             if (!result) {
-                return globalMethods.activeGlobalMessageV2({
+                return activeGlobalMessageV2({
                     message: "SERVER ERROR",
                     type: "warning"
                 })
             };
 
-            globalMethods.activeGlobalMessageV2(result.status);
+            activeGlobalMessageV2(result.status);
 
             const userMessage = {
                 message: `The product ${result.product.title} has been deleted`,
@@ -46,20 +56,8 @@ window.onload = () => {
         else if (!!dataset.updateProduct) updateProduct(dataset.updateProduct);
     });
 }
-const message_crud = JSON.parse(localStorage.getItem("message")) || "";
-
-if (message_crud) {
-    const { type, message } = message_crud;
-    Swal.fire({
-        text: message,
-        toast: true,
-        position: "top",
-        color: type
-    });
-    localStorage.removeItem("message");
-}
 //On press side-bar options
-list_items.addEventListener("click", e => {
+list_items.addEventListener("click", async e => {
     const target = e.target;
 
     if (target === list_items) return;
@@ -74,6 +72,24 @@ list_items.addEventListener("click", e => {
 
     const prevIndex = [...slides.children].indexOf(activeSlide);
 
+    const { GET_USERS } = crudAdminMethods.case_methods;
+    switch (target.dataset.handleOption) {
+
+        case GET_USERS:
+
+            if (GET_USERS in crudAdminMethods) break;
+
+            let { result, request } = await useFetch({
+                url: "/api/crud-admin/getUsers",
+                useLoader: target,
+                method: "GET"
+            });
+            if (!request.ok) return;
+
+            crudAdminMethods[GET_USERS] = result;
+            renderUsers(result);
+            break;
+    }
     list_items.children[newIndex].classList.add("onPressLi");
     console.log(newIndex);
     slides.children[newIndex].dataset.active = true;
@@ -172,7 +188,7 @@ const updateProduct = (id_p) => {
         const formData = new FormData(this);
         const data = Object.fromEntries(formData);
 
-        globalMethods.loader(this);
+        loader(this);
         const request = await fetch(`/api/crud-admin/updateProduct/${this.dataset.formId}`, {
             method: "PUT",
             headers: {
@@ -180,16 +196,16 @@ const updateProduct = (id_p) => {
             },
             body: JSON.stringify(data)
         });
-        globalMethods.hideLoader(this);
+        hideLoader(this);
 
         let result = await request.json();
 
         if (!request.ok && "status" in result) {
-            return globalMethods.activeGlobalMessageV2(result.status);
+            return activeGlobalMessageV2(result.status);
         }
 
         else if (!result && !result?.product) {
-            return globalMethods.activeGlobalMessageV2({
+            return activeGlobalMessageV2({
                 message: "SERVER ERROR",
                 type: "brown"
             });
@@ -208,7 +224,7 @@ const updateProduct = (id_p) => {
             type: "update"
         });
 
-        return globalMethods.activeGlobalMessageV2(result.status);
+        return activeGlobalMessageV2(result.status);
     });
 }
 
@@ -219,7 +235,7 @@ form.addEventListener("submit", async (e) => {
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
 
-    globalMethods.loader(form);
+    loader(form);
 
     const request = await fetch("/api/crud-admin/addProduct", {
         method: "POST",
@@ -229,16 +245,16 @@ form.addEventListener("submit", async (e) => {
         body: JSON.stringify(data)
     });
 
-    globalMethods.hideLoader(form);
+    hideLoader(form);
 
     let result = await request.json();
 
     if (!request.ok && "status" in result) {
-        return globalMethods.activeGlobalMessageV2(result.status);
+        return activeGlobalMessageV2(result.status);
     }
 
     else if (!result && !result?.product) {
-        return globalMethods.activeGlobalMessageV2({
+        return activeGlobalMessageV2({
             message: "SERVER ERROR",
             type: "brown"
         });
@@ -252,7 +268,7 @@ form.addEventListener("submit", async (e) => {
         type: "add"
     });
 
-    return globalMethods.activeGlobalMessageV2(result.status);
+    return activeGlobalMessageV2(result.status);
 }
 );
 

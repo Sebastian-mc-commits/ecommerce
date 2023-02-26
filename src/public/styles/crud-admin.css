@@ -66,31 +66,47 @@ body {
   /* background-color: yellowgreen; */
 }
 
-.userRender tr td.userMessage {
+.userRender tr td.optionsFromAdminToUser {
   position: relative;
   overflow: hidden;
 }
 
-.userRender tr td.userMessage::before {
+.userRender tr td.optionsFromAdminToUser::before {
   position: absolute;
   inset: 0;
   transform: translateY(100%);
-  content: "message";
   display: flex;
   flex-direction: column;
   justify-content: center;
   font-weight: bold;
   cursor: pointer;
-  color: var(--gray);
   z-index: 3;
   transition: all 0.5s;
 }
 
-.userRender tr td.userMessage:hover::before {
+.userRender tr td.optionsFromAdminToUser:hover::before {
   transform: translateY(0);
-  background-color: var(--user-color);
 }
 
+.userRender tr td.messageToUser::before {
+  
+  content: "message";
+}
+
+.userRender tr td.messageToUser:hover::before {
+  background-color: var(--user-color);
+  color: var(--gray);
+}
+
+.userRender tr td.visitUser::before {
+  
+  content: "Visit User";
+}
+
+.userRender tr td.visitUser:hover::before {
+  background-color: var(--info);
+  color: var(--white);
+}
 .content {
   position: absolute;
   inset: 0;
@@ -131,4 +147,11 @@ body {
   background-color: var(--random-color);
   width: 5%;
   border-radius: 7px;
+}
+
+.connected {
+  font-size: 2rem;
+  cursor: default;
+  color: var(--white);
+  transition: all 0.3;
 }

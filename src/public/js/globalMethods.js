@@ -73,11 +73,23 @@ const globalMethods = {
 
     showCurrentUserValues: () => {
         let authUser = {};
-        const userData = document.querySelector("[data-user-for-js='true']").textContent.split(" ");
+        const userData = document.querySelector("[data-user-for-js='true']")?.textContent?.split(" ");
+
+        if (!userData) return {}
 
         for (let i = 0; i < userData.length; i += 2) {
 
-            authUser[userData[i]] = userData[i + 1];
+            let value = userData[i + 1];
+
+            if (userData[i + 1] === "false") {
+                value = false;
+            }
+            else if (userData[i + 1] === "true") {
+                value = true;
+            }
+
+            authUser[userData[i]] = value;
+
         }
 
         return Object.values(authUser).length ? authUser : {};

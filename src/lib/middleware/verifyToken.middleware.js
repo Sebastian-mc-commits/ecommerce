@@ -7,8 +7,6 @@ config();
 
 export const verifyTokenAdmin = async (req, res, next) => {
     const { authenticateAdmin = "" } = req.signedCookies
-    console.log("authenticateAdmin");
-    console.log(authenticateAdmin);
     if (!authenticateAdmin?.token) {
         req.flash("message", {
             message: userMessages.COOKIE_NOT_FOUND,

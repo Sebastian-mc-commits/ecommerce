@@ -137,7 +137,7 @@ img {
 }
 
 .default {
-  background-color: white;
+  background-color: var(--default);
 }
 
 .bg-danger {
@@ -318,6 +318,10 @@ input[type="file"]:hover {
 
 .bg-gray {
   background-color: var(--gray);
+}
+
+.gray {
+  color: var(--gray);
 }
 
 .loader {

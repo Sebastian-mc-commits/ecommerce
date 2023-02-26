@@ -102,7 +102,7 @@ router.put("/setUserToAdmin/:id", authenticateSuperAdmin, verifyTokenSuperAdmin,
         const adminId = req.session.user._id;
         const user = await userToAdmin(adminId, req.params.id);
         // res.redirect("/crud-admin");
-        res.json({ message: userMessages.ADMIN_UPDATE(user.name) });
+        res.json({ message: userMessages.ADMIN_UPDATE(user.name), user });
     }
     catch (err) {
         return res.status(400).json({ message: err.message });
@@ -114,7 +114,7 @@ router.put("/unsetToAdmin/:id", authenticateSuperAdmin, verifyTokenSuperAdmin, a
         const adminId = req.session.user._id;
         const user = await unsetUserToAdmin(adminId, req.params.id);
         // res.redirect("/crud-admin");
-        res.json({ message: userMessages.UNSET_ADMIN(user.name) });
+        res.json({ message: userMessages.UNSET_ADMIN(user.name), user });
     }
     catch (err) {
         return res.status(400).json({ message: err.message });

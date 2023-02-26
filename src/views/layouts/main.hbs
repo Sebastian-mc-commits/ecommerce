@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="/public/styles/index.css" />
 </head>
 
+  <p data-user-for-js="true" hidden>email {{user.auth.email}} _id {{user._id}} isAdmin {{user.adminOptions.isAdmin}} isSuperAdmin {{user.superAdminOptions.isSuperAdmin}}</p>
 <script src="/public/js/globalMethods.js"></script>
 {{#if (showMenu)}}
 {{> menu}}
@@ -15,7 +16,6 @@
 {{> messages}}
 
 <body>
-  <p data-user-for-js="true" hidden>email {{user.auth.email}} _id {{user._id}} isAdmin {{user.adminOptions.isAdmin}} isSuperAdmin {{user.superAdminOptions.isSuperAdmin}}</p>
   {{{body}}}
 </body>
 
