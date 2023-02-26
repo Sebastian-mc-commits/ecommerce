@@ -1,11 +1,16 @@
 const user = document.querySelector("#user");
 // const socket = io({auth});
-const { activeGlobalMessage, activeGlobalMessageV2, showCurrentUserValues } = globalMethods;
+const { activeGlobalMessage, activeGlobalMessageV2, showCurrentUserValues, showConfirmationMessage, useFetch, randomColor } = globalMethods;
+randomColor();
 const userValues = showCurrentUserValues();
 const socket = io({ auth: userValues });
 
 let data = [];
 let userData = [];
+
+// const crudAdminMethods = {
+//     reachedTheBottom: false
+// }
 
 socket.on("getProducts", async ({ products }) => {
     console.log("products");
@@ -19,23 +24,22 @@ socket.on("getProducts", async ({ products }) => {
 
 });
 
-socket.on("newUser", ({ user }) => {
-    console.log("Connected New User");
-    console.log("connected ", user)
-    if (!!!userData.length) return;
-    const index = userData.findIndex(({ email }) => email === user.email);
+socket.on("showUserEdited", userUpdated => {
 
-    if (index !== -1) {
-        userData[index].isConnected = true;
-    }
-    else {
-        userData.push({ ...user, isConnected: true });
-    }
-    printUsers(userData);
-    // console.log("userData");
-    // console.log(userData);
 
+    const element = Array.from(document.querySelectorAll("[data-id]")).find(el => el.dataset?.id === userUpdated._id);
+
+    if (element) {
+
+        element.closest("tr").innerHTML = printUser(userUpdated);
+    }
+
+    return activeGlobalMessage({
+        message: userUpdated.adminOptions.isAdmin ? `${userUpdated.name} is now an admin` : `${userUpdated.name} is not longer an admin`,
+        type: userUpdated.adminOptions.isAdmin ? "success" : "warning"
+    });
 });
+
 
 socket.on("getUsers", async ({ users }) => {
     try {
@@ -48,91 +52,30 @@ socket.on("getUsers", async ({ users }) => {
 
 });
 
-// const deleteUser = ({ name, id }) => {
-//     Swal.fire({
-//         title: `Are you sure you wanna delete User ${name}`,
-//         showDenyButton: true,
-//         showCancelButton: true,
-//         confirmButtonText: "Continue",
-//         denyButtonText: "Cancel"
-//     }).then(({ isConfirmed, isDenied }) => {
-//         if (isConfirmed) {
-//             location.href(`/home/crud-admin/deleteUser/${id}`);
-//         }
-//         else if (isDenied) {
-//             Swal.fire("Changes are not save", "", "info");
-//         }
-//     })
-// }
+const setUserToAdmin = ({ name, _id, email }, method = true, target) => showConfirmationMessage({
+    title: `Are you sure you wanna ${method ? "set" : "unset"} ${name} to Admin`,
+    onConfirmTitle: `Remember this user ${name} is ${method ?
+        "gonna be able to perform the same as you do"
+        :
+        "no longer an admin"
+        }`
+}, async () => {
+    let { request } = await useFetch({
+        url: `/api/crud-admin/${method ? "setUserToAdmin" : "unsetToAdmin"}/${_id}`,
+        useLoader: target,
+        method: "PUT"
+    });
 
-const setUserToAdmin = ({ name, _id, email }, method = true) => {
-    Swal.fire({
-        title: `Are you sure you wanna ${method ? "set" : "unset"} ${name} to Admin`,
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: "Continue",
-    }).then(({ isConfirmed, isDenied }) => {
-        if (isConfirmed) {
-            Swal.fire({
-                title: `Remember this user ${name} is ${method ?
-                    "gonna be able to perform the same as you do"
-                    :
-                    "no longer an admin"
-                    }`,
-                showDenyButton: true,
-                showCancelButton: true,
-                confirmButtonText: "Continue",
-            }).then(async ({ isConfirmed, isDenied }) => {
-                if (isConfirmed) {
-
-                    let retrieveData = [];
-
-                    let request = await fetch(`/api/crud-admin/${method ?
-                        "setUserToAdmin"
-                        :
-                        "unsetToAdmin"
-                        }/${_id}`, {
-                        method: "PUT",
-                    });
-
-                    retrieveData = await request.json();
-
-                    if (!request.ok && "message" in retrieveData) {
-                        return activeGlobalMessage({
-                            message: retrieveData.message,
-                            type: "warning"
-                        });
-                    }
-
-                    else if (!request.ok) {
-                        return activeGlobalMessage({
-                            message: "SERVER ERROR",
-                            type: "warning"
-                        });
-                    }
-
-                    // socket.emit("editedUser", { email, isAdmin: method === "setUserToAdmin" });
-                    return activeGlobalMessageV2({
-                        message: retrieveData.message,
-                        type: "#84DE02"
-                    });
-
-                }
-                else if (isDenied) Swal.fire("Changes are not save", "", "info");
-            })
-        }
-        else if (isDenied) {
-            Swal.fire("Changes are not save", "", "info");
-        }
-    })
+    if (request.ok) return socket.emit("editedUser", { email, _id, admin: method });
 }
+);
 
 const printProducts = (productData) => {
     data = productData;
     product.innerHTML = ``;
     for (const { title, _id, code, categoryType } of data) {
         product.innerHTML += `
-            <tr class='text-center' id='abcde'>
+            <tr class='text-center'>
                 <td>${_id}</td>
                 <td>${categoryType}</td>
                 <td>${title}</td>
@@ -144,39 +87,93 @@ const printProducts = (productData) => {
 
 }
 
+const printUser = ({ _id, adminOptions, name, last_name, auth }) => {
+    let handleAdmin = `<button data-set-admin='true' data-id=${_id}>Set to Admin</button>`
+
+    if (adminOptions.isAdmin) {
+        handleAdmin = "This user is an admin"
+        if (getUser.superAdminOptions.isSuperAdmin) {
+            handleAdmin += `
+                <button data-id=${_id} data-set-admin='false'>
+                    Unset to Admin
+                </button>`
+        }
+    };
+
+    // <td class="userMessage" onclick="notifyUser('${_id}')">${name}</td>
+    // <td><span class=${isConnected ? "success bg-success" : "danger bg-danger"}>&#9737; &#8213; ${isConnected}</span></td>
+    return `
+        <tr class='text-center'>
+        <td>${_id}</td>
+        <td>${name}</td>
+        <td>${last_name}</td>
+        <td>${auth.email}</td>
+        <td class='text-end'>
+            ${handleAdmin}
+        </td>
+        </tr>`
+}
+
 const printUsers = (users) => {
     user.innerHTML = "";
     userData = users;
-    for (const { name, _id, auth, last_name, adminOptions, isConnected } of userData) {
+    console.log(users);
+    for (const { name, _id, auth, last_name, adminOptions } of userData) {
         if (getUser._id === _id) continue;
-
-        const requestId = JSON.stringify({ _id, name, email: auth.email });
-        let handleAdmin = `<button onclick='setUserToAdmin(${requestId})'>Set to Admin</button>`
-
-        if (adminOptions.isAdmin) {
-            handleAdmin = "This user is an admin"
-            if (getUser.superAdminOptions.isSuperAdmin) {
-                handleAdmin += `
-                <button onclick='setUserToAdmin(${requestId}, false)'>
-                    Unset to Admin
-                </button>`
-            }
-        };
-
-        // <td class="userMessage" onclick="notifyUser('${_id}')">${name}</td>
-        user.innerHTML += `
-            <tr class='text-center'>
-            <td><span class=${isConnected ? "success bg-success" : "danger bg-danger"}>&#9737; &#8213; ${isConnected}</span></td>
-            <td>${_id}</td>
-            <td>${name}</td>
-            <td>${last_name}</td>
-            <td>${auth.email}</td>
-            <td class='text-end'>
-                ${handleAdmin}
-            </td>
-            </tr>`
+        user.innerHTML += printUser({ name, _id, auth, last_name, adminOptions });
     }
 
 }
 
 const notifyUser = (_id) => location.href = `/user/visitUser?_id=${_id}`;
+
+document.querySelector("[data-render-users]").onclick = async function (event) {
+    const target = event.target;
+    const dataset = target.dataset;
+
+    if (!Object.values(dataset).length) return;
+
+    if (dataset.setAdmin) {
+        console.log(target.closest("tr"));
+        const { name, _id, email } = userData.find(({ _id }) => _id === dataset.id);
+
+        setUserToAdmin({
+            name,
+            _id,
+            email
+        },
+            dataset.setAdmin === "true", target);
+    }
+
+    else if (dataset.loadResults) {
+        let { request, result } = await useFetch({
+            method: "GET",
+            useLoader: target,
+            url: `/api/crud-admin/getUsers?skip=${dataset.loadResults}`
+        });
+
+        if (request.ok) {
+
+            if (!result.length) {
+                delete target.dataset.loadResults;
+                target.style.cursor = "default";
+                return target.textContent = "You reached the bottom";
+            }
+
+            userData.push(...result);
+            randomColor();
+
+            for (let { name, _id, auth, last_name, adminOptions } of result) {
+
+                user.innerHTML += printUser({ name, _id, auth, last_name, adminOptions });
+            }
+            dataset.loadResults = parseInt(dataset.loadResults) + 10;
+        }
+    }
+}
+
+socket.on("connectedSockets", ({ connectedSockets }, ack) => {
+    console.log("Connected sockets:", connectedSockets);
+    ack({ message: "Received connectedSockets data" });
+  });
+  

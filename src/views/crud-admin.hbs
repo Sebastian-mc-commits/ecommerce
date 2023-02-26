@@ -35,7 +35,7 @@
     <li class="slide" data-active>
       <div>
         <h2 class="title">Add a product</h2>
-        <button onclick="existUpdateValues()">Pres for view</button>
+        <button onclick="c()">Pres for view</button>
         <form class="form card" id="form" action="/crud-admin/addProduct" method="POST" enctype="multipart/form-data">
           <div class="group">
             <input type="file" placeholder="Image route (optional)" name="thumbnail" />
@@ -86,12 +86,11 @@
       <div id="handleUpdate"></div>
     </li>
 
-    <li class="slide">
+    <li class="slide" data-render-users="true">
       <div>
         <h2>Users</h2>
         <table class="w-10">
           <thead>
-            <th>Is connected</th>
             <th>id</th>
             <th>Name</th>
             <th>Last Name</th>
@@ -100,6 +99,8 @@
           </thead>
           <tbody id="user" class="userRender"></tbody>
         </table>
+
+        <p data-load-results="10" class="load-more">Load more results</p>
       </div>
     </li>
 

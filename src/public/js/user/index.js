@@ -1,7 +1,7 @@
 const optionsContent = document.querySelector("#optionsContent");
 const changeBody = document.querySelector("body");
 
-const { loader, hideLoader, randomColor, activeGlobalMessage, functionsMethods, activeGlobalMessageV2, showCurrentUserValues } = globalMethods;
+const { loader, hideLoader, randomColor, activeGlobalMessage, functionsMethods, activeGlobalMessageV2, showCurrentUserValues, useFetch } = globalMethods;
 console.log("showCurrentUserValues")
 console.log(showCurrentUserValues())
 
@@ -42,33 +42,15 @@ optionsContent.addEventListener("click", async e => {
                 break;
             }
 
-            loader(target);
-
-            request = await fetch("http://localhost:4000/api/product/getCreatedByAdminProducts", {
+            result = await useFetch({
+                url: "http://localhost:4000/api/product/getCreatedByAdminProducts",
                 method: "GET",
+                useLoader: target
             });
 
-            result = await request.json();
+            if (!result.request.ok) return;
 
-            hideLoader(target);
-
-            if (!request.ok && "message" in result) {
-
-                return activeGlobalMessage({
-                    message: result.message,
-                    type: "warning"
-                });
-            }
-
-            else if (!request.ok) {
-
-                return activeGlobalMessage({
-                    message: "SERVER ERROR",
-                    type: "warning"
-                });
-            }
-
-            retrieveData[getProducts] = result;
+            retrieveData[getProducts] = result.result;
 
             handleProduct(retrieveData.getProducts, "create");
             break;
@@ -83,33 +65,16 @@ optionsContent.addEventListener("click", async e => {
                 break;
             }
 
-            loader(target);
-
-            request = await fetch("http://localhost:4000/api/product/getDeletedProducts", {
+            result = await useFetch({
+                url: "http://localhost:4000/api/product/getDeletedProducts",
                 method: "GET",
+                useLoader: target
             });
 
-            result = await request.json();
+            if (!result.request.ok) return;
 
-            hideLoader(target);
+            retrieveData[getDeletedProducts] = result.result;
 
-            if (!request.ok && "message" in result) {
-
-                return activeGlobalMessage({
-                    message: result.message,
-                    type: "warning"
-                });
-            }
-
-            else if (!request.ok) {
-
-                return activeGlobalMessage({
-                    message: "SERVER ERROR",
-                    type: "warning"
-                });
-            }
-
-            retrieveData[getDeletedProducts] = result;
             handleProduct(retrieveData[getDeletedProducts], "delete");
             break;
 

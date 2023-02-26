@@ -9,9 +9,9 @@ const userMessages = {
 
     DATA_NOT_FOUND_REQUEST: "No products were found matching your search criteria.",
 
-    ADMIN_UPDATE: `The account has been updated to an admin account.`,
+    ADMIN_UPDATE: name => `The account of ${name} has been updated to an admin account.`,
 
-    UNSET_ADMIN: "The user is no longer an admin"
+    UNSET_ADMIN: name => `The ${name} user is no longer an admin`
 }
 
 export default userMessages;

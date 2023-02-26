@@ -2,7 +2,7 @@ import UserModel from "../models/user.models.js";
 import authMessages from "../utils/messages/messages.auth.utils.js";
 import serverMessages from "../utils/messages/messages.server.utils.js";
 import userMessages from "../utils/messages/messages.user.utils.js";
-// import "../config/db.js";
+
 export const getUser = async ({ auth }) => {
     try {
         const user = await UserModel.findOne({ "auth.email": auth.email, "auth.provider": "EmailPasswordAuth" });
@@ -71,14 +71,45 @@ export const createUser = async (data) => {
     }
 }
 
-export const getUsers = async () => {
+export const getUsers = async (skip = 0) => {
     try {
-        const users = await UserModel.find().select("-password").lean();
+
+        const aggregate = [
+            {
+                $match: {
+                    "superAdminOptions.isSuperAdmin": false
+                }
+            },
+
+            {
+                $skip: skip
+            },
+
+            {
+                $limit: 10
+            },
+
+            {
+                $project: {
+                    name: 1,
+                    last_name: 1,
+                    "adminOptions.isAdmin": 1,
+                    "auth": 1,
+                }
+            },
+
+            {
+                $project: {
+                    "auth.password": 0,
+                }
+            }
+        ];
+        const users = await UserModel.aggregate(aggregate);
         // const users = await UserModel.paginate({}, {limit: 6, page, lean: true});
         return users;
     }
-    catch (err) {
-        throw new Error(err);
+    catch {
+        throw new Error(serverMessages.SERVER_FAILURE);
     }
 }
 
@@ -125,8 +156,9 @@ export const getUserForSuperAdmin = async (_id) => {
 export const userToAdmin = async (adminId, _id) => {
     try {
         // const user = await UserModel.updateOne({ _id }, {$set: {name: "sebastian mac"} }, {upsert: false});
-        const user = await UserModel.findOne({ _id });
+        const user = await UserModel.findOne({ _id, "superAdminOptions.isSuperAdmin": false });
         await user.setToAdmin(adminId);
+        return user;
     }
     catch (err) {
         throw new Error(err.message);
@@ -136,8 +168,9 @@ export const userToAdmin = async (adminId, _id) => {
 export const unsetUserToAdmin = async (adminId, _id) => {
     try {
         // const user = await UserModel.updateOne({ _id }, {$set: {name: "sebastian mac"} }, {upsert: false});
-        const user = await UserModel.findOne({ _id });
+        const user = await UserModel.findOne({ _id, "superAdminOptions.isSuperAdmin": false });
         await user.unsetUserToAdmin(adminId);
+        return user;
     }
     catch (err) {
         throw new Error(err);

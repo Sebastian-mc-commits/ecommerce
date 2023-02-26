@@ -35,23 +35,23 @@ router.get("/failAuth", (req, res) => {
 });
 
 router.post("/signup", isAuthenticate, passport.authenticate("signup", {
-    failureRedirect: "/auth/failAuth",
-    // failureFlash: authMessages.FAIL_SIGNUP,
+    failureRedirect: "/api/auth/failAuth",
     failureFlash: true
-    // successRedirect: "/home"
 }), (req, res) => {
+
     req.session.user = req.user;
     res.redirect("/home");
 });
 
 router.post("/login", isAuthenticate, passport.authenticate("login", {
-    failureRedirect: "/auth/failAuth",
+    failureRedirect: "/api/auth/failAuth",
     // failureFlash: authMessages.FAIL_LOGIN,
     failureFlash: true
 
 }), (req, res) => {
+    console.log("Getting router auth");
     req.session.user = req.user;
-    res.redirect("/home");
+    res.json({ message: "RRRR" });
 });
 
 export default router;

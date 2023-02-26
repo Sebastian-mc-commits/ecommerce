@@ -5,7 +5,7 @@ import { v4 } from "uuid";
 import __dirname from "../../__dirname.js";
 import { authenticate, authenticateAdmin, authenticateSuperAdmin } from "../../lib/middleware/authentication.js";
 import * as ProductService from "../../services/product.service.js";
-import { getAdmins, unsetUserToAdmin, userToAdmin } from "../../services/user.service.js";
+import { getAdmins, unsetUserToAdmin, userToAdmin, getUsers } from "../../services/user.service.js";
 import productMessages from "../../utils/messages/messages.product.utils.js";
 import userMessages from "../../utils/messages/messages.user.utils.js";
 
@@ -99,9 +99,9 @@ router.put("/updateProduct/:pid", authenticateAdmin, async (req, res) => {
 router.put("/setUserToAdmin/:id", authenticateSuperAdmin, async (req, res) => {
     try {
         const adminId = req.session.user._id;
-        await userToAdmin(adminId, req.params.id);
+        const user = await userToAdmin(adminId, req.params.id);
         // res.redirect("/crud-admin");
-        res.json({ message: userMessages.ADMIN_UPDATE });
+        res.json({ message: userMessages.ADMIN_UPDATE(user.name) });
     }
     catch (err) {
         return res.status(400).json({ message: err.message });
@@ -111,9 +111,9 @@ router.put("/setUserToAdmin/:id", authenticateSuperAdmin, async (req, res) => {
 router.put("/unsetToAdmin/:id", authenticateSuperAdmin, async (req, res) => {
     try {
         const adminId = req.session.user._id;
-        await unsetUserToAdmin(adminId, req.params.id);
+        const user = await unsetUserToAdmin(adminId, req.params.id);
         // res.redirect("/crud-admin");
-        res.json({ message: userMessages.UNSET_ADMIN });
+        res.json({ message: userMessages.UNSET_ADMIN(user.name) });
     }
     catch (err) {
         return res.status(400).json({ message: err.message });
@@ -130,5 +130,18 @@ router.get("/getAdmins", authenticate, async (req, res) => {
         res.status(401).json({ message: err.message });
     }
 });
+
+router.get("/getUsers", authenticateSuperAdmin, async (req, res) => {
+    try {
+        const { skip = 0 } = req?.query || {};
+        const users = await getUsers(parseInt(skip));
+        res.json(users);
+    }
+    catch (err) {
+        res.json({ message: err.message });
+        // res.status(500);
+    }
+}
+)
 
 export default router;

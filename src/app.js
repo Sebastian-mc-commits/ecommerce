@@ -9,7 +9,7 @@ import { auth, cart, crud_admin, home, listContent, realTimeProducts, user } fro
 import __dirname from "./__dirname.js";
 import helpers from "./lib/handlebars.js";
 import { getAllProducts } from "./services/product.service.js";
-import { getUsers } from "./services/user.service.js";
+import { getUserById, getUsers } from "./services/user.service.js";
 import * as comments from "./services/comment.service.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -89,14 +89,35 @@ const io = new Server(server);
 
 
 
+let handleConnectedSockets = [];
 io.on("connection", async (socket) => {
 
-    io.use((socket, next) => {
+    io.use(async (socket, next) => {
         const auth = socket.handshake.auth
 
         if (!auth) return next(userMessages.NOT_FOUND);
 
         socket.user = auth;
+
+        if (socket.user.isSuperAdmin === "false") return next();
+
+        if (handleConnectedSockets.length) {
+
+            return socket.emit("connectedSockets", { connectedSockets: handleConnectedSockets }, (data) => {
+                console.log("Received ACK from front end", data);
+            });
+        }
+
+        for (let [socketId, connectedSockets] of io.of("/").sockets) {
+            const authSocket = connectedSockets.handshake.auth;
+            handleConnectedSockets.push({ authSocket, socketId });
+        }
+        socket.emit("connectedSockets", { connectedSockets: handleConnectedSockets }, (data) => {
+            console.log("Received ACK from front end", data);
+        });
+
+
+
         console.log("User")
         console.log(socket.user)
         return next();
@@ -129,28 +150,11 @@ io.on("connection", async (socket) => {
     io.use((socket, next) => {
         const { isAdmin = false } = socket.user;
 
-        console.log("isAdmin")
-        console.log(isAdmin)
-        if (!isAdmin) return next(new Error("Unauthorized"));
+        if (isAdmin || isAdmin === "false") return next(new Error("Unauthorized"));
 
         return next();
     });
 
-    const isUserConnected = (users) => {
-        if (!socket.user) return;
-        for (let user of users) {
-            let isConnected = false;
-            for (let [_, socket] of io.of("/").sockets) {
-                // console.log("socket name");
-                // console.log(socket?.request?.session?.user?.name);
-                if (socket.user.email === user.email) {
-                    isConnected = true;
-                    break;
-                }
-            }
-            user.isConnected = isConnected;
-        }
-    }
 
     // if (socket.request?.session?.user?.superAdminOptions?.isSuperAdmin) {
     // }
@@ -159,34 +163,37 @@ io.on("connection", async (socket) => {
         users = await getUsers();
     }
 
-    isUserConnected(users);
+    // const getConnectedSockets = () => {
+    //     // if (!socket?.username && socket.username?.isSuperAdmin === "false") return;
+
+
+    //     return handleConnectedSockets.length ? handleConnectedSockets : [];
+    // }
+
     socket.emit("getUsers", { users });
 
+    socket.on("editedUser", async ({ email, _id, admin }) => {
 
-    // socket.on("editedUser", async ({ email, isAdmin = false }) => {
+        if (!users.length) users = await getUsers();
 
-    //     if (!users.length) {
+        const index = users.findIndex(({ auth }) => auth.email === email);
+        let userUpdated
 
-    //         users = await getUsers();
-    //         return io.emit("getUsers", { users });
+        if (index !== -1) {
+            const [_, connectedSockets] = io.of("/");
+            users[index].isConnected = connectedSockets.some(socket => socket.user.email === email);
+            users.adminOptions.isAdmin = admin;
+            userUpdated = users[index];
+        }
+        // else {
+        //     userUpdated = await getUserById(_id);
+        //     users.push(userUpdated);
+        // }
 
-    //     }
-    //     const index = users.find(({ auth }) => auth.email === email);
-
-    //     if (index !== -1) {
-    //         const [_, connectedSockets] = io.of("/").sockets;
-    //         const isConnected = connectedSockets?.some(connected => connected.user.email === email);
-
-    //         // user.isConnected = isConnected || false;
-    //         console.log(users[index]);
-    //         users[index].adminOptions.isAdmin = isAdmin;
-    //     }
-
-    //     io.emit("getUsers", users);
-    // });
+        io.emit("showUserEdited", userUpdated);
+    });
 
     socket.on("sendProduct", async ({ message, product, type = "delete" }) => {
-        console.log("hi");
 
         if (!!!products.length) {
             products = await getAllProducts();

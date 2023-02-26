@@ -3,6 +3,9 @@ let isCodeunique = true;
 const children = document.querySelector("#signUpFields").children;
 const title = document.querySelector("#title");
 const action = document.querySelector("#form");
+
+const { useFetch } = globalMethods;
+
 isRegister.addEventListener("click", () => {
 
     if (action.getAttribute("action") === "/api/auth/signup") {
@@ -46,8 +49,9 @@ action.addEventListener("submit", async function (event) {
     const formData = new FormData(this);
     const data = Object.fromEntries(formData);
 
-    globalMethods.loader(this);
-    const request = await fetch(this.action, {
+    let result = await useFetch({
+        url: this.action,
+        useLoader: this,
         method: "POST",
         headers: {
             "Content-type": "application/json"
@@ -55,16 +59,7 @@ action.addEventListener("submit", async function (event) {
         body: JSON.stringify(data)
     });
 
-    if (!request.ok && request.redirected) {
-        let { message } = await request.json();
-        globalMethods.activeGlobalMessage({
-            message,
-            type: "warning"
-        });
-    }
-    else if (request.ok && request.redirected) location.href = request.url;
-
-    return globalMethods.hideLoader(this);
+    if (result.request.ok && result.request.redirected) location.href = result.request.url;
 
 });
 

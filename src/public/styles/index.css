@@ -14,6 +14,7 @@
   --gray: #cfd4c7;
   --dark-blue: #0b62b9;
   --white: #fff;
+  --random-color: rgb(0, 0, 0);
 }
 
 body {

@@ -1,6 +1,7 @@
 body {
   overflow: hidden;
 }
+
 /* .side-bar {
     width: 40%;
     position: relative;
@@ -22,17 +23,18 @@ body {
   box-sizing: border-box;
 }
 
-.translate{
+.translate {
   /* transform: translateX(80%); */
   width: 60vw;
   transform: translateX(20%);
 }
+
 /* .content p{
   font-size: 40px;
   font-weight: 700;
 } */
 
-.content > ul {
+.content>ul {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -51,8 +53,9 @@ body {
   z-index: 7;
 }
 
-.slide > div {
+.slide>div {
   display: block;
+  margin-bottom: 70%;
   height: 100vh;
   /* width: 100vw; */
 }
@@ -63,10 +66,11 @@ body {
   /* background-color: yellowgreen; */
 }
 
-.userRender tr td.userMessage{
+.userRender tr td.userMessage {
   position: relative;
   overflow: hidden;
 }
+
 .userRender tr td.userMessage::before {
   position: absolute;
   inset: 0;
@@ -82,7 +86,7 @@ body {
   transition: all 0.5s;
 }
 
-.userRender tr td.userMessage:hover::before{
+.userRender tr td.userMessage:hover::before {
   transform: translateY(0);
   background-color: var(--user-color);
 }
@@ -101,4 +105,30 @@ body {
   margin: auto;
   text-align: center;
   transition: all .6s ease;
+}
+
+.load-more {
+  position: relative;
+  margin-top: 6%;
+  cursor: pointer;
+  width: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.load-more:hover {
+  background-color: var(--gray);
+  border-radius: 6px;
+  opacity: 0.6;
+}
+
+.load-more::before {
+  content: " ";
+  position: absolute;
+  inset: 0;
+  background-color: var(--random-color);
+  width: 5%;
+  border-radius: 7px;
 }

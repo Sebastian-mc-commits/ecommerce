@@ -28,6 +28,32 @@ const globalMethods = {
         });
     },
 
+    showConfirmationMessage: async ({ title, onConfirmTitle }, handleConfirmationSuccess) => {
+        Swal.fire({
+            title,
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Continue",
+        }).then(({ isConfirmed, isDenied }) => {
+            if (isConfirmed) {
+                Swal.fire({
+                    title: onConfirmTitle,
+                    showDenyButton: true,
+                    showCancelButton: true,
+                    confirmButtonText: "Continue",
+                }).then(async ({ isConfirmed, isDenied }) => {
+
+                    if (isConfirmed) await handleConfirmationSuccess();
+
+                    else if (isDenied) Swal.fire("Changes are not save", "", "info");
+                })
+            }
+            else if (isDenied) {
+                Swal.fire("Changes are not save", "", "info");
+            }
+        })
+    },
+
     loader: (target, position = "last") => {
         let spinner = "<div class='loader'></div>";
         switch (position) {
@@ -92,5 +118,62 @@ const globalMethods = {
                 configurable: true
             });
         },
+    },
+
+    useFetch: async ({
+
+        url, method, useLoader = "", maxTime = 5000,
+        messageTimeEndedFetch = "The server is taking too long to respond. Please try again later or wait.",
+        ...fetchBody
+
+    }) => {
+
+        if (useLoader) globalMethods.loader(useLoader);
+
+        const timeout = setTimeout(() => {
+            globalMethods.activeGlobalMessageV2({
+                message: messageTimeEndedFetch,
+                type: "brown"
+            });
+        }, maxTime);
+
+        const startTime = performance.now();
+
+        const request = await fetch(url, { method, ...fetchBody });
+
+        const contentType = request.headers.get("Content-Type");
+
+        let result;
+
+        if (contentType.startsWith("application/json")) {
+            result = await request.json();
+        }
+
+        const endTime = performance.now();
+
+        clearTimeout(timeout);
+
+        if (!request.ok && result && "message" in result) {
+            globalMethods.activeGlobalMessage({
+                message: result.message,
+                type: "warning"
+            });
+        }
+
+        else if (!request.ok) {
+
+            return activeGlobalMessage({
+                message: "SERVER ERROR",
+                type: "warning"
+            });
+        }
+
+        if (useLoader) globalMethods.hideLoader(useLoader);
+
+        return {
+            result,
+            request,
+            timeTaken: endTime - startTime
+        }
     }
 }
