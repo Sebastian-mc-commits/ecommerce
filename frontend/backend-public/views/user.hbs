@@ -1,0 +1,54 @@
+<link rel="stylesheet" href="/public/styles/partials/side-bar.css">
+<link rel="stylesheet" href="/public/styles/user.css">
+<link rel="stylesheet" href="/public/styles/messages.css">
+<h3>Still working on this page</h3>
+
+<div class="content">
+    <div class="userContent">
+        <img src="{{selectedUser.image}}" alt="Image">
+        <p>{{selectedUser.name}}</p>
+        <p>{{selectedUser.email}}</p>
+    </div>
+    <div class="optionsContent" id="optionsContent">
+        <ul>
+            {{#if selectedUser.adminOptions.isAdmin}}
+            <li style="--clr:#336699">
+                <p data-text="&nbsp;Created products" data-option="getProducts">&nbsp;Created products</p>
+            </li>
+            <li style="--clr:#0066cc">
+                <p data-text="&nbsp;Updated products" data-option="getUpdatedProducts">&nbsp;Updated products&nbsp;
+                </p>
+            </li>
+            <li style="--clr:#3399ff">
+                <p data-text="&nbsp;Deleted products" data-option="getDeletedProducts">&nbsp;Deleted products&nbsp;
+                </p>
+            </li>
+            {{/if}}
+            {{#if selectedUser.superAdminOptions.isSuperAdmin}}
+            <li style="--clr:#6699ff">
+                <p data-text="&nbsp;Users set to admin" data-option="getAdmins">&nbsp;Users set to admin&nbsp;</p>
+            </li>
+            {{/if}}
+            <li style="--clr:#3399ff">
+                <p data-text="&nbsp;Settings" data-option="settings">&nbsp;Settings&nbsp;</p>
+            </li>
+            <li style="--clr:#9999ff">
+                <p data-text="&nbsp;Order" data-option="getOrder">&nbsp;Order&nbsp;</p>
+            </li>
+            <li style="--clr:#9999ff">
+                <p data-text="&nbsp;Chat" data-option="goToChat">&nbsp;Chat&nbsp;</p>
+            </li>
+            {{#isEqual user._id selectedUser._id }}
+            <li class="onLogOut">
+                <button onclick="handleLogout()">Log out</button>
+            </li>
+            {{/isEqual}}
+        </ul>
+    </div>
+</div>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/public/js/user/user-admin-options.js"></script>
+<script src="/public/js/user/user-settings.js"></script>
+<script src="/public/js/user/user-oder.js"></script>
+<script src="/public/js/user/handleRenderUsers.js"></script>
+<script src="/public/js/user/index.js"></script>

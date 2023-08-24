@@ -1,0 +1,16 @@
+.notFoundContainer {
+  margin: auto;
+  position: absolute;
+  top: 20%;
+  left: 20;
+  width: 90vw;
+  border: 1px var(--gray) solid;
+  border-radius: 5px;
+  padding: 5%;
+  cursor: default;
+}
+
+.notFoundMessage {
+  font-size: 1rem;
+  color: var(--dark-gray);
+}

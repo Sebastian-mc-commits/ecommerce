@@ -1,0 +1,32 @@
+<div class="content m-auto">
+  <h2 id="title">Sing Up</h2>
+
+  <form class="form card" id="form" action="/api/auth/signup" method="POST">
+    <div class="group">
+
+      <div id="signUpFields">
+        <input type="text" class="title_form" placeholder="Name" id="field" name="name" />
+
+        <input type="text" class="title_form" placeholder="Last Name" id="field" name="last_name" />
+      </div>
+
+      <input type="email" class="title_form" placeholder="Email" id="field" name="email" />
+      <input type="password" class="title_form" placeholder="Password" id="field" name="password" />
+      <p id="passwordMessage" class="warning"></p>
+
+    </div>
+
+    <input type="submit" value="Done" class="w-6 btn-transition" id="activeButton" disabled/>
+    <div id="sign-in_methods">
+      <button data-method="github">GitHub</button>
+      <button data-method="google">Google</button>
+    </div>
+  </form>
+
+  <p id="isRegister" class="cursor-pointer">Do you already have an account?</p>
+</div>
+<a href="/api/auth/github">GitHub</a>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/public/js/auth.js"></script>
+<script src="/public/js/validateField.js"></script>

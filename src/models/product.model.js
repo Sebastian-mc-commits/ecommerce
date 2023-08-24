@@ -1,156 +1,180 @@
-import mongoose, { mongo } from "mongoose";
+import { Schema, model, startSession } from "mongoose";
 import mongooseDelete from "mongoose-delete";
-import User from "./user.models.js";
 import pagination from "mongoose-paginate-v2";
 import userMessages from "../utils/messages/messages.user.utils.js";
-import productMessages from "../utils/messages/messages.product.utils.js";
 import serverMessages from "../utils/messages/messages.server.utils.js";
-const schema = new mongoose.Schema({
-    title: {
-        type: String,
-        requred: true
-    },
+import tryCatchHandler from "../utils/functions/tryCatch.utils.js";
+import customErrorCodes from "../utils/enums/errorCodes.custom.enum.js";
+import ErrorHandler from "../utils/classes/errorHandler.utils.js";
+import errorCodes from "../utils/enums/errorCodes.enum.js";
+import AdminModel from "./admin.model.js";
+import CommentModel from "./comment.model.js";
+const schema = new Schema({
+  title: {
+    type: String,
+    required: true
+  },
 
-    description: {
-        type: String,
-        requred: true
-    },
-    price: {
-        type: Number,
-        requred: true
-    },
+  description: {
+    type: String,
+    required: true
+  },
+  price: {
+    type: Number,
+    required: true
+  },
 
-    thumbnail: {
-        type: String,
-        requred: true,
-        default: "https://i.pinimg.com/originals/73/a6/c4/73a6c4e772e4aad4e6ec37de2f52af74.png"
-    },
+  thumbnail: {
+    type: String,
+    required: true,
+    default:
+      "https://i.pinimg.com/originals/73/a6/c4/73a6c4e772e4aad4e6ec37de2f52af74.png"
+  },
 
+  code: {
+    type: String,
+    required: true,
+    unique: true
+  },
 
-    code: {
-        type: String,
-        requred: true,
-        unique: true
-    },
+  stock: {
+    type: Number,
+    required: true
+  },
 
-    stock: {
-        type: Number,
-        requred: true
-    },
+  status: {
+    type: Boolean,
+    required: true,
+    default: true
+  },
 
-    status: {
-        type: Boolean,
-        requred: true,
-        default: true
-    },
+  createdBy: {
+    required: true,
+    type: Schema.Types.ObjectId,
+    ref: "users"
+  },
 
-    createdBy: {
-        required: true,
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-    },
-
-    comments: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Comment"
-        }
-    ],
-
-    categoryType: {
-        type: String,
-        required: true
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: CommentModel
     }
+  ],
 
+  categoryType: {
+    type: String,
+    required: true
+  }
 });
 
 schema.plugin(mongooseDelete, { deletedAt: true });
 schema.plugin(pagination);
 
 schema.pre("save", async function (next) {
-    const user = await User.findOne({ _id: this.createdBy });
-    try {
+  tryCatchHandler({
+    fn: async () => {
+      if (!(await AdminModel.exists({ admin: this.createdBy }))) {
+        throw new ErrorHandler(
+          userMessages.ADMIN_ONLY,
+          "",
+          errorCodes.FORBIDDEN,
+          customErrorCodes.INVALID_REQUEST
+        );
+      }
 
-        if (!user || !user.adminOptions.isAdmin) throw new Error(userMessages.ADMIN_ONLY);
-
-        return next();
-
-    } catch {
-        throw new Error(serverMessages.SERVER_FAILURE);
+      return next();
     }
+  });
 });
 
 schema.methods.handleDelete = async function (userId) {
+  const session = await startSession();
 
-    const session = await mongoose.startSession();
+  session.startTransaction();
+  try {
+    await Promise.all([
+      AdminModel.updateOne(
+        { admin: userId },
+        { $push: { deletedProducts: this._id } },
+        { new: false, upsert: false }
+      ),
+      await this.delete()
+    ]);
 
-    session.startTransaction();
-    try {
-
-        await Promise.all([
-            await User.updateOne({ _id: userId, "adminOptions.isAdmin": true }, { $push: { "adminOptions.deletedProducts": this._id } }),
-            await this.delete()
-        ]);
-
-        await session.commitTransaction();
-        session.endSession();
-
-    } catch {
-        await session.abortTransaction();
-        session.endSession();
-        throw new Error(serverMessages.SERVER_FAILURE);
-    }
-
-}
+    await session.commitTransaction();
+  } catch (err) {
+    await session.abortTransaction();
+    throw new ErrorHandler(
+      serverMessages.SERVER_FAILURE,
+      err.message,
+      errorCodes.INTERNAL_SERVER_ERROR,
+      customErrorCodes.SERVER_FAILURE
+    );
+  } finally {
+    await session.endSession();
+  }
+};
 
 schema.methods.irreversibleDeleteProduct = async function (userId) {
+  const session = await startSession();
 
-    const session = await mongoose.startSession();
+  session.startTransaction();
 
-    session.startTransaction();
+  try {
+    await Promise.all([
+      AdminModel.updateOne(
+        { admin: userId },
+        { $pull: { deletedProducts: this._id } },
+        { new: false, upsert: false }
+      ),
+      await this.deleteOne()
+    ]);
 
-    try {
-
-        await Promise.all([
-            await User.updateOne({ _id: userId, "adminOptions.isAdmin": true }, { $pull: { "adminOptions.deletedProducts": this._id } }),
-            await this.deleteOne(),
-        ]);
-
-        await session.commitTransaction();
-        session.endSession();
-
-    } catch (err) {
-        await session.abortTransaction();
-        session.endSession();
-
-        throw new Error(serverMessages.SERVER_FAILURE);
-    }
-
-}
+    await session.commitTransaction();
+  } catch (err) {
+    await session.abortTransaction();
+    throw new ErrorHandler(
+      serverMessages.SERVER_FAILURE,
+      err.message,
+      errorCodes.INTERNAL_SERVER_ERROR,
+      customErrorCodes.SERVER_FAILURE
+    );
+  } finally {
+    await session.endSession();
+  }
+};
 
 schema.methods.restoreProduct = async function (userId) {
-    const session = await mongoose.startSession();
+  const session = await startSession();
 
-    session.startTransaction();
+  session.startTransaction();
 
-    try {
+  try {
+    await Promise.all([
+      AdminModel.updateOne(
+        { admin: userId },
+        { $pull: { deletedProducts: this._id } },
+        { new: false, upsert: false, session }
+      ),
+      await this.updateOne({ deleted: false }, { session })
+    ]);
 
-        await Promise.all([
-            await User.updateOne({ _id: userId, "adminOptions.isAdmin": true }, { $pull: { "adminOptions.deletedProducts": this._id } }, { session }),
-            await this.updateOne({ deleted: false }, { session })
-        ]);
-
-        await session.commitTransaction();
-        session.endSession();
-
-    } catch (err) {
-        await session.abortTransaction();
-        session.endSession();
-        throw new Error(serverMessages.SERVER_FAILURE);
+    await session.commitTransaction();
+  } catch (err) {
+    await session.abortTransaction();
+    throw new ErrorHandler(
+      serverMessages.SERVER_FAILURE,
+      err.message,
+      errorCodes.INTERNAL_SERVER_ERROR,
+      customErrorCodes.SERVER_FAILURE
+      );
     }
+    
+    finally {
+    await session.endSession();
+  }
+};
 
-}
-
-const ProductModel = mongoose.model("Product", schema);
+const ProductModel = model("products", schema);
 
 export default ProductModel;

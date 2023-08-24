@@ -1,0 +1,76 @@
+<link rel="stylesheet" href="/public/styles/listContent.css" />
+
+<div class="container m-auto">
+  {{#with getProduct}}
+  <div class="content">
+    <img src={{thumbnail}} alt="Product image" />
+    <div class="productAttributes">
+      <h1>{{title}}</h1>
+      <p>Price: {{price}}</p>
+      <p>Code: {{code}}</p>
+      <p>Status: {{status}}</p>
+      <p>Stock: {{stock}}</p>
+    </div>
+  </div>
+  {{#if user}}
+  <button class="button">Buy {{title}}</button>
+  {{/if}}
+  <div class="description">
+    <p><strong>Description: </strong><br />{{description}}</p>
+  </div>
+  {{/with}}
+
+  <div class="border"></div>
+
+  {{#if user}}
+  <h1>Welcome {{user.name}}</h1>
+
+  <form id="formChat">
+    <div class="rate">
+      <h3>Rate the product</h3>
+      <label for="1">
+        <input type="radio" value="1" id="rate" name="rate" />
+        1</label>
+      <label for="2">
+        <input type="radio" value="2" id="rate" name="rate" />
+        2</label>
+      <label for="3">
+        <input type="radio" value="3" id="rate" name="rate" />
+        3</label>
+      <label for="4">
+        <input type="radio" value="4" id="rate" name="rate" />
+        4</label>
+      <label for="5">
+        <input type="radio" value="5" id="rate" name="rate" checked />
+        5</label>
+    </div>
+
+    <div class="commentContent">
+      <textarea id="comment" rows="10" placeholder="Your opinion make us grow"></textarea>
+      <input type="submit" value="All set" />
+    </div>
+
+  </form>
+    {{/if}}
+
+  <h3>Comments <strong id="commentsLength"></strong></h3>
+  <ul id="chat">
+    {{#each getProduct.comments}}
+      <li><h3>{{userCreator.name}}</h3>says: <br> {{message}}</li>
+    {{/each}}
+  </ul>
+</div>
+
+<p hidden id="productRef">{{getProduct._id}}</p>
+<p hidden id="room">{{getProduct._id}}</p>
+<p hidden id="createdBy">{{user._id}}</p>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{{#if user}}
+<script>
+  const createdBy = document.querySelector("#createdBy").textContent;
+</script>
+<script src="/public/js/chat.js"></script>
+{{/if}}

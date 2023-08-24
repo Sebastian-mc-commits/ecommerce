@@ -1,0 +1,17 @@
+{{#if message}}
+<p data-global-router-message="true" hidden>message/*&*/{{message.message}}/*&*/type/*&*/{{message.type}}</p>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    const messageByRouter = {}
+    const getMessageRouter = document.querySelector("[data-global-router-message]").textContent.split("/*&*/");
+
+    for (let i = 0; i < getMessageRouter.length; i += 2) {
+        messageByRouter[getMessageRouter[i]] = getMessageRouter[i + 1];
+    }
+
+    if (Object.values(messageByRouter).length) globalMethods.activeGlobalMessage(messageByRouter);
+
+</script>
+{{/if}}

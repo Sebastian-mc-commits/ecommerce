@@ -1,37 +1,67 @@
+import config from "../../config/config.js";
+import { existAdminByUserId } from "../../services/admin.service.js";
+import { existSuperAdminByUserId } from "../../services/superAdmin.service.js";
+import ErrorHandler from "../../utils/classes/errorHandler.utils.js";
+import customErrorCodes from "../../utils/enums/errorCodes.custom.enum.js";
+import errorCodes from "../../utils/enums/errorCodes.enum.js";
+import buildFrontEndUrl from "../../utils/functions/frontEndParser.utils.js";
 import userMessages from "../../utils/messages/messages.user.utils.js";
 
+const { LOCALHOST_CORS } = config;
 export const authenticate = (req, res, next) => {
-    if (req.session?.user) {
-        req.session.touch();
-        return next()
-    };
-    req.flash("message", { message: userMessages.AUTHENTICATION_REQUIRED, type: "warning" });
-    res.status(403).redirect("/home");
-}
+  req.session.touch();
+  if (req.session?.user) {
+    return next();
+  }
 
-export const authenticateAdmin = (req, res, next) => {
-    if (req.session?.user?.adminOptions.isAdmin) {
-        req.session.touch();
-        return next();
-    }
-    req.flash("message", { message: userMessages.ADMIN_ONLY, type: "info" });
-    res.status(403).redirect("/home");
-}
+  throw new ErrorHandler(
+    userMessages.AUTHENTICATION_REQUIRED,
+    "",
+    errorCodes.FORBIDDEN,
+    customErrorCodes.INVALID_REQUEST
+  );
+};
 
-export const authenticateSuperAdmin = (req, res, next) => {
-    if (req.session?.user?.superAdminOptions.isSuperAdmin) {
-        req.session.touch();
-        return next();
-    }
-    req.flash("message", { message: userMessages.ADMIN_ONLY, type: "info" });
-    res.status(403).redirect("/home");
-}
+export const authenticateAdmin = async (req, _res, next) => {
+  req.session.touch();
+  if (await existAdminByUserId(req.session.user._id)) {
+    return next();
+  }
+
+  throw new ErrorHandler(
+    userMessages.ADMIN_ONLY,
+    "",
+    errorCodes.FORBIDDEN,
+    customErrorCodes.INVALID_REQUEST
+  );
+};
+
+export const authenticateSuperAdmin = async (req, _res, next) => {
+  req.session.touch();
+  if (await existSuperAdminByUserId(req.session.user._id)) {
+    return next();
+  }
+  throw new ErrorHandler(
+    userMessages.ADMIN_ONLY,
+    "",
+    errorCodes.FORBIDDEN,
+    customErrorCodes.INVALID_REQUEST
+  );
+};
 
 export const isAuthenticate = (req, res, next) => {
-    if (req.session?.user) {
-        req.session.touch();
-        req.flash("message", { message: userMessages.ALREADY_AUTHENTICATE(req.session.user.auth.email), type: "info" });
-        return res.status(403).redirect("/home");
-    }
-    return next();
-}
+  req.session.touch();
+  if (req.session?.user) {
+    throw new ErrorHandler(
+      userMessages.ALREADY_AUTHENTICATE,
+      "",
+      errorCodes.FORBIDDEN,
+      customErrorCodes.SPECIFIED_REDIRECT(
+        buildFrontEndUrl({
+          url: [LOCALHOST_CORS]
+        })
+      )
+    );
+  }
+  return next();
+};

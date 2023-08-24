@@ -1,219 +1,181 @@
-import mongoose from "mongoose";
+import { Schema } from "mongoose";
 import bcryptjs from "bcryptjs";
-import { emailRegex } from "../const/regex.js";
 import ProductModel from "./product.model.js";
 import authMessages from "../utils/messages/messages.auth.utils.js";
 import userMessages from "../utils/messages/messages.user.utils.js";
 import serverMessages from "../utils/messages/messages.server.utils.js";
+import providers, { providerEnum } from "../utils/enums/provider.enum.js";
+import { model } from "mongoose";
+import ErrorHandler from "../utils/classes/errorHandler.utils.js";
+import errorCodes from "../utils/enums/errorCodes.enum.js";
+import customErrorCodes from "../utils/enums/errorCodes.custom.enum.js";
+import SuperAdminModel from "./superAdmin.model.js";
+import AdminModel from "./admin.model.js";
 
-const schema = new mongoose.Schema({
-    image: {
-        type: String,
-        required: true,
-        default: "https://th.bing.com/th/id/R.6c6bff6f40d420c8a756db79a369681c?rik=suTO6OOqRmSAJQ&pid=ImgRaw&r=0"
+const schema = new Schema({
+  image: {
+    type: String,
+    required: true,
+    default:
+      "https://th.bing.com/th/id/R.6c6bff6f40d420c8a756db79a369681c?rik=suTO6OOqRmSAJQ&pid=ImgRaw&r=0"
+  },
+
+  name: {
+    type: String,
+    required: true
+  },
+
+  last_name: {
+    type: String
+  },
+
+  auth: {
+    email: {
+      type: String,
+      required: true,
+      index: true,
+      unique: true
     },
 
-    name: {
-        type: String,
-        required: true
+    provider: {
+      type: String,
+      required: true,
+      default: providerEnum.EMAIL_PASSWORD_AUTH,
+      enum: providers
     },
 
-    last_name: {
-        type: String
-    },
+    password: {
+      type: String,
+      index: true
+    }
+  },
 
-    auth: {
-        email: {
-            type: String,
-            required: true,
-            index: true,
-            unique: true
-        },
-
-        provider: {
-            type: String,
-            required: true,
-            default: "EmailPasswordAuth",
-            enum: ["EmailPasswordAuth", "github", "google"]
-        },
-
-        password: {
-            type: String,
-            index: true
-        },
-    },
-
-    // email: {
-    //     type: String,
-    //     required: true,
-    //     unique: true,
-    //     index: true
-
-    // },
-
-
-    adminOptions: {
-        isAdmin: {
-            type: Boolean,
-            default: false,
-            required: true
-        },
-
-        deletedProducts: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Product",
-            unique: true
-        }],
-
-        updatedProducts: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Product",
-            unique: true
-        }]
-    },
-
-    superAdminOptions: {
-        isSuperAdmin: {
-            type: Boolean,
-            default: false,
-            required: true
-        },
-        usersSetToAdmin: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-            unique: true
-        }],
-
-        // usersUnsetToAdmin: [{
-        //     type: mongoose.Schema.Types.ObjectId,
-        //     ref: "User"
-        // }]
-    },
-
-    cart: {
-        type: [{
-            product: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Product"
-            }
-        }],
-
-        default: []
-    },
-
-    orders: {
-        type: [{
-            order: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Order"
-            }
-        }],
-
-        default: []
-    },
-
-    messages: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Message"
+  cart: {
+    type: [
+      {
+        product: {
+          type: Schema.Types.ObjectId,
+          ref: "Product"
         }
-    ]
+      }
+    ],
 
+    default: []
+  },
+
+  orders: {
+    type: [
+      {
+        order: {
+          type: Schema.Types.ObjectId,
+          ref: "Order"
+        }
+      }
+    ],
+
+    default: []
+  },
+
+  messages: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Message"
+    }
+  ]
 });
 
-
 schema.pre("save", async function (next) {
-
-    if (this.auth.provider === "EmailPasswordAuth" && !!!this.auth.password) return next(authMessages.FAIL_PASSWORD);
-    if (!this.isModified("auth.password") || this.auth.provider !== "EmailPasswordAuth") return next();
-    const salt = await bcryptjs.genSalt(10);
-    this.auth.password = await bcryptjs.hash(this.auth.password, salt);
-    return next()
+  if (
+    this.auth.provider === providerEnum.EMAIL_PASSWORD_AUTH &&
+    !this.auth.password
+  ) {
+    throw new ErrorHandler(
+      authMessages.FAIL_PASSWORD,
+      "",
+      errorCodes.UNAUTHORIZED,
+      customErrorCodes.INVALID_REQUEST
+    );
+  }
+  if (
+    !this.isModified("auth.password") ||
+    this.auth.provider !== providerEnum.EMAIL_PASSWORD_AUTH
+  )
+    {
+      return next();
+    }
+  const salt = await bcryptjs.genSalt(10);
+  this.auth.password = await bcryptjs.hash(this.auth.password, salt);
+  return next();
 });
 
 schema.methods.comparePassword = async function (password) {
-    if (this.auth.provider !== "EmailPasswordAuth") return;
-    const isValidPassword = await bcryptjs.compare(password, this.auth.password);
-    return isValidPassword;
+  if (this.auth.provider !== providerEnum.EMAIL_PASSWORD_AUTH) return;
+  const isValidPassword = await bcryptjs.compare(password, this.auth.password);
+  return isValidPassword;
 };
 
 schema.methods.setToAdmin = async function (_id) {
+  try {
+    const superAdmin = await SuperAdminModel.findOne({ superAdmin: _id });
+    if (!superAdmin)
+      throw new ErrorHandler(
+        userMessages.ADMIN_ONLY,
+        "",
+        errorCodes.FORBIDDEN,
+        customErrorCodes.INVALID_REQUEST
+      );
 
-    try {
+    const isAlreadySetByAdmin = [...superAdmin.usersSetToAdmin].includes(
+      this._id
+    );
 
-        const user = await UserModel.findOne({ _id, "adminOptions.isAdmin": true });
-        if (!user) throw new Error(userMessages.ADMIN_ONLY);
-
-        const isAlreadySetByAdmin = [...user.superAdminOptions.usersSetToAdmin].includes(this._id);
-
-        if (!isAlreadySetByAdmin) {
-            user.superAdminOptions.usersSetToAdmin.push(this._id);
-        }
-
-        await Promise.all([
-            await user.save(),
-            this.adminOptions.isAdmin = true,
-            await this.save()
-
-        ]);
-
-
+    if (!isAlreadySetByAdmin) {
+      superAdmin.usersSetToAdmin.push(this._id);
     }
-    catch (err) {
 
-        if (err.message !== userMessages.ADMIN_ONLY) {
-            err.message = serverMessages.SERVER_FAILURE
-        }
-        throw new Error(err);
-    }
-}
+    await Promise.all([
+      await superAdmin.save(),
+      await AdminModel.create({
+        admin: this._id
+      }),
+      await this.save()
+    ]);
+  } catch (err) {
+    throw new ErrorHandler(serverMessages.SERVER_FAILURE, err.message);
+  }
+};
 
 schema.methods.unsetUserToAdmin = async function (_id) {
-    try {
+  try {
+    const superAdmin = await SuperAdminModel.findOne({ superAdmin: _id });
+    if (!superAdmin)
+      throw new ErrorHandler(
+        userMessages.ADMIN_ONLY,
+        "",
+        errorCodes.FORBIDDEN,
+        customErrorCodes.INVALID_REQUEST
+      );
 
-        const user = await UserModel.findOne({ _id, "adminOptions.isAdmin": true });
-        if (!user) throw new Error(userMessages.ADMIN_ONLY);
+    const isAlreadySetByAdmin = [...superAdmin.usersSetToAdmin].includes(
+      this._id
+    );
 
-        const isNotAnAdmin = [...user.superAdminOptions.usersSetToAdmin].includes(this._id);
-
-        if (isNotAnAdmin) {
-            user.superAdminOptions.usersSetToAdmin.pull(this._id);
-        }
-
-        await Promise.all([
-            await user.save(),
-            this.adminOptions.isAdmin = false,
-            await this.save()
-
-        ]);
-
+    if (isAlreadySetByAdmin) {
+      superAdmin.usersSetToAdmin.pull(this._id);
     }
-    catch (err) {
-        throw new Error(err);
-    }
-}
 
-schema.pre("remove", async function (next) {
-    if (this.adminOptions.isAdmin) {
-        try {
-            await ProductModel.deleteMany({ createdBy: this._id });
-        }
-        catch (err) {
-            return next(Error(err));
-        }
-    }
-    next();
-});
+    await Promise.all([
+      await superAdmin.save(),
+      await AdminModel.deleteOne({
+        admin: this._id
+      }),
+      await this.save()
+    ]);
+  } catch (err) {
+    throw new ErrorHandler(serverMessages.SERVER_FAILURE, err.message);
+  }
+};
 
-const UserModel = mongoose.model("User", schema);
-
+const UserModel = model("users", schema);
 
 export default UserModel;
-
-const students = [{ "first_name": "John", "last_name": "Doe", "email": "johndoe@example.com", "gender": "male", "grade": "A", "group": "1" },
-{ "first_name": "Jane", "last_name": "Doe", "email": "janedoe@example.com", "gender": "female", "grade": "B", "group": "2" },
-{ "first_name": "Bob", "last_name": "Smith", "email": "bobsmith@example.com", "gender": "male", "grade": "C", "group": "1" },
-{ "first_name": "Alice", "last_name": "Johnson", "email": "alicejohnson@example.com", "gender": "female", "grade": "A", "group": "2" },
-{ "first_name": "Charlie", "last_name": "Williams", "email": "charliewilliams@example.com", "gender": "male", "grade": "B", "group": "1" },
-{ "first_name": "Emma", "last_name": "Jones", "email": "emmajones@example.com", "gender": "female", "grade": "C", "group": "2" },
-{ "first_name": "Sebastian", "last_name": "Mc", "email": "sm9349168gmail.com", "gender": "male", "grade": "A", "group": "2" }]

@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
-import {config} from "dotenv";
+import config from "./config.js";
 
-config()
 mongoose.set("strictQuery", false);
-mongoose.connect(process.env.MONGO_URI, {
+mongoose.connect(config.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }, (err) => {
     if (err) {
         console.log("Message: ", err.message);
+        process.exit(1)
     }
     else {
         console.log("database connected");

@@ -17,7 +17,9 @@ const userMessages = {
 
     AUTHENTICATION_REQUIRED: "Please authenticate yourself to access this resource. You may do so by logging in or creating an account if you haven't already done so.",
 
-    ALREADY_AUTHENTICATE: email => `You're already logged in as ${email}. Please log out first if you want to log in with a different account`
+    ALREADY_AUTHENTICATE: email => `You're already logged in as ${email}. Please log out first if you want to log in with a different account`,
+
+    ALREADY_AN_ADMIN_UPDATE: "It appears that this user is already an admin"
 }
 
 export default userMessages;

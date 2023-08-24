@@ -1,0 +1,166 @@
+.formDesign {
+  position: fixed;
+  top: 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 80vh;
+  width: 30%;
+  border-right: 1px black solid;
+  padding-right: 5%;
+  padding-left: 3%;
+  background-color: var(--default);
+  z-index: 6;
+  transition: transform 0.7s;
+}
+
+.formDesign .orderBy {
+  padding: 3%;
+  margin: 2%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.formDesign .orderBy select {
+  border: none;
+  margin-top: 10%;
+  color: var(--gray);
+  cursor: pointer;
+}
+
+.formDesign .orderBy select:hover {
+  color: black;
+}
+
+.formDesign .orderBy select:focus {
+  border-top: 1px solid black;
+  color: black;
+}
+
+.rangeValue {
+  color: var(--success);
+  font-weight: bold;
+  font-size: larger;
+}
+
+.hideForm {
+  transform: translateX(-120%);
+}
+
+.buttonHideFiltersForm {
+  position: fixed;
+  top: 15%;
+  left: 28%;
+  width: auto;
+  font-size: x-large;
+  background-color: var(--options-color);
+  color: var(--white);
+  padding: 10px 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 550ms;
+  z-index: 7;
+}
+
+.buttonHideFiltersForm:hover {
+  background-color: var(--options-color-children);
+}
+
+.buttonHideFiltersFormRotate {
+  transform: rotate(180deg);
+  left: 2%;
+}
+
+.selectedCategories {
+  max-height: 45%;
+  overflow: auto;
+  margin-top: 20%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.selectedCategories p {
+  color: var(--dark-gray);
+  cursor: pointer;
+  padding: 2%;
+  border-radius: 10%;
+  margin-bottom: 2%;
+  transition: background-color 1s;
+}
+
+.selectedCategories p:hover {
+  background-color: var(--gray);
+  opacity: 0.8;
+}
+
+.categoriesButton {
+  background-color: var(--dark-blue);
+  color: var(--text);
+}
+
+.submitButton {
+  background-color: black;
+  color: var(--text);
+}
+
+@media (max-width: 800px) {
+
+  .formDesign {
+    top: 5%;
+    margin-top: 5%;
+    width: 60%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--options-color-children);
+    padding: 2%;
+    border-radius: 10px;
+    color: var(--default);
+  }
+
+  .buttonHideFiltersForm {
+    top: 5%;
+    left: 85%;
+    transition: all 0.5 ease-in-out;
+  }
+
+  .formDesign .orderBy select {
+    background-color: var(--options-color-children);
+  }
+
+  .hideForm {
+    transform: translateX(-195%);
+  }
+
+}
+
+.modalContent {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  min-height: 40vh;
+  max-height: 40vh;
+  overflow: auto;
+}
+
+.modalContent * {
+  background-color: var(--gray);
+  padding: 1%;
+  border-radius: 10%;
+}
+
+.closeButton {
+  border: none;
+  background-color: var(--default);
+  color: var(--danger);
+  font-size: large;
+  padding: 0.5rem 0.7rem;
+}
+
+.closeButton:hover {
+  background-color: var(--gray);
+}

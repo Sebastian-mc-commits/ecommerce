@@ -1,0 +1,70 @@
+.productContent {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid black;
+  padding: 0.6rem;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.productContent .imgContainer {
+  height: 40%;
+}
+
+.productContent .imgContainer img {
+  cursor: pointer;
+  transition: filter 0.4s;
+}
+
+.productContent .imgContainer img:hover {
+  filter: blur(1.5px);
+}
+
+.productContent::after {
+  content: "View Product";
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 5%;
+  right: -70%;
+  background-color: var(--dark-blue);
+  width: 70%;
+  height: 8.5%;
+  transition: right 0.9s;
+  cursor: pointer;
+}
+
+.productContent:hover.productContent::after {
+  right: 0;
+}
+
+.productButtons {
+  display: flex;
+  font-size: large;
+  width: 100%;
+  border-radius: 0;
+}
+
+.productButtons button {
+
+  width: 100%;
+  border-radius: 0;
+}
+
+.productButtons .buttonCart {
+  background-color: var(--sky-blue);
+}
+
+.productButtons .buttonBuy {
+  background-color: var(--success);
+}
+
+.price {
+  font-weight: bold;
+  color: var(--success);
+}

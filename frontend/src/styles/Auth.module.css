@@ -1,0 +1,163 @@
+.mainContainer {
+  background-color: var(--darker-blue);
+  overflow: hidden;
+}
+
+.changeMainContainerColor {
+  background-color: var(--options-color-children-darker);
+}
+
+.formContainer {
+  min-height: 90%;
+  max-height: 95%;
+  min-width: 40%;
+  max-width: 100%;
+  width: 40%;
+  display: flex;
+  margin: 10%;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.7s;
+  padding: 2%;
+  background-color: var(--default);
+  z-index: 6;
+}
+
+.formContainer h2 {
+  text-align: center;
+  cursor: default;
+}
+
+.formContainer label {
+  position: relative;
+}
+
+.optionalErrorMessageStyles {
+  position: absolute;
+  top: 45%;
+  left: 110%;
+}
+
+.moveOptionalErrorMessageStyles {
+  transform: translateX(-225%);
+}
+
+.formContainer input[type="submit"] {
+  width: 100%;
+  color: var(--text);
+}
+
+
+.toggleAuth {
+  display: inline;
+  cursor: pointer;
+  transition: all 0.4s;
+}
+
+.toggleAuth:hover {
+  color: var(--dark-gray);
+}
+
+.moveForm {
+  transform: translateX(100%);
+}
+
+.blurredCoverImage {
+  width: 50%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(-5%, 25%);
+  z-index: 5;
+}
+
+.blurredCoverImage img {
+  width: 100%;
+  /* -webkit-mask-image: linear-gradient(to top left, transparent, black); */
+  mask-image: radial-gradient(red, transparent 70%);
+  /* mask-image: radial-gradient(circle at top left, transparent 0%, transparent 50%, #000 51%); */
+}
+
+.moveBlurredCoverImage {
+  transform: translateX(-100%);
+}
+
+.externAuthButtonsContainer {
+  width: 100%;
+}
+
+.externAuthButtonsContainer button {
+  width: 50%;
+  border-radius: 0;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.externAuthButtonsContainer .buttonGoogle {
+  background-color: var(--sky-blue);
+  color: black;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.externAuthButtonsContainer .buttonGitHub {
+  background-color: black;
+  color: var(--text);
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+@media (max-width: 800px) {
+  .formContainer {
+    min-width: 80%;
+    max-width: 90%;
+    margin: auto;
+    overflow: auto;
+  }
+
+  .optionalErrorMessageStyles {
+    position: static;
+    inset: 0;
+  }
+
+  .moveOptionalErrorMessageStyles {
+    transform: translateX(0);
+  }
+
+  .moveForm {
+    transform: translateX(0);
+    min-height: 80%;
+  }
+
+  .blurredCoverImage {
+    width: 100%;
+    transform: translate(0, 0);
+    inset: 0;
+    z-index: 7;
+    pointer-events: none;
+    opacity: 0.2;
+  }
+
+  .moveBlurredCoverImage {
+    transform: translateX(0%);
+  }
+}
+
+@media (max-height: 350px) {
+  .formContainer {
+    min-width: 80%;
+    max-width: 90%;
+    /* margin: 0;*/
+    overflow: auto;
+  }
+
+  .optionalErrorMessageStyles {
+    position: static;
+    inset: 0;
+  }
+
+  .moveForm {
+    transform: translateX(0);
+    min-height: 80%;
+  }
+}

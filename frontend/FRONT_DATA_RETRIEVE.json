@@ -1,0 +1,73 @@
+[
+  {
+    "_id": "6430f28ee603405932f99391",
+    "title": "Pants",
+    "description": "The Football Is Good For Training And Recreational Purposes",
+    "price": 544,
+    "thumbnail": "https://picsum.photos/id/983/3757/2468.jpg",
+    "code": "26275-1998",
+    "stock": 41616,
+    "status": true,
+    "createdBy": "4fffebfcb989cef52755dbc1",
+    "categoryType": "Electronic",
+    "deleted": false,
+    "__v": 0,
+    "comments": [
+      {
+        "rate": 4,
+        "message": "Ducimus repellat iusto inventore temporibus.",
+        "userCreator": {
+          "_id": "aca3a92996bcec9c7aadd5ec",
+          "image": "https://picsum.photos/id/300/4272/2848.jpg",
+          "name": "Melyssa75",
+          "last_name": "West, Hackett and Cassin",
+          "__v": 0
+        }
+      },
+      {
+        "rate": 0,
+        "message": "Sunt facilis quod debitis vero reiciendis ipsam cum esse ipsum.",
+        "userCreator": {
+          "_id": "9d96a93a88447faf522bb655",
+          "image": "https://picsum.photos/id/154/3264/2176.jpg",
+          "name": "Kristin.Runolfsson",
+          "last_name": "Bergstrom Group",
+          "__v": 0
+        }
+      },
+      {
+        "rate": 1,
+        "message": "Accusamus architecto consequatur quos omnis.",
+        "userCreator": {
+          "_id": "a3cbdda2edc1c1b59ad91e59",
+          "image": "https://picsum.photos/id/570/2509/1673.jpg",
+          "name": "Jacquelyn_McDermott12",
+          "last_name": "Conroy, Johns and Schuppe",
+          "__v": 0
+        }
+      },
+      {
+        "rate": 0,
+        "message": "Dolor cum eum itaque tempora aspernatur laudantium ipsum a.",
+        "userCreator": {
+          "_id": "ee35fab88e552af55ac0b70c",
+          "image": "https://picsum.photos/id/446/3072/1728.jpg",
+          "name": "Boyd_Emard",
+          "last_name": "Vandervort Group",
+          "__v": 0
+        }
+      },
+      {
+        "rate": 3,
+        "message": "Quos soluta neque temporibus maxime.",
+        "userCreator": {
+          "_id": "aca3a92996bcec9c7aadd5ec",
+          "image": "https://picsum.photos/id/300/4272/2848.jpg",
+          "name": "Melyssa75",
+          "last_name": "West, Hackett and Cassin",
+          "__v": 0
+        }
+      }
+    ]
+  }
+]

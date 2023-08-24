@@ -1,0 +1,126 @@
+<link rel="stylesheet" href="/public/styles/partials/side-bar.css" />
+<link rel="stylesheet" href="/public/styles/crud-admin.css" />
+
+<div class="side-bar-wrapper">
+  <input type="checkbox" id="btn" hidden />
+  <label for="btn" class="menu-btn">
+    <p>&#9776</p>
+  </label>
+
+  <nav class="sidebar">
+    <div>
+      <a href="/home" class="text">Go Back</a>
+      <p class="title">Admins options</p>
+    </div>
+    <ul class="list-items" id="list_items">
+      <li class="onPressLi" data-handle-option="createProduct">Create product</li>
+      <li data-handle-option="delete_update_product">Delete or Update product</li>
+      <li id="handleUpdateOnMenu" hidden></li>
+      {{#if user.superAdminOptions.isSuperAdmin}}
+      <li data-handle-option="getUsers">Users Options</li>
+      {{/if}}
+    </ul>
+  </nav>
+
+</div>
+{{! <p> </p> }}
+
+{{! <div class="content">
+  <div class="header">Animated Side Navigation Menu</div>
+  <p>using only HTML and CSS</p>
+</div> }}
+
+<div class="content">
+  <ul data-slides>
+    <li class="slide" data-active>
+      <div>
+        <h2 class="title">Add a product</h2>
+        <button onclick="c()">Pres for view</button>
+        <form class="form card" id="form" action="/crud-admin/addProduct" method="POST" enctype="multipart/form-data">
+          <div class="group">
+            <input type="file" placeholder="Image route (optional)" name="thumbnail" />
+            <input type="text" class="title_form" placeholder="Title" id="field" name="title" />
+            <input type="number" placeholder="price" id="field" name="price" />
+            <div>
+              <input type="text" placeholder="Code" id="field" name="code" />
+            </div>
+          </div>
+          <div class="group">
+            <label for="status">
+              <p>Set status to false</p>
+              <input type="checkbox" name="status" value="false" />
+            </label>
+            <input type="number" placeholder="Stock" id="field" name="stock" />
+
+            <input type="text" id="field" name="categoryType" placeholder="Which category does belong">
+          </div>
+
+
+          <div class="commentContent">
+            <textarea name="description" rows="10" placeholder="Description" id="field"></textarea>
+          </div>
+          <input type="submit" value="Done" class="w-6 btn-transition" id="activeButton" disabled />
+        </form>
+      </div>
+    </li>
+
+    <li class="slide">
+      <div>
+        <h2 class="title">Delete or Update</h2>
+        {{! <ul id="product"></ul> }}
+        <table class="w-10">
+          <thead>
+            <th>id</th>
+            <th>Category</th>
+            <th>Name</th>
+            <th>code</th>
+            <th>Delete</th>
+            <th>Update</th>
+          </thead>
+          <tbody id="product"></tbody>
+        </table>
+      </div>
+    </li>
+
+    <li class="slide">
+      <div id="handleUpdate"></div>
+    </li>
+
+    <li class="slide" data-render-users="true">
+      <div>
+        <button onclick="tryGetConnection()">Try connection</button>
+        <h2>Users</h2>
+        <table class="w-10">
+          <thead>
+            <th>Is connected</th>
+            <th>id</th>
+            <th>Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Set to admin</th>
+          </thead>
+          <tbody id="user" class="userRender"></tbody>
+        </table>
+
+        <p data-load-results="10" class="load-more">Load more results</p>
+      </div>
+    </li>
+
+  </ul>
+
+</div>
+
+{{#if pagination}}
+<div class="footer-content">
+  {{> pagination}}
+</div>
+{{/if}}
+
+{{!--
+<script src="/socket.io/socket.io.js"></script> --}}
+<script src="/socket.io/socket.io.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/public/js/crud-admin.js"></script>
+<script src="/public/js/crud-admin-data.js"></script>
+<script src="/public/js/crud-admin-renderUsers.js"></script>
+<script src="/public/js/validateField.js"></script>

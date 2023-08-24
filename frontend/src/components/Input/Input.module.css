@@ -1,0 +1,12 @@
+.inputLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.errorMessage {
+  border-left: 7px var(--danger) solid;
+  background-color: var(--light-danger);
+  padding: 2%;
+  width: 100%;
+}

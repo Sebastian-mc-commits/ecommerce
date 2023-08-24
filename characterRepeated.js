@@ -45,3 +45,22 @@ const countNumberInnerString = (string) => {
 let s = "059620";
 // console.log(countNumberInnerString(s));
 // console.log(s);
+
+function solution(str){
+    const splitStr = [];
+
+    for (let i = 0; i < str.length; i += 2 ) {
+        const isLetterOdd = str[i + 1] || "_";
+        splitStr.push(str[i] + isLetterOdd);
+    }
+
+    return splitStr;
+}
+
+// console.log(solution("abc"));
+
+function generateHashtag (str) {
+    return str.replace(/\s+/, " ").split(" ");
+
+}
+console.log(generateHashtag("hello world  sebas"));

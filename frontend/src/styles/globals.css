@@ -1,0 +1,174 @@
+@import url("https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300&display=swap");
+
+:root {
+  --user-color: rgb(79, 76, 72);
+  --options-color: rgb(42, 41, 39);
+  --options-color-children: rgb(61, 59, 56);
+  --options-color-children-darker: rgb(36, 35, 33);
+  --danger: brown;
+  --light-danger: rgb(246, 156, 156);
+  --text: rgb(242, 240, 235);
+  --default: #FFFFFF;
+  --success: #28a745;
+  --info: #8b9dc3;
+  --warning: #F7DE3A;
+  --gray: #e2e7da;
+  --dark-gray: #6f716b;
+  --dark-blue: #0b62b9;
+  --darker-blue: #03182e;
+  --white: #fff;
+  --random-color: rgb(0, 0, 0);
+  --sky-blue: #87CEFA;
+  --aqua: #00468b;
+  --dark-cyan: #008b8b
+}
+
+* {
+  font-family: "Hanken Grotesk", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.gray {
+  color: var(--dark-gray);
+}
+
+img {
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  border-radius: 7px;
+}
+
+.container {
+  width: 90%;
+  margin: 1.5rem auto;
+}
+
+button,
+input[type="submit"],
+input[type="file"] {
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  margin: 0.4rem 0 0.2rem;
+  padding: 10px;
+  font-weight: bold;
+}
+
+input[type="submit"]:hover,
+button:hover,
+input[type="file"]:hover {
+  animation: hoverButton infinite 0.5s ease-in-out;
+  animation-direction: alternate;
+  transition: all 0.5s;
+}
+
+input[type="number"],
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  border-radius: 5px;
+  outline: none;
+  border: 1px var(--gray) solid;
+  padding: 2%;
+  font-size: large;
+  width: 100%;
+}
+
+@keyframes hoverButton {
+  from {
+    border: 1px black solid;
+  }
+
+  to {
+    border: 1px var(--gray) solid;
+  }
+}
+
+.title {
+  text-align: center;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span {
+  inline-size: 100%;
+  overflow-wrap: break-word;
+
+
+}
+
+textarea {
+  border-radius: 10px;
+  font-size: large;
+  border: 1px var(--gray) solid;
+  width: 100%;
+  padding: 2%;
+  transition: all 0.5s;
+}
+
+textarea::placeholder {
+  text-align: center;
+  font-size: large;
+}
+
+textarea:focus {
+  outline: 1px var(--dark-gray) solid;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: auto;
+  grid-auto-rows: auto;
+  gap: 15px;
+}
+
+.card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  padding: 1.5%;
+  border-radius: 7px;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, auto);
+  }
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(3, auto);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(4, auto);
+  }
+}
+
+@media (min-width: 1280px) {
+  .grid {
+    grid-template-columns: repeat(5, auto);
+  }
+}
+
+@media (min-width: 1536px) {
+  .grid {
+    grid-template-columns: repeat(6, auto);
+  }
+}

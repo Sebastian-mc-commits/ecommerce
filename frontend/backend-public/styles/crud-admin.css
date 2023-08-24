@@ -1,0 +1,157 @@
+body {
+  overflow: hidden;
+}
+
+/* .side-bar {
+    width: 40%;
+    position: relative;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: black;
+}
+
+.side-bar-content {
+    margin: 3%;
+    overflow: auto;
+    height: 90vh;
+} */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.translate {
+  /* transform: translateX(80%); */
+  width: 60vw;
+  transform: translateX(20%);
+}
+
+/* .content p{
+  font-size: 40px;
+  font-weight: 700;
+} */
+
+.content>ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+.slide[data-active] {
+  opacity: 1;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 7;
+}
+
+.slide>div {
+  display: block;
+  margin-bottom: 70%;
+  height: 100vh;
+  /* width: 100vw; */
+}
+
+.onPressLi {
+  color: #f2f2f2;
+  background: #343333;
+  /* background-color: yellowgreen; */
+}
+
+.userRender tr td.optionsFromAdminToUser {
+  position: relative;
+  overflow: hidden;
+}
+
+.userRender tr td.optionsFromAdminToUser::before {
+  position: absolute;
+  inset: 0;
+  transform: translateY(100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 3;
+  transition: all 0.5s;
+}
+
+.userRender tr td.optionsFromAdminToUser:hover::before {
+  transform: translateY(0);
+}
+
+.userRender tr td.messageToUser::before {
+  
+  content: "message";
+}
+
+.userRender tr td.messageToUser:hover::before {
+  background-color: var(--user-color);
+  color: var(--gray);
+}
+
+.userRender tr td.visitUser::before {
+  
+  content: "Visit User";
+}
+
+.userRender tr td.visitUser:hover::before {
+  background-color: var(--info);
+  color: var(--white);
+}
+.content {
+  position: absolute;
+  inset: 0;
+  /* top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); */
+  /* color: #202020; */
+  /* z-index: -1; */
+  width: 80vw;
+  height: 100vh;
+  overflow: hidden;
+  margin: auto;
+  text-align: center;
+  transition: all .6s ease;
+}
+
+.load-more {
+  position: relative;
+  margin-top: 6%;
+  cursor: pointer;
+  width: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.load-more:hover {
+  background-color: var(--gray);
+  border-radius: 6px;
+  opacity: 0.6;
+}
+
+.load-more::before {
+  content: " ";
+  position: absolute;
+  inset: 0;
+  background-color: var(--random-color);
+  width: 5%;
+  border-radius: 7px;
+}
+
+.connected {
+  font-size: 2rem;
+  cursor: default;
+  color: var(--white);
+  transition: all 0.3;
+}

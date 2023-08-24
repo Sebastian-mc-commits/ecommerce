@@ -1,0 +1,22 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{currentView}} ProductManager</title>
+  <link rel="stylesheet" href="/public/styles/index.css" />
+</head>
+
+  <p data-user-for-js="true" hidden>email {{user.auth.email}} _id {{user._id}} isAdmin {{user.adminOptions.isAdmin}} isSuperAdmin {{user.superAdminOptions.isSuperAdmin}}</p>
+<script src="/public/js/globalMethods.js"></script>
+{{#if (showMenu)}}
+{{> menu}}
+{{/if}}
+{{> messages}}
+
+<body>
+  {{{body}}}
+</body>
+
+</html>

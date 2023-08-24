@@ -1,0 +1,565 @@
+{
+  "users": [],
+  "products": {
+    "createProduct": {
+      "id": "93df56c5-93bc-4bac-ac0f-ed9b5b4cc38d",
+      "thumbnail": "https://i.pinimg.com/originals/73/a6/c4/73a6c4e772e4aad4e6ec37de2f52af74.png",
+      "isDeleted": false,
+      "title": "Test Product",
+      "description": "test product description",
+      "price": 1.1,
+      "code": 4688,
+      "stock": 106,
+      "status": true,
+      "categoryType": "Test category type",
+      "createdBy": "0334a99c-f52e-4751-aa5d-e2a30c2378a0"
+    },
+    "getProducts": [
+      {
+        "id": "033f1fe6-7bf6-4fa2-b335-3ada513a46e2",
+        "title": "Chips",
+        "description": "The slim & simple Maple Gaming Keyboard from Dev Byte comes with a sleek body and 7- Color RGB LED B",
+        "price": 575,
+        "thumbnail": "https://picsum.photos/id/1015/5000/3333.jpg",
+        "code": "21573",
+        "stock": 96796,
+        "status": false,
+        "createdBy": "27e922d3-179b-49c7-ae3d-0da19758624e",
+        "categoryType": "Fantastic",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "0e1faa91-30fd-4ddc-96f5-1a418b95c021",
+        "title": "Cheese",
+        "description": "Boston's most advanced compression wear technology increases muscle oxygenation, stabilizes active m",
+        "price": 649,
+        "thumbnail": "https://picsum.photos/id/317/1935/1089.jpg",
+        "code": "52450",
+        "stock": 65298,
+        "status": true,
+        "createdBy": "521a16fe-5832-4723-808b-b187fc5223a3",
+        "categoryType": "Licensed",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "11fd01da-a484-4167-bc7f-da296217abb6",
+        "title": "Shoes",
+        "description": "Ergonomic executive chair upholstered in bonded black leather and PVC padded seat and back for all-d",
+        "price": 813,
+        "thumbnail": "https://picsum.photos/id/824/5000/3333.jpg",
+        "code": "85425",
+        "stock": 47529,
+        "status": true,
+        "createdBy": "521a16fe-5832-4723-808b-b187fc5223a3",
+        "categoryType": "Rustic",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "127f00e6-b820-4e81-a96b-2a2bcf746ca8",
+        "title": "Table",
+        "description": "The Football Is Good For Training And Recreational Purposes",
+        "price": 150,
+        "thumbnail": "https://picsum.photos/id/13/2500/1667.jpg",
+        "code": "58262-2135",
+        "stock": 97453,
+        "status": true,
+        "createdBy": "f8d7e28e-88ae-42e7-bfd0-0334c1a8973d",
+        "categoryType": "Incredible",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "198470e8-430a-45ec-bff3-8127b508b6ab",
+        "title": "Gloves",
+        "description": "Carbonite web goalkeeper gloves are ergonomically designed to give easy fit",
+        "price": 366,
+        "thumbnail": "https://picsum.photos/id/379/2000/1328.jpg",
+        "code": "36527",
+        "stock": 61704,
+        "status": false,
+        "createdBy": "39bffd49-1798-4a55-8c95-318287e89f3b",
+        "categoryType": "Oriental",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "1b112b3f-38ca-4453-9bd9-f3a1ad4660fa",
+        "title": "Bike",
+        "description": "Carbonite web goalkeeper gloves are ergonomically designed to give easy fit",
+        "price": 162,
+        "thumbnail": "https://picsum.photos/id/701/1858/1393.jpg",
+        "code": "55172",
+        "stock": 15662,
+        "status": false,
+        "createdBy": "eb972b58-5aae-44d4-bcde-a6cfc7398d3d",
+        "categoryType": "Refined",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "2127949d-d267-4a0b-b035-4bd758b16333",
+        "title": "Mouse",
+        "description": "The Nagasaki Lander is the trademarked name of several series of Nagasaki sport bikes, that started ",
+        "price": 478,
+        "thumbnail": "https://picsum.photos/id/698/4605/3050.jpg",
+        "code": "57473-3083",
+        "stock": 78704,
+        "status": false,
+        "createdBy": "ad678c34-0486-43c4-8ef1-3dd7a0cf56e7",
+        "categoryType": "Handcrafted",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "26499d46-3e46-400e-aee4-0ae846e6cc56",
+        "title": "Pants",
+        "description": "Boston's most advanced compression wear technology increases muscle oxygenation, stabilizes active m",
+        "price": 366,
+        "thumbnail": "https://picsum.photos/id/526/4000/3000.jpg",
+        "code": "91549-3115",
+        "stock": 21564,
+        "status": true,
+        "createdBy": "f8d7e28e-88ae-42e7-bfd0-0334c1a8973d",
+        "categoryType": "Oriental",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "2ee70e3d-e12c-411f-aef8-b98d53a949e5",
+        "title": "Mouse",
+        "description": "The automobile layout consists of a front-engine design, with transaxle-type transmissions mounted a",
+        "price": 249,
+        "thumbnail": "https://picsum.photos/id/639/2365/1774.jpg",
+        "code": "69771",
+        "stock": 63847,
+        "status": false,
+        "createdBy": "94929ed3-d6d7-48c7-9186-95006b9dd903",
+        "categoryType": "Tasty",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "309a2dfc-1ab5-4bbc-8311-7083f0757ce0",
+        "title": "Pants",
+        "description": "The beautiful range of Apple Naturalé that has an exciting mix of natural ingredients. With the Good",
+        "price": 894,
+        "thumbnail": "https://picsum.photos/id/973/5000/3334.jpg",
+        "code": "13715-6325",
+        "stock": 95262,
+        "status": false,
+        "createdBy": "a2a38517-4793-4347-a56b-a18cad6f356b",
+        "categoryType": "Unbranded",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "342663c7-dd93-4adf-a0e0-b58f7dcfda53",
+        "title": "Shirt",
+        "description": "Ergonomic executive chair upholstered in bonded black leather and PVC padded seat and back for all-d",
+        "price": 91,
+        "thumbnail": "https://picsum.photos/id/518/2500/1667.jpg",
+        "code": "12935",
+        "stock": 47664,
+        "status": false,
+        "createdBy": "eb972b58-5aae-44d4-bcde-a6cfc7398d3d",
+        "categoryType": "Elegant",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "3b6c5785-3484-46c8-a306-7542ea7bf9ff",
+        "title": "Ball",
+        "description": "Andy shoes are designed to keeping in mind durability as well as trends, the most stylish range of s",
+        "price": 74,
+        "thumbnail": "https://picsum.photos/id/368/4896/3264.jpg",
+        "code": "71879",
+        "stock": 57416,
+        "status": false,
+        "createdBy": "521a16fe-5832-4723-808b-b187fc5223a3",
+        "categoryType": "Intelligent",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "3e85d1cf-4d7a-45a3-bc9d-e7f627fb0354",
+        "title": "Tuna",
+        "description": "The automobile layout consists of a front-engine design, with transaxle-type transmissions mounted a",
+        "price": 363,
+        "thumbnail": "https://picsum.photos/id/894/5000/3333.jpg",
+        "code": "47132-2161",
+        "stock": 74468,
+        "status": false,
+        "createdBy": "e3328e59-92e7-429d-a6a1-7f640c72ae62",
+        "categoryType": "Luxurious",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "40e639b9-24fb-4715-94e4-b0eabb56f464",
+        "title": "Cheese",
+        "description": "Andy shoes are designed to keeping in mind durability as well as trends, the most stylish range of s",
+        "price": 962,
+        "thumbnail": "https://picsum.photos/id/1032/2880/1800.jpg",
+        "code": "11903-1892",
+        "stock": 60493,
+        "status": true,
+        "createdBy": "7065a40a-ae2b-4ada-8eb5-2228d017c182",
+        "categoryType": "Bespoke",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "4404d708-0086-4223-9514-4cecf41ac4b6",
+        "title": "Pants",
+        "description": "The beautiful range of Apple Naturalé that has an exciting mix of natural ingredients. With the Good",
+        "price": 377,
+        "thumbnail": "https://picsum.photos/id/902/3300/2200.jpg",
+        "code": "95955",
+        "stock": 69816,
+        "status": false,
+        "createdBy": "94929ed3-d6d7-48c7-9186-95006b9dd903",
+        "categoryType": "Luxurious",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      }
+    ],
+    "getAllProducts": [
+      {
+        "id": "dca97c49-1888-467e-b878-3d2c44a21d1a",
+        "title": "Computer",
+        "description": "Andy shoes are designed to keeping in mind durability as well as trends, the most stylish range of s",
+        "price": 322,
+        "thumbnail": "https://picsum.photos/id/982/2048/1286.jpg",
+        "code": "69756",
+        "stock": 47622,
+        "status": true,
+        "createdBy": "27e922d3-179b-49c7-ae3d-0da19758624e",
+        "categoryType": "Gorgeous",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "debd6856-94af-430d-be68-5bd906ff9ab0",
+        "title": "Gloves",
+        "description": "New ABC 13 9370, 13.3, 5th Gen CoreA5-8250U, 8GB RAM, 256GB SSD, power UHD Graphics, OS 10 Home, OS ",
+        "price": 266,
+        "thumbnail": "https://picsum.photos/id/488/1772/1181.jpg",
+        "code": "14795",
+        "stock": 32850,
+        "status": false,
+        "createdBy": "0a4b4d07-8093-41dc-b160-8ad7b3531a3e",
+        "categoryType": "Gorgeous",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "e243def8-e167-40a3-8919-fce893b90b91",
+        "title": "Keyboard",
+        "description": "Carbonite web goalkeeper gloves are ergonomically designed to give easy fit",
+        "price": 668,
+        "thumbnail": "https://picsum.photos/id/155/3264/2176.jpg",
+        "code": "81480",
+        "stock": 50122,
+        "status": false,
+        "createdBy": "606ecb8a-8584-479b-ba30-76f6e9c817a2",
+        "categoryType": "Rustic",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "e47fcf47-6079-4e4d-990c-b54c959f4162",
+        "title": "Chips",
+        "description": "The automobile layout consists of a front-engine design, with transaxle-type transmissions mounted a",
+        "price": 184,
+        "thumbnail": "https://picsum.photos/id/533/4000/3000.jpg",
+        "code": "82205-8622",
+        "stock": 46802,
+        "status": false,
+        "createdBy": "27e922d3-179b-49c7-ae3d-0da19758624e",
+        "categoryType": "Tasty",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "ead4843c-9351-490b-bd25-858c8dd5444b",
+        "title": "Ball",
+        "description": "The automobile layout consists of a front-engine design, with transaxle-type transmissions mounted a",
+        "price": 131,
+        "thumbnail": "https://picsum.photos/id/7/4728/3168.jpg",
+        "code": "34719-8108",
+        "stock": 40871,
+        "status": false,
+        "createdBy": "27e922d3-179b-49c7-ae3d-0da19758624e",
+        "categoryType": "Ergonomic",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "fdb9ecc2-f4b9-4d2e-acb7-7f4a873eb6d7",
+        "title": "Pants",
+        "description": "Carbonite web goalkeeper gloves are ergonomically designed to give easy fit",
+        "price": 75,
+        "thumbnail": "https://picsum.photos/id/322/5000/3333.jpg",
+        "code": "45840-4668",
+        "stock": 59497,
+        "status": false,
+        "createdBy": "27e922d3-179b-49c7-ae3d-0da19758624e",
+        "categoryType": "Bespoke",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      }
+    ],
+    "getAvailableCategories": [
+      {
+        "categoryType": "Fantastic"
+      },
+      {
+        "categoryType": "Licensed"
+      },
+      {
+        "categoryType": "Rustic"
+      },
+      {
+        "categoryType": "Incredible"
+      },
+      {
+        "categoryType": "Oriental"
+      },
+      {
+        "categoryType": "Refined"
+      },
+      {
+        "categoryType": "Handcrafted"
+      },
+      {
+        "categoryType": "Tasty"
+      },
+      {
+        "categoryType": "Unbranded"
+      },
+      {
+        "categoryType": "Elegant"
+      },
+      {
+        "categoryType": "Intelligent"
+      },
+      {
+        "categoryType": "Luxurious"
+      },
+      {
+        "categoryType": "Bespoke"
+      },
+      {
+        "categoryType": "Sleek"
+      },
+      {
+        "categoryType": "Modern"
+      },
+      {
+        "categoryType": "Handmade"
+      },
+      {
+        "categoryType": "Test category type"
+      },
+      {
+        "categoryType": "Generic"
+      },
+      {
+        "categoryType": "Awesome"
+      },
+      {
+        "categoryType": "Gorgeous"
+      },
+      {
+        "categoryType": "Ergonomic"
+      },
+      {
+        "categoryType": "Recycled"
+      }
+    ],
+    "getTheHighestPrice": {
+      "maxPrice": 962
+    },
+    "handleApplyFilters": [
+      {
+        "id": "82fbe7e6-fd2d-4615-9a76-79cb5b58e7c1",
+        "title": "Pants",
+        "description": "Andy shoes are designed to keeping in mind durability as well as trends, the most stylish range of s",
+        "price": 702,
+        "thumbnail": "https://picsum.photos/id/144/4912/2760.jpg",
+        "code": "05900-1263",
+        "stock": 27045,
+        "status": false,
+        "createdBy": "a2a38517-4793-4347-a56b-a18cad6f356b",
+        "categoryType": "Gorgeous",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "cf67f57c-325d-4b76-a899-d12643415ac9",
+        "title": "Chair",
+        "description": "Carbonite web goalkeeper gloves are ergonomically designed to give easy fit",
+        "price": 214,
+        "thumbnail": "https://picsum.photos/id/143/3600/2385.jpg",
+        "code": "14204",
+        "stock": 46494,
+        "status": true,
+        "createdBy": "f8d7e28e-88ae-42e7-bfd0-0334c1a8973d",
+        "categoryType": "Recycled",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "dca97c49-1888-467e-b878-3d2c44a21d1a",
+        "title": "Computer",
+        "description": "Andy shoes are designed to keeping in mind durability as well as trends, the most stylish range of s",
+        "price": 322,
+        "thumbnail": "https://picsum.photos/id/982/2048/1286.jpg",
+        "code": "69756",
+        "stock": 47622,
+        "status": true,
+        "createdBy": "27e922d3-179b-49c7-ae3d-0da19758624e",
+        "categoryType": "Gorgeous",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "debd6856-94af-430d-be68-5bd906ff9ab0",
+        "title": "Gloves",
+        "description": "New ABC 13 9370, 13.3, 5th Gen CoreA5-8250U, 8GB RAM, 256GB SSD, power UHD Graphics, OS 10 Home, OS ",
+        "price": 266,
+        "thumbnail": "https://picsum.photos/id/488/1772/1181.jpg",
+        "code": "14795",
+        "stock": 32850,
+        "status": false,
+        "createdBy": "0a4b4d07-8093-41dc-b160-8ad7b3531a3e",
+        "categoryType": "Gorgeous",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      }
+    ],
+    "deleteProduct": {
+      "id": "127f00e6-b820-4e81-a96b-2a2bcf746ca8",
+      "title": "Table",
+      "description": "The Football Is Good For Training And Recreational Purposes",
+      "price": 150,
+      "thumbnail": "https://picsum.photos/id/13/2500/1667.jpg",
+      "code": "58262-2135",
+      "stock": 97453,
+      "status": false,
+      "createdBy": "f8d7e28e-88ae-42e7-bfd0-0334c1a8973d",
+      "categoryType": "Incredible",
+      "isDeleted": true,
+      "deletedAt": "2023-04-18T20:20:41.000Z"
+    },
+    "getDeletedProducts": [
+      {
+        "product": {
+          "id": "033f1fe6-7bf6-4fa2-b335-3ada513a46e2",
+          "title": "Chips",
+          "description": "The slim & simple Maple Gaming Keyboard from Dev Byte comes with a sleek body and 7- Color RGB LED B",
+          "price": 575,
+          "thumbnail": "https://picsum.photos/id/1015/5000/3333.jpg",
+          "code": "21573",
+          "stock": 96796,
+          "status": false,
+          "createdBy": "27e922d3-179b-49c7-ae3d-0da19758624e",
+          "categoryType": "Fantastic",
+          "isDeleted": true,
+          "deletedAt": null
+        }
+      },
+      {
+        "product": {
+          "id": "5b98a6bf-294a-4472-bcbf-e619d97e512f",
+          "title": "Test Product",
+          "description": "test product description",
+          "price": 1.1,
+          "thumbnail": "https://i.pinimg.com/originals/73/a6/c4/73a6c4e772e4aad4e6ec37de2f52af74.png",
+          "code": "723",
+          "stock": 106,
+          "status": true,
+          "createdBy": "0334a99c-f52e-4751-aa5d-e2a30c2378a0",
+          "categoryType": "Test category type",
+          "isDeleted": true,
+          "deletedAt": null
+        }
+      }
+    ],
+    "getProduct": {
+      "id": "0e1faa91-30fd-4ddc-96f5-1a418b95c021",
+      "title": "Cheese",
+      "description": "Boston's most advanced compression wear technology increases muscle oxygenation, stabilizes active m",
+      "price": 649,
+      "thumbnail": "https://picsum.photos/id/317/1935/1089.jpg",
+      "code": "52450",
+      "stock": 65298,
+      "status": true,
+      "createdBy": "521a16fe-5832-4723-808b-b187fc5223a3",
+      "categoryType": "Licensed",
+      "isDeleted": false,
+      "deletedAt": "2023-04-18T03:36:46.000Z"
+    },
+    "getCreatedProductsByAdmin": [
+      {
+        "id": "40e639b9-24fb-4715-94e4-b0eabb56f464",
+        "title": "Cheese",
+        "description": "Andy shoes are designed to keeping in mind durability as well as trends, the most stylish range of s",
+        "price": 962,
+        "thumbnail": "https://picsum.photos/id/1032/2880/1800.jpg",
+        "code": "11903-1892",
+        "stock": 60493,
+        "status": true,
+        "createdBy": "7065a40a-ae2b-4ada-8eb5-2228d017c182",
+        "categoryType": "Bespoke",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      },
+      {
+        "id": "44ffe35e-3f31-4a1b-8f73-ec7059de41f5",
+        "title": "Cheese",
+        "description": "The slim & simple Maple Gaming Keyboard from Dev Byte comes with a sleek body and 7- Color RGB LED B",
+        "price": 765,
+        "thumbnail": "https://picsum.photos/id/541/5000/3181.jpg",
+        "code": "66985",
+        "stock": 20571,
+        "status": false,
+        "createdBy": "7065a40a-ae2b-4ada-8eb5-2228d017c182",
+        "categoryType": "Sleek",
+        "isDeleted": false,
+        "deletedAt": "2023-04-18T03:36:46.000Z"
+      }
+    ],
+    "irreversibleDelete": {
+      "id": "11fd01da-a484-4167-bc7f-da296217abb6",
+      "title": "Shoes",
+      "description": "Ergonomic executive chair upholstered in bonded black leather and PVC padded seat and back for all-d",
+      "price": 813,
+      "thumbnail": "https://picsum.photos/id/824/5000/3333.jpg",
+      "code": "85425",
+      "stock": 47529,
+      "status": false,
+      "createdBy": "521a16fe-5832-4723-808b-b187fc5223a3",
+      "categoryType": "Rustic",
+      "isDeleted": true,
+      "deletedAt": null
+    },
+    "restoreDeletedProduct": {
+      "id": "127f00e6-b820-4e81-a96b-2a2bcf746ca8",
+      "title": "Table",
+      "description": "The Football Is Good For Training And Recreational Purposes",
+      "price": 150,
+      "thumbnail": "https://picsum.photos/id/13/2500/1667.jpg",
+      "code": "58262-2135",
+      "stock": 97453,
+      "status": false,
+      "createdBy": "f8d7e28e-88ae-42e7-bfd0-0334c1a8973d",
+      "categoryType": "Incredible",
+      "isDeleted": false,
+      "deletedAt": null
+    }
+  }
+}

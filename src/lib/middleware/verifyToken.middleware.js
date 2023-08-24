@@ -1,56 +1,45 @@
 import jwt from "jsonwebtoken";
-import { config } from "dotenv";
 import userMessages from "../../utils/messages/messages.user.utils.js";
-import { getUserById } from "../../services/user.service.js";
+import config from "./../../config/config.js";
+import ErrorHandler from "../../utils/classes/errorHandler.utils.js";
+import errorCodes from "../../utils/enums/errorCodes.enum.js";
+import customErrorCodes from "../../utils/enums/errorCodes.custom.enum.js";
+import { existAdminByUserId } from "../../services/admin.service.js";
+import { existSuperAdminByUserId } from "../../services/superAdmin.service.js";
 
-config();
+const { SECRET_JWT } = config;
 
-export const verifyTokenAdmin = async (req, res, next) => {
-    const { authenticateAdmin = "" } = req.signedCookies
-    if (!authenticateAdmin?.token) {
-        req.flash("message", {
-            message: userMessages.COOKIE_NOT_FOUND,
-            type: "warning"
-        });
-        return res.status(401).redirect("/home");
-    }
+export const verifyTokenAdmin = async (req, _res, next) => {
+  const { authenticateAdmin = "" } = req.signedCookies;
+  if (!authenticateAdmin?.token) {
+    throw new ErrorHandler(userMessages.COOKIE_NOT_FOUND, '', errorCodes.UNAUTHORIZED, customErrorCodes.INVALID_REQUEST)
+  }
+  
+  const { _id = "" } = jwt.verify(authenticateAdmin.token, SECRET_JWT);
+  
+  
+  if (await existAdminByUserId(_id)) {
+    return next();
+  }
 
-    const { _id = "" } = jwt.verify(authenticateAdmin.token, process.env.SECRET_JWT);
-
-    const user = await getUserById(_id);
-
-    if (user && user.adminOptions.isAdmin) {
-        return next();
-    }
-
-    req.flash("message", {
-        message: userMessages.ADMIN_ONLY,
-        type: "warning"
-    });
-    return res.status(403).redirect("/home");
-}
+  throw new ErrorHandler(userMessages.ADMIN_ONLY, '', errorCodes.FORBIDDEN, customErrorCodes.INVALID_REQUEST)
+};
 
 export const verifyTokenSuperAdmin = async (req, res, next) => {
-    const { authenticateAdmin = "" } = req.signedCookies
-    if (!authenticateAdmin?.token) {
-        req.flash("message", {
-            message: userMessages.COOKIE_NOT_FOUND,
-            type: "warning"
-        });
-        return res.status(401).redirect("/home");
-    }
+  const { authenticateAdmin = "" } = req.signedCookies;
+  if (!authenticateAdmin?.token) {
+    throw new ErrorHandler(userMessages.COOKIE_NOT_FOUND, '', errorCodes.UNAUTHORIZED, customErrorCodes.INVALID_REQUEST)
+  }
+  
+  const { _id = "" } = jwt.verify(authenticateAdmin.token, SECRET_JWT);
 
-    const { _id = "" } = jwt.verify(authenticateAdmin.token, process.env.SECRET_JWT);
+  if (await existSuperAdminByUserId(_id)) {
+    return next();
+  }
 
-    const user = await getUserById(_id);
-
-    if (user && user.adminOptions.isAdmin && user.superAdminOptions.isSuperAdmin) {
-        return next();
-    }
-
-    req.flash("message", {
-        message: userMessages.ADMIN_ONLY,
-        type: "warning"
-    });
-    return res.status(403).redirect("/home");
-}
+  req.flash("message", {
+    message: userMessages.ADMIN_ONLY,
+    type: "warning"
+  });
+  throw new ErrorHandler(userMessages.ADMIN_ONLY, '', errorCodes.FORBIDDEN, customErrorCodes.INVALID_REQUEST)
+};
